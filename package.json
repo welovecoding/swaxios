@@ -11,7 +11,7 @@
     "typescript": "3.4.5"
   },
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/index.js",
   "name": "swagger-ts-client-generator",
   "scripts": {
     "clean": "rimraf src/temp",
