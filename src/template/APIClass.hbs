@@ -1,0 +1,11 @@
+import {AxiosInstance} from 'axios';
+
+class {{name}} {
+  private readonly apiClient: AxiosInstance;
+
+  constructor(apiClient: AxiosInstance) {
+    this.apiClient = apiClient;
+  }
+}
+
+export {{#surroundWithCurlyBraces name}}{{/surroundWithCurlyBraces}};

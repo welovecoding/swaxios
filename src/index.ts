@@ -18,7 +18,8 @@ urls.forEach(url => {
   const filePath = `${urlPath}/${serviceName}.ts`;
   console.log(`${filePath} => ${url}`);
 
-  const templateSource = 'class {{name}} {}\r\n\r\nexport {{#surroundWithCurlyBraces name}}{{/surroundWithCurlyBraces}}';
+  const templateFile = path.join(process.cwd(), 'src', 'template', 'APIClass.hbs');
+  const templateSource = fs.readFileSync(templateFile, 'utf8');
   const template = Handlebars.compile(templateSource);
   const renderedTemplate = template({name: serviceName});
 
