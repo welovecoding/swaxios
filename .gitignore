@@ -1,5 +1,6 @@
 .env
 .idea
+/src/temp
 /dist
 /node_modules
 /package-lock.json

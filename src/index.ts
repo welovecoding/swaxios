@@ -1,5 +1,12 @@
 import swagger from './swagger.json';
 import {StringUtil} from './util/StringUtil';
+import Handlebars from 'handlebars';
+import path from 'path';
+import fs from 'fs-extra';
+
+Handlebars.registerHelper('surroundWithCurlyBraces', (text) => {
+  return new Handlebars.SafeString(`{${text}}`);
+});
 
 const urls = Object.keys(swagger.paths);
 urls.forEach(url => {
@@ -7,7 +14,15 @@ urls.forEach(url => {
   const lastUrlPart = urlParts[urlParts.length - 1];
   const resourceName = lastUrlPart ? lastUrlPart : 'Root';
   const serviceName = StringUtil.pascalCase([resourceName, 'service']);
-  const path = url.substr(0, url.lastIndexOf('/'));
-  const filePath = `${path}/${serviceName}.ts`;
+  const urlPath = url.substr(0, url.lastIndexOf('/'));
+  const filePath = `${urlPath}/${serviceName}.ts`;
   console.log(`${filePath} => ${url}`);
+
+  const templateSource = 'class {{name}} {}\r\n\r\nexport {{#surroundWithCurlyBraces name}}{{/surroundWithCurlyBraces}}';
+  const template = Handlebars.compile(templateSource);
+  const renderedTemplate = template({name: serviceName});
+
+  const outputDirectory = path.join(process.cwd(), 'src', 'temp');
+  const outputFile = path.join(outputDirectory, filePath);
+  fs.outputFileSync(outputFile, renderedTemplate);
 });
