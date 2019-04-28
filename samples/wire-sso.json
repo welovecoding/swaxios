@@ -1,0 +1,578 @@
+{
+  "definitions": {
+    "AuthnRequest": {
+      "properties": {
+        "iD": {
+          "$ref": "#/definitions/ID"
+        },
+        "issueInstant": {
+          "$ref": "#/definitions/Time"
+        },
+        "issuer": {
+          "type": "string"
+        },
+        "nameIDPolicy": {
+          "$ref": "#/definitions/NameIdPolicy"
+        }
+      },
+      "required": [
+        "iD",
+        "issueInstant",
+        "issuer"
+      ],
+      "type": "object"
+    },
+    "CreateScimToken": {
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "description"
+      ],
+      "type": "object"
+    },
+    "CreateScimTokenResponse": {
+      "properties": {
+        "info": {
+          "$ref": "#/definitions/ScimTokenInfo"
+        },
+        "token": {
+          "description": "Authentication token",
+          "type": "string"
+        }
+      },
+      "required": [
+        "token",
+        "info"
+      ],
+      "type": "object"
+    },
+    "FormRedirect": {
+      "items": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/definitions/AuthnRequest"
+        }
+      ],
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array"
+    },
+    "ID": {
+      "properties": {
+        "iD": {
+          "$ref": "#/definitions/XmlText"
+        }
+      },
+      "required": [
+        "iD"
+      ],
+      "type": "object"
+    },
+    "IdPConfig": {
+      "properties": {
+        "extraInfo": {
+          "$ref": "#/definitions/UUID"
+        },
+        "id": {
+          "$ref": "#/definitions/UUID"
+        },
+        "metadata": {
+          "$ref": "#/definitions/IdPMetadata"
+        }
+      },
+      "required": [
+        "id",
+        "metadata",
+        "extraInfo"
+      ],
+      "type": "object"
+    },
+    "IdPList": {
+      "properties": {
+        "providers": {
+          "items": {
+            "$ref": "#/definitions/IdPConfig"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "providers"
+      ],
+      "type": "object"
+    },
+    "IdPMetadata": {
+      "properties": {
+        "certAuthnResponse": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "issuer": {
+          "type": "string"
+        },
+        "requestURI": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "issuer",
+        "requestURI",
+        "certAuthnResponse"
+      ],
+      "type": "object"
+    },
+    "NameIDFormat": {
+      "enum": [
+        "NameIDFUnspecified",
+        "NameIDFEmail",
+        "NameIDFX509",
+        "NameIDFWindows",
+        "NameIDFKerberos",
+        "NameIDFEntity",
+        "NameIDFPersistent",
+        "NameIDFTransient"
+      ],
+      "type": "string"
+    },
+    "NameIdPolicy": {
+      "properties": {
+        "allowCreate": {
+          "type": "boolean"
+        },
+        "format": {
+          "$ref": "#/definitions/NameIDFormat"
+        },
+        "spNameQualifier": {
+          "$ref": "#/definitions/XmlText"
+        }
+      },
+      "required": [
+        "format",
+        "allowCreate"
+      ],
+      "type": "object"
+    },
+    "ScimTokenInfo": {
+      "properties": {
+        "created_at": {
+          "$ref": "#/definitions/UTCTime"
+        },
+        "description": {
+          "type": "string"
+        },
+        "id": {
+          "$ref": "#/definitions/UUID"
+        },
+        "idp": {
+          "$ref": "#/definitions/UUID"
+        },
+        "team": {
+          "$ref": "#/definitions/UUID"
+        }
+      },
+      "required": [
+        "team",
+        "id",
+        "created_at",
+        "description"
+      ],
+      "type": "object"
+    },
+    "ScimTokenList": {
+      "properties": {
+        "tokens": {
+          "items": {
+            "$ref": "#/definitions/ScimTokenInfo"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "tokens"
+      ],
+      "type": "object"
+    },
+    "Time": {
+      "properties": {
+        "time": {
+          "$ref": "#/definitions/UTCTime"
+        }
+      },
+      "required": [
+        "time"
+      ],
+      "type": "object"
+    },
+    "UTCTime": {
+      "example": "2016-07-22T00:00:00Z",
+      "format": "yyyy-mm-ddThh:MM:ssZ",
+      "type": "string"
+    },
+    "UUID": {
+      "example": "00000000-0000-0000-0000-000000000000",
+      "format": "uuid",
+      "type": "string"
+    },
+    "XmlText": {
+      "properties": {
+        "fromXmlText": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "fromXmlText"
+      ],
+      "type": "object"
+    }
+  },
+  "info": {
+    "description": "\n\n# Overview\n\n`/sso/metadata` will be requested by the IdPs to learn how to talk to wire.\n\n`/sso/initiate-login`, `/sso/finalize-login` are for the SAML authentication handshake performed by a user in order to log into wire.  They are not exactly standard in their details: they may return HTML or XML; redirect to error URLs instead of throwing errors, etc.\n\n`/identity-providers` end-points are for use in the team settings page when IdPs are registered.  They talk json.\n\n\n# Configuring IdPs\n\nIdPs usually allow you to copy the metadata into your clipboard.  That should contain all the details you need to post the idp in your team under `/identity-providers`.  (Team id is derived from the authorization credentials of the request.)\n\n## okta.com\n\nOkta will ask you to provide two URLs when you set it up for talking to wireapp:\n\n1. The `Single sign on URL`.  This is the end-point that accepts the user's credentials after successful authentication against the IdP.  Choose `/sso/finalize-login` with schema and hostname of the wire server you are configuring.\n\n2. The `Audience URI`.  You can find this in the metadata returned by the `/sso/metadata` end-point.  It is the contents of the `md:OrganizationURL` element.\n\n## centrify.com\n\nCentrify allows you to upload the metadata xml document that you get from the `/sso/metadata` end-point.  You can also enter the metadata url and have centrify retrieve the xml, but to guarantee integrity of the setup, the metadata should be copied from the team settings page and pasted into the centrify setup page without any URL indirections.\n\n## microsoft azure active directory\n\n(coming up.)\n\n",
+    "title": "",
+    "version": ""
+  },
+  "paths": {
+    "/identity-providers": {
+      "get": {
+        "produces": [
+          "application/json;charset=utf-8"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/IdPList"
+            }
+          }
+        }
+      },
+      "post": {
+        "consumes": [
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/IdPMetadata"
+            }
+          }
+        ],
+        "produces": [
+          "application/json;charset=utf-8"
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/IdPConfig"
+            }
+          },
+          "400": {
+            "description": "Invalid `body`"
+          }
+        }
+      }
+    },
+    "/identity-providers/{id}": {
+      "delete": {
+        "parameters": [
+          {
+            "format": "uuid",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json;charset=utf-8"
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "`id` not found"
+          }
+        }
+      },
+      "get": {
+        "parameters": [
+          {
+            "format": "uuid",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json;charset=utf-8"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/IdPConfig"
+            }
+          },
+          "404": {
+            "description": "`id` not found"
+          }
+        }
+      }
+    },
+    "/scim/auth-tokens": {
+      "delete": {
+        "parameters": [
+          {
+            "format": "uuid",
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json;charset=utf-8"
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "description": "Invalid `id`"
+          }
+        }
+      },
+      "get": {
+        "produces": [
+          "application/json;charset=utf-8"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ScimTokenList"
+            }
+          }
+        }
+      },
+      "post": {
+        "consumes": [
+          "application/json;charset=utf-8"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateScimToken"
+            }
+          }
+        ],
+        "produces": [
+          "application/json;charset=utf-8"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/CreateScimTokenResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid `body`"
+          }
+        }
+      }
+    },
+    "/sso-initiate-bind/{idp}": {
+      "get": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "success_redirect",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "error_redirect",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "format": "uuid",
+            "in": "path",
+            "name": "idp",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "text/html"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {
+              "Set-Cookie": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/FormRedirect"
+            }
+          },
+          "400": {
+            "description": "Invalid `error_redirect` or `success_redirect`"
+          },
+          "404": {
+            "description": "`idp` not found"
+          }
+        }
+      }
+    },
+    "/sso/finalize-login": {
+      "post": {
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Cookie",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "text/plain;charset=utf-8"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Invalid `Cookie`"
+          }
+        }
+      }
+    },
+    "/sso/initiate-login/{idp}": {
+      "get": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "success_redirect",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "error_redirect",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "format": "uuid",
+            "in": "path",
+            "name": "idp",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "text/html"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {
+              "Set-Cookie": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/FormRedirect"
+            }
+          },
+          "400": {
+            "description": "Invalid `error_redirect` or `success_redirect`"
+          },
+          "404": {
+            "description": "`idp` not found"
+          }
+        }
+      },
+      "head": {
+        "parameters": [
+          {
+            "in": "query",
+            "name": "success_redirect",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "error_redirect",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "format": "uuid",
+            "in": "path",
+            "name": "idp",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "text/plain;charset=utf-8"
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "400": {
+            "description": "Invalid `error_redirect` or `success_redirect`"
+          },
+          "404": {
+            "description": "`idp` not found"
+          }
+        }
+      }
+    },
+    "/sso/metadata": {
+      "get": {
+        "produces": [
+          "application/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "swagger": "2.0"
+}

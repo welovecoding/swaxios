@@ -1,9 +1,14 @@
 {
+  "bin": {
+    "swaxios": "dist/cli.js"
+  },
   "dependencies": {
     "@types/fs-extra": "5.0.5",
+    "@types/minimist": "1.2.0",
     "axios": "0.18.0",
     "fs-extra": "7.0.1",
-    "handlebars": "4.1.2"
+    "handlebars": "4.1.2",
+    "minimist": "1.2.0"
   },
   "devDependencies": {
     "@types/node": "11.13.7",
@@ -12,10 +17,10 @@
   },
   "license": "MIT",
   "main": "dist/index.js",
-  "name": "swagger-ts-client-generator",
+  "name": "swaxios",
   "scripts": {
     "clean": "rimraf src/temp",
-    "start": "yarn clean && tsc && node dist/index.js"
+    "start": "yarn clean && tsc && node dist/cli.js -i ./samples/lambot-server.json -o ./src/temp"
   },
   "version": "0.0.0"
 }
