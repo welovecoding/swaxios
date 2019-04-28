@@ -9,3 +9,5 @@ If you pass a [Swagger definition](https://swagger.io/docs/specification/2-0/bas
 ```
 swaxios -i ./path/to/swagger.json -o ./path/to/output/directory
 ```
+
+Inspired by [swagger-codegen](https://github.com/swagger-api/swagger-codegen).

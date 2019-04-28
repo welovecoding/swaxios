@@ -6,6 +6,14 @@ class {{name}} {
   constructor(apiClient: AxiosInstance) {
     this.apiClient = apiClient;
   }
+
+  {{#each methods}}
+  async {{this.method}}(): Promise<{}> {
+    const resource = '{{this.url}}';
+    const response = await this.apiClient.{{this.method}}<{}>(resource);
+    return response.data;
+  }
+  {{/each}}
 }
 
 export {{#surroundWithCurlyBraces name}}{{/surroundWithCurlyBraces}};

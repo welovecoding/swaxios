@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import {validateConfig} from "./util/SwaggerValidator";
 import {ParsedResource} from "./info/ParsedResource";
+import prettier from 'prettier';
 
 Handlebars.registerHelper('surroundWithCurlyBraces', (text) => {
   return new Handlebars.SafeString(`{${text}}`);
@@ -18,9 +19,7 @@ function getTemplateFile(parsedInfo: any): string | undefined {
 
 function getContext(parsedInfo: any): { [index: string]: any } | undefined {
   if (parsedInfo instanceof ParsedResource) {
-    return {
-      name: parsedInfo.name
-    };
+    return parsedInfo.context;
   } else {
     return undefined;
   }
@@ -42,11 +41,12 @@ export function generateClient(inputFile: string, outputDirectory: string, write
 
   const urls = Object.keys(swaggerJson.paths);
   urls.forEach(url => {
-    const restResource = new ParsedResource(url);
+    const restResource = new ParsedResource(url, swaggerJson.paths[url]);
     const renderedTemplate = renderTemplate(restResource);
     if (writeFiles) {
+      const prettified = prettier.format(String(renderedTemplate), {parser: 'typescript', singleQuote: true});
       const outputFile = path.join(outputDirectory, restResource.filePath);
-      fs.outputFileSync(outputFile, renderedTemplate);
+      fs.outputFileSync(outputFile, prettified);
     }
   });
 }
