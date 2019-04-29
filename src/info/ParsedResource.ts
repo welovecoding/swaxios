@@ -2,21 +2,16 @@ import {StringUtil} from "../util/StringUtil";
 import {RequestMethod} from "./RequestMethod";
 
 class ParsedResource {
+  public directory: string;
+  public methods: RequestMethod[];
   public name: string;
   public url: string;
-  public directory: string;
-  public methods: RequestMethod[] = [];
 
-  constructor(url: string, methodDefinitions: { [index: string]: any }) {
+  constructor(url: string, methodDefinitions: { [index: string]: any } = {}) {
+    this.directory = url.substr(0, url.lastIndexOf('/'));
+    this.methods = [];
+    this.name = StringUtil.generateServiceName(url);
     this.url = url;
-
-    const urlParts = url.split('/');
-    const lastUrlPart = urlParts[urlParts.length - 1];
-    const resourceName = lastUrlPart ? lastUrlPart : 'Root';
-    this.name = StringUtil.pascalCase([resourceName, 'service']);
-
-    const urlPath = url.substr(0, url.lastIndexOf('/'));
-    this.directory = urlPath;
 
     for (const [key, value] of Object.entries(methodDefinitions)) {
       const methodDefinition = new RequestMethod(url, key);

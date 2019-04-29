@@ -1,8 +1,10 @@
 .env
 .idea
-/src/temp
+.nyc_output
+/coverage
 /dist
 /node_modules
 /package-lock.json
+/src/temp
 npm-debug.log
 yarn-error.log
