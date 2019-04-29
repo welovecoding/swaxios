@@ -1,7 +1,7 @@
 import Handlebars from 'handlebars';
 import path from 'path';
 import fs from 'fs-extra';
-import {validateConfig} from "./util/SwaggerValidator";
+import {validateConfig} from "./validator/SwaggerValidator";
 import {ParsedResource} from "./info/ParsedResource";
 import prettier from 'prettier';
 
@@ -35,9 +35,9 @@ function renderTemplate(parsedInfo: any) {
   }
 }
 
-export function generateClient(inputFile: string, outputDirectory: string, writeFiles: boolean = true) {
+export async function generateClient(inputFile: string, outputDirectory: string, writeFiles: boolean = true) {
   const swaggerJson = fs.readJsonSync(inputFile);
-  validateConfig(swaggerJson);
+  await validateConfig(swaggerJson);
 
   const urls = Object.keys(swaggerJson.paths);
   urls.forEach(url => {

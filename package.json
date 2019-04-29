@@ -6,11 +6,13 @@
     "@types/fs-extra": "5.0.5",
     "@types/minimist": "1.2.0",
     "@types/prettier": "1.16.3",
+    "@types/swagger-parser": "4.0.3",
     "axios": "0.18.0",
     "fs-extra": "7.0.1",
     "handlebars": "4.1.2",
     "minimist": "1.2.0",
-    "prettier": "1.17.0"
+    "prettier": "1.17.0",
+    "swagger-parser": "6.0.5"
   },
   "devDependencies": {
     "@types/jasmine": "3.3.12",
