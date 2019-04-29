@@ -1,13 +1,14 @@
 import {StringUtil} from '../util/StringUtil';
 import {RequestMethod} from './RequestMethod';
+import {SwaxiosGenerator} from './SwaxiosGenerator';
 
-class ParsedResource {
+class ParsedResource implements SwaxiosGenerator {
   public directory: string;
   public methods: RequestMethod[];
   public name: string;
   public url: string;
 
-  constructor(url: string, methodDefinitions: {[index: string]: any} = {}) {
+  constructor(url: string, methodDefinitions: Record<string, any> = {}) {
     this.directory = url.substr(0, url.lastIndexOf('/'));
     this.methods = [];
     this.name = StringUtil.generateServiceName(url);

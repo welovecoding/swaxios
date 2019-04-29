@@ -4,67 +4,65 @@ import path from 'path';
 import prettier from 'prettier';
 import {BaseClient} from './info/BaseClient';
 import {ParsedResource} from './info/ParsedResource';
+import {SwaxiosGenerator} from './info/SwaxiosGenerator';
 import {validateConfig} from './validator/SwaggerValidator';
 
 Handlebars.registerHelper('surroundWithCurlyBraces', text => {
   return new Handlebars.SafeString(`{${text}}`);
 });
 
-function getTemplateFile(parsedInfo: any): string | undefined {
-  const templateDirectory = path.join(process.cwd(), 'src', 'template');
+function getTemplateFile(parsedInfo: SwaxiosGenerator): string | void {
+  const templateDirectory = path.join(process.cwd(), 'src/template');
 
   if (parsedInfo instanceof ParsedResource) {
     return path.join(templateDirectory, 'APIClass.hbs');
   } else if (parsedInfo instanceof BaseClient) {
     return path.join(templateDirectory, 'APIClient.hbs');
-  } else {
-    return undefined;
   }
 }
 
-function getContext(parsedInfo: any): {[index: string]: any} | undefined {
-  if (parsedInfo instanceof ParsedResource) {
+function getContext(parsedInfo: SwaxiosGenerator): Record<string, any> | void {
+  if (parsedInfo instanceof ParsedResource || parsedInfo instanceof BaseClient) {
     return parsedInfo.context;
-  } else if (parsedInfo instanceof BaseClient) {
-    return parsedInfo.context;
-  } else {
-    return undefined;
   }
 }
 
-function renderTemplate(parsedInfo: any) {
+async function renderTemplate(parsedInfo: SwaxiosGenerator): Promise<string | void> {
   const templateFile = getTemplateFile(parsedInfo);
   const context = getContext(parsedInfo);
   if (templateFile && context) {
-    const templateSource = fs.readFileSync(templateFile, 'utf8');
+    const templateSource = await fs.readFile(templateFile, 'utf8');
     const template = Handlebars.compile(templateSource);
     return template(context);
   }
 }
 
-function writeTemplate(templatingClass: any, outputFilePath: string) {
-  const renderedTemplate = renderTemplate(templatingClass);
+async function writeTemplate(templatingClass: SwaxiosGenerator, outputFilePath: string): Promise<void> {
+  const renderedTemplate = await renderTemplate(templatingClass);
   const prettified = prettier.format(String(renderedTemplate), {
     parser: 'typescript',
     singleQuote: true,
   });
-  const outputFile = path.join(outputFilePath);
-  fs.outputFileSync(outputFile, prettified);
+  await fs.outputFile(outputFilePath, prettified);
 }
 
-export async function generateClient(inputFile: string, outputDirectory: string, writeFiles: boolean = true) {
-  const swaggerJson = fs.readJsonSync(inputFile);
+export async function generateClient(
+  inputFile: string,
+  outputDirectory: string,
+  writeFiles: boolean = true
+): Promise<void> {
+  const swaggerJson = await fs.readJson(inputFile);
   await validateConfig(swaggerJson);
 
-  const urls = Object.keys(swaggerJson.paths);
-  urls.forEach(url => {
+  for (const url of Object.keys(swaggerJson.paths)) {
     const restResource = new ParsedResource(url, swaggerJson.paths[url]);
     if (writeFiles) {
-      writeTemplate(restResource, path.join(outputDirectory, restResource.filePath));
+      await writeTemplate(restResource, path.join(outputDirectory, restResource.filePath));
     }
-  });
+  }
 
   if (writeFiles) {
-    writeTemplate(new BaseClient(), path.join(outputDirectory, 'APIClient.ts'));
+    const baseClient = new BaseClient(swaggerJson.paths);
+    await writeTemplate(baseClient, path.join(outputDirectory, baseClient.filePath));
   }
 }

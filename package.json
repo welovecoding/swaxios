@@ -55,7 +55,7 @@
     "lint:other": "yarn prettier --list-different",
     "lint:ts": "tslint --config tslint.json --project tsconfig.json \"**/*.ts?(x)\"",
     "prettier": "prettier \"**/*.{json,md}\"",
-    "start": "yarn clean && tsc && node dist/cli.js -i ./samples/wire-sso.json -o ./src/temp",
+    "start": "ts-node src/cli.ts -i ./samples/wire-sso.json -o ./src/temp",
     "test": "yarn lint && nyc jasmine --config=jasmine.json"
   },
   "version": "0.0.0"
