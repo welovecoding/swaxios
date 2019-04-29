@@ -1,0 +1,25 @@
+import axios, {AxiosInstance, AxiosRequestConfig} from 'axios';
+
+class APIClient {
+  private readonly httpClient: AxiosInstance;
+
+  constructor(baseURL: string);
+  constructor(config: AxiosRequestConfig);
+  constructor(configOrBaseURL: AxiosRequestConfig | string) {
+    if (typeof configOrBaseURL === 'string') {
+      configOrBaseURL = {baseURL: configOrBaseURL};
+    }
+
+    this.httpClient = axios.create(configOrBaseURL);
+  }
+
+  get api() {
+    return {{api}};
+  }
+
+  get interceptors() {
+    return this.httpClient.interceptors;
+  }
+}
+
+export {APIClient};
