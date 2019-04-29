@@ -1,4 +1,4 @@
-import {StringUtil} from "./StringUtil";
+import {StringUtil} from './StringUtil';
 
 describe('camelCase', () => {
   it('creates camel-cased names out of words', () => {

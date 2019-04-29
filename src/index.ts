@@ -1,12 +1,12 @@
+import fs from 'fs-extra';
 import Handlebars from 'handlebars';
 import path from 'path';
-import fs from 'fs-extra';
-import {validateConfig} from "./validator/SwaggerValidator";
-import {ParsedResource} from "./info/ParsedResource";
 import prettier from 'prettier';
-import {BaseClient} from "./info/BaseClient";
+import {BaseClient} from './info/BaseClient';
+import {ParsedResource} from './info/ParsedResource';
+import {validateConfig} from './validator/SwaggerValidator';
 
-Handlebars.registerHelper('surroundWithCurlyBraces', (text) => {
+Handlebars.registerHelper('surroundWithCurlyBraces', text => {
   return new Handlebars.SafeString(`{${text}}`);
 });
 
@@ -22,7 +22,7 @@ function getTemplateFile(parsedInfo: any): string | undefined {
   }
 }
 
-function getContext(parsedInfo: any): { [index: string]: any } | undefined {
+function getContext(parsedInfo: any): {[index: string]: any} | undefined {
   if (parsedInfo instanceof ParsedResource) {
     return parsedInfo.context;
   } else if (parsedInfo instanceof BaseClient) {
@@ -44,7 +44,10 @@ function renderTemplate(parsedInfo: any) {
 
 function writeTemplate(templatingClass: any, outputFilePath: string) {
   const renderedTemplate = renderTemplate(templatingClass);
-  const prettified = prettier.format(String(renderedTemplate), {parser: 'typescript', singleQuote: true});
+  const prettified = prettier.format(String(renderedTemplate), {
+    parser: 'typescript',
+    singleQuote: true,
+  });
   const outputFile = path.join(outputFilePath);
   fs.outputFileSync(outputFile, prettified);
 }

@@ -38,8 +38,8 @@ class APIClient {
     return {
       identityProviders: new IdentityProvidersService(this.httpClient),
       sso: {
-        FinalizeLogin: new FinalizeLoginService(this.httpClient)
-      }
+        FinalizeLogin: new FinalizeLoginService(this.httpClient),
+      },
     };
   }
 

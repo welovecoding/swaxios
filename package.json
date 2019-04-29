@@ -17,19 +17,46 @@
   "devDependencies": {
     "@types/jasmine": "3.3.12",
     "@types/node": "11.13.7",
+    "@wireapp/prettier-config": "0.2.0",
+    "@wireapp/tslint-config": "1.0.2",
+    "husky": "2.1.0",
     "jasmine": "3.4.0",
+    "lint-staged": "8.1.5",
     "nyc": "14.0.0",
     "rimraf": "2.6.3",
     "ts-node": "8.1.0",
+    "tslint": "5.16.0",
+    "tslint-config-prettier": "1.18.0",
+    "tslint-plugin-prettier": "2.0.1",
+    "tslint-react": "4.0.0",
+    "tslint-react-hooks": "2.1.0",
     "typescript": "3.4.5"
   },
   "license": "MIT",
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "tslint --config tslint.json --project tsconfig.json --fix",
+      "git add"
+    ],
+    "*.{json,md,scss,yml}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "main": "dist/index.js",
   "name": "swaxios",
+  "prettier": "@wireapp/prettier-config",
   "scripts": {
     "clean": "rimraf src/temp",
+    "fix": "yarn fix:other && yarn fix:ts",
+    "fix:other": "yarn prettier --write",
+    "fix:ts": "yarn lint:ts --fix",
+    "lint": "yarn lint:other && yarn lint:ts",
+    "lint:other": "yarn prettier --list-different",
+    "lint:ts": "tslint --config tslint.json --project tsconfig.json \"**/*.ts?(x)\"",
+    "prettier": "prettier \"**/*.{json,md}\"",
     "start": "yarn clean && tsc && node dist/cli.js -i ./samples/wire-sso.json -o ./src/temp",
-    "test": "nyc jasmine --config=jasmine.json"
+    "test": "yarn lint && nyc jasmine --config=jasmine.json"
   },
   "version": "0.0.0"
 }
