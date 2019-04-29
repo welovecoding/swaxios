@@ -1,0 +1,2028 @@
+{
+  "basePath": "/api/v1",
+  "definitions": {
+    "BasicLogin": {
+      "properties": {
+        "backend": {
+          "enum": [
+            "staging",
+            "prod",
+            "production"
+          ],
+          "type": "string"
+        },
+        "email": {
+          "format": "email",
+          "type": "string"
+        },
+        "password": {
+          "format": "password",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Client": {
+      "properties": {
+        "class": {
+          "type": "string"
+        },
+        "cookie": {
+          "type": "string"
+        },
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "location": {
+          "properties": {
+            "lat": {
+              "format": "float",
+              "type": "integer"
+            },
+            "lon": {
+              "format": "float",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "lat",
+            "lon"
+          ],
+          "type": "object"
+        },
+        "model": {
+          "type": "string"
+        },
+        "time": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Confirmation": {
+      "properties": {
+        "firstMessageId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "moreMessageIds": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "type": {
+          "enum": [
+            0,
+            1
+          ],
+          "type": "integer"
+        }
+      },
+      "required": [
+        "firstMessageId",
+        "type"
+      ],
+      "type": "object"
+    },
+    "Instance": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/InstanceAndName"
+        },
+        {
+          "properties": {
+            "backend": {
+              "type": "string"
+            },
+            "clientId": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "InstanceAndName": {
+      "properties": {
+        "instanceId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "LinkPreview": {
+      "properties": {
+        "image": {
+          "properties": {
+            "data": {
+              "format": "base64",
+              "type": "string"
+            },
+            "height": {
+              "format": "number",
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "width": {
+              "format": "number",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "permanentUrl": {
+          "type": "string"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "tweet": {
+          "properties": {
+            "author": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "url": {
+          "format": "url",
+          "type": "string"
+        },
+        "urlOffset": {
+          "format": "number",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Login": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/BasicLogin"
+        },
+        {
+          "properties": {
+            "deviceLabel": {
+              "type": "string"
+            },
+            "deviceName": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      ],
+      "required": [
+        "backend",
+        "email",
+        "password"
+      ]
+    },
+    "Mention": {
+      "properties": {
+        "length": {
+          "format": "number",
+          "type": "string"
+        },
+        "start": {
+          "format": "number",
+          "type": "string"
+        },
+        "userId": {
+          "format": "uuid",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Message": {
+      "properties": {
+        "content": {
+          "properties": {
+            "text": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "confirmations": {
+          "items": {
+            "allOf": [
+              {
+                "$ref": "#/definitions/Confirmation"
+              },
+              {
+                "properties": {
+                  "from": {
+                    "format": "uuid",
+                    "type": "string"
+                  }
+                }
+              }
+            ]
+          },
+          "type": "array"
+        },
+        "conversation": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "expectsReadConfirmation": {
+          "type": "boolean"
+        },
+        "from": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "messageTimer": {
+          "format": "number",
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "PayloadBundleState.INCOMING",
+            "PayloadBundleState.OUTGOING_SENT"
+          ],
+          "format": "string"
+        },
+        "type": {
+          "format": "string"
+        }
+      },
+      "required": [
+        "conversation",
+        "from",
+        "id",
+        "messageTimer",
+        "state",
+        "timestamp",
+        "type"
+      ],
+      "type": "object"
+    },
+    "NotFoundError": {
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "stack": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TextMessage": {
+      "properties": {
+        "conversationId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "expectsReadConfirmation": {
+          "type": "boolean"
+        },
+        "linkPreview": {
+          "$ref": "#/definitions/LinkPreview"
+        },
+        "mentions": {
+          "items": {
+            "$ref": "#/definitions/Mention"
+          },
+          "type": "array"
+        },
+        "messageTimer": {
+          "format": "number",
+          "type": "string"
+        },
+        "quote": {
+          "properties": {
+            "quotedMessageId": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "quotedMessageSha256": {
+              "format": "sha256",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ValidationError": {
+      "properties": {
+        "error": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "info": {
+    "contact": {
+      "email": "opensource@wire.com"
+    },
+    "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
+    "license": {
+      "name": "GPL-3.0",
+      "url": "https://github.com/wireapp/wire-web-ets/blob/master/LICENSE"
+    },
+    "termsOfService": "https://wire.com/legal/",
+    "title": "E2E Test Service",
+    "version": "1.16.1"
+  },
+  "paths": {
+    "/clients": {
+      "delete": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "",
+        "operationId": "deleteAllClients",
+        "parameters": [
+          {
+            "description": "Login data",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BasicLogin"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Delete all clients",
+        "tags": [
+          "Clients"
+        ]
+      }
+    },
+    "/instance": {
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "description": "",
+        "operationId": "createInstance",
+        "parameters": [
+          {
+            "description": "Login data",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InstanceAndName"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Create a new instance",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}": {
+      "delete": {
+        "description": "",
+        "operationId": "deleteInstance",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "object"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Delete an instance",
+        "tags": [
+          "Instance"
+        ]
+      },
+      "get": {
+        "operationId": "getInstance",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Instance"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          }
+        },
+        "summary": "Get information about an instance",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/archive": {
+      "post": {
+        "operationId": "archiveConversation",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "archive": {
+                  "type": "boolean"
+                },
+                "conversationId": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InstanceAndName"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Archive a conversation",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/availability": {
+      "post": {
+        "operationId": "setAvailability",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Type can be 0 (`NONE`), 1 (`AVAILABLE`), 2 (`AWAY`), 3 (`BUSY`).",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "teamId": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "type": {
+                  "enum": [
+                    0,
+                    1,
+                    2,
+                    3
+                  ],
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InstanceAndName"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Set a user's availability",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/clear": {
+      "post": {
+        "operationId": "clearConversation",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "conversationId": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InstanceAndName"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Clear a conversation",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/clients": {
+      "get": {
+        "operationId": "getClients",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Client"
+              },
+              "type": "array"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          }
+        },
+        "summary": "Get all clients of an instance",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/delete": {
+      "post": {
+        "operationId": "deleteMessage",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "conversationId": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "messageId": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InstanceAndName"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Delete a message locally",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/deleteEverywhere": {
+      "post": {
+        "operationId": "deleteMessageEverywhere",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "conversationId": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "messageId": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InstanceAndName"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Delete a message for everyone",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/fingerprint": {
+      "get": {
+        "operationId": "getFingerprint",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "properties": {
+                "fingerprint": {
+                  "type": "string"
+                },
+                "instanceId": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          }
+        },
+        "summary": "Get the fingerprint from the instance's client",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/getMessages": {
+      "post": {
+        "operationId": "getMessages",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "conversationId": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/Message"
+              },
+              "type": "array"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Get all messages",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/mute": {
+      "post": {
+        "operationId": "muteConversation",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "conversationId": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "mute": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InstanceAndName"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Mute a conversation",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/sendConfirmationDelivered": {
+      "post": {
+        "operationId": "sendConfirmationDelivered",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "conversationId": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "firstMessageId": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "moreMessageIds": {
+                  "items": {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "conversationId",
+                "firstMessageId"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InstanceAndName"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Send a delivery confirmation for a message",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/sendConfirmationRead": {
+      "post": {
+        "operationId": "sendConfirmationRead",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "conversationId": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "firstMessageId": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "moreMessageIds": {
+                  "items": {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "conversationId",
+                "firstMessageId"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InstanceAndName"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Send a read confirmation for a message",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/sendEphemeralConfirmationDelivered": {
+      "post": {
+        "operationId": "sendEphemeralConfirmationDelivered",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "conversationId": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "firstMessageId": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InstanceAndName"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Send a delivery confirmation for an ephemeral message",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/sendEphemeralConfirmationRead": {
+      "post": {
+        "operationId": "sendEphemeralConfirmationRead",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "conversationId": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "firstMessageId": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InstanceAndName"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Send a read confirmation for an ephemeral message",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/sendFile": {
+      "post": {
+        "operationId": "sendFile",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "conversationId": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "data": {
+                  "format": "base64",
+                  "type": "string"
+                },
+                "expectsReadConfirmation": {
+                  "type": "boolean"
+                },
+                "fileName": {
+                  "type": "string"
+                },
+                "messageTimer": {
+                  "format": "number",
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/InstanceAndName"
+                },
+                {
+                  "properties": {
+                    "messageId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Send a file to a conversation",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/sendImage": {
+      "post": {
+        "operationId": "sendImage",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "conversationId": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "data": {
+                  "format": "base64",
+                  "type": "string"
+                },
+                "expectsReadConfirmation": {
+                  "type": "boolean"
+                },
+                "height": {
+                  "format": "number",
+                  "type": "string"
+                },
+                "messageTimer": {
+                  "format": "number",
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "width": {
+                  "format": "number",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/InstanceAndName"
+                },
+                {
+                  "properties": {
+                    "messageId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Send an image to a conversation",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/sendLocation": {
+      "post": {
+        "operationId": "sendLocation",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "conversationId": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "expectsReadConfirmation": {
+                  "type": "boolean"
+                },
+                "latitude": {
+                  "format": "number",
+                  "type": "string"
+                },
+                "locationName": {
+                  "type": "string"
+                },
+                "longitude": {
+                  "format": "number",
+                  "type": "string"
+                },
+                "messageTimer": {
+                  "format": "number",
+                  "type": "string"
+                },
+                "zoom": {
+                  "format": "number",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/InstanceAndName"
+                },
+                {
+                  "properties": {
+                    "messageId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Send a location to a conversation",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/sendPing": {
+      "post": {
+        "operationId": "sendPing",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "conversationId": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "expectsReadConfirmation": {
+                  "type": "boolean"
+                },
+                "messageTimer": {
+                  "format": "number",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/InstanceAndName"
+                },
+                {
+                  "properties": {
+                    "messageId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Send a ping to a conversation",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/sendReaction": {
+      "post": {
+        "operationId": "sendReaction",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "conversationId": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "originalMessageId": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "type": {
+                  "enum": [
+                    "❤️",
+                    ""
+                  ],
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/InstanceAndName"
+                },
+                {
+                  "properties": {
+                    "messageId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Send a reaction to a message",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/sendSessionReset": {
+      "post": {
+        "operationId": "sendSessionReset",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "conversationId": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/InstanceAndName"
+                },
+                {
+                  "properties": {
+                    "messageId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Send a session reset message",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/sendText": {
+      "post": {
+        "operationId": "sendText",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TextMessage"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/InstanceAndName"
+                },
+                {
+                  "properties": {
+                    "messageId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Send a text message to a conversation",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/sendTyping": {
+      "post": {
+        "operationId": "sendTyping",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "conversationId": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "status": {
+                  "enum": [
+                    "started",
+                    "stopped"
+                  ],
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InstanceAndName"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Send a typing indicator to a conversation",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instance/{instanceId}/updateText": {
+      "post": {
+        "operationId": "updateText",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TextMessage"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/InstanceAndName"
+                },
+                {
+                  "properties": {
+                    "messageId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Update a text message in a conversation",
+        "tags": [
+          "Instance"
+        ]
+      }
+    },
+    "/instances": {
+      "get": {
+        "operationId": "getInstances",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "additionalProperties": {
+                "$ref": "#/definitions/Instance"
+              },
+              "type": "object"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          }
+        },
+        "summary": "Get all instances",
+        "tags": [
+          "Instances"
+        ]
+      }
+    }
+  },
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0",
+  "tags": [
+    {
+      "description": "Wire Client Instance",
+      "name": "Instance"
+    },
+    {
+      "description": "Wire Client Instances",
+      "name": "Instances"
+    },
+    {
+      "description": "Wire User Clients",
+      "name": "Clients"
+    }
+  ]
+}
