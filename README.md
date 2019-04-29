@@ -1,3 +1,5 @@
+![Swaxios](./logo.png)
+
 # Swaxios
 
 A [Swagger](https://swagger.io/) API client generator based on [axios](https://github.com/axios/axios) and written in [TypeScript](https://www.typescriptlang.org/).
