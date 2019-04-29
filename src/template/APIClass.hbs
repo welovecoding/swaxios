@@ -6,11 +6,15 @@ class {{name}} {
   constructor(apiClient: AxiosInstance) {
     this.apiClient = apiClient;
   }
-
   {{#each methods}}
+
   async {{this.method}}(): Promise<{}> {
     const resource = '{{this.url}}';
-    const response = await this.apiClient.{{this.method}}<{}>(resource);
+    {{#if this.returnType}}
+    const response = await this.apiClient.{{this.method}}<{{this.returnType}}>(resource);
+    {{else}}
+    const response = await this.apiClient.{{this.method}}(resource);
+    {{/if}}
     return response.data;
   }
   {{/each}}
