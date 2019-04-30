@@ -8,10 +8,10 @@ class {{name}} {
   }
   {{#each methods}}
 
-  async {{this.method}}(): Promise<{}> {
+  async {{this.method}}(): Promise<{{{this.returnType}}}> {
     const resource = '{{this.url}}';
     {{#if this.returnType}}
-    const response = await this.apiClient.{{this.method}}<{{this.returnType}}>(resource);
+    const response = await this.apiClient.{{this.method}}{{#ifNotEquals this.returnType "void"}}<{{this.returnType}}>{{/ifNotEquals}}(resource);
     {{else}}
     const response = await this.apiClient.{{this.method}}(resource);
     {{/if}}

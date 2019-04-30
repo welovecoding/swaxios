@@ -11,6 +11,11 @@ Handlebars.registerHelper('surroundWithCurlyBraces', text => {
   return new Handlebars.SafeString(`{${text}}`);
 });
 
+Handlebars.registerHelper('ifNotEquals', function(arg1, arg2, options) {
+  //@ts-ignore
+  return arg1 != arg2 ? options.fn(this) : options.inverse(this);
+});
+
 function getTemplateFile(parsedInfo: SwaxiosGenerator): string | void {
   const templateDirectory = path.join(process.cwd(), 'src/template');
 
