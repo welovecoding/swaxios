@@ -21,25 +21,26 @@ function getTemplateFile(parsedInfo: SwaxiosGenerator): string | void {
   }
 }
 
-function getContext(parsedInfo: SwaxiosGenerator): Record<string, any> | void {
+function getContext(parsedInfo: SwaxiosGenerator): Promise<any> | void {
   if (parsedInfo instanceof ParsedResource || parsedInfo instanceof BaseClient) {
-    return parsedInfo.context;
+    return parsedInfo.getContext();
   }
 }
 
-async function renderTemplate(parsedInfo: SwaxiosGenerator): Promise<string | void> {
+async function renderTemplate(parsedInfo: SwaxiosGenerator): Promise<string> {
   const templateFile = getTemplateFile(parsedInfo);
-  const context = getContext(parsedInfo);
+  const context = await getContext(parsedInfo);
   if (templateFile && context) {
     const templateSource = await fs.readFile(templateFile, 'utf8');
     const template = Handlebars.compile(templateSource);
     return template(context);
   }
+  return '';
 }
 
 async function writeTemplate(templatingClass: SwaxiosGenerator, outputFilePath: string): Promise<void> {
   const renderedTemplate = await renderTemplate(templatingClass);
-  const prettified = prettier.format(String(renderedTemplate), {
+  const prettified = prettier.format(renderedTemplate, {
     parser: 'typescript',
     singleQuote: true,
   });
@@ -62,7 +63,7 @@ export async function generateClient(
   }
 
   if (writeFiles) {
-    const baseClient = new BaseClient(swaggerJson.paths);
+    const baseClient = new BaseClient(outputDirectory);
     await writeTemplate(baseClient, path.join(outputDirectory, baseClient.filePath));
   }
 }

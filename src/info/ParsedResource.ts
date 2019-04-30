@@ -1,3 +1,4 @@
+import {Path} from 'swagger-schema-official';
 import {StringUtil} from '../util/StringUtil';
 import {RequestMethod} from './RequestMethod';
 import {SwaxiosGenerator} from './SwaxiosGenerator';
@@ -8,7 +9,7 @@ class ParsedResource implements SwaxiosGenerator {
   public name: string;
   public url: string;
 
-  constructor(url: string, methodDefinitions: Record<string, any> = {}) {
+  constructor(url: string, methodDefinitions: Record<string, Path> = {}) {
     this.directory = url.substr(0, url.lastIndexOf('/'));
     this.methods = [];
     this.name = StringUtil.generateServiceName(url);
@@ -24,7 +25,7 @@ class ParsedResource implements SwaxiosGenerator {
     return `${this.directory}/${this.name}.ts`;
   }
 
-  get context(): Object {
+  async getContext() {
     return {
       methods: this.methods,
       name: this.name,

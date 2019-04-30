@@ -1,4 +1,4 @@
 export abstract class SwaxiosGenerator {
   abstract get filePath(): string;
-  abstract get context(): Object;
+  abstract async getContext(): Promise<any>;
 }
