@@ -1,5 +1,6 @@
-import * as fs from 'fs-extra';
-import * as path from 'path';
+import fs from 'fs-extra';
+import os from 'os';
+import path from 'path';
 import {inspect} from 'util';
 
 import {StringUtil} from '../util/StringUtil';
@@ -108,7 +109,7 @@ class BaseClient implements SwaxiosGenerator {
 
     return {
       api: apiString,
-      imports: imports.join('\n'),
+      imports: imports.join(os.EOL),
     };
   }
 }
