@@ -84,7 +84,7 @@ class BaseClient implements SwaxiosGenerator {
 
     for (const [fileName, file] of Object.entries(fileIndex.files)) {
       const apiName = StringUtil.camelize(fileName);
-      const relativePath = path.relative(this.outputDirectory, file.fullPath);
+      const relativePath = path.relative(this.outputDirectory, file.fullPath).replace(/\\/g, '/');
       imports.push(`import {${apiName}} from './${relativePath}'`);
     }
 
@@ -101,7 +101,8 @@ class BaseClient implements SwaxiosGenerator {
 
   async getContext(): Promise<API> {
     const fileIndex = await this.generateFileIndex(this.outputDirectory);
-    delete fileIndex.files['APIClient.ts'];
+    // FIXME: The file shouldn't exist in the first place!
+    delete fileIndex.files[this.filePath];
 
     const API = await this.generateAPI(fileIndex);
     const apiString = inspect(API).replace(/'/gm, '');
