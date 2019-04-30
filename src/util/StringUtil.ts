@@ -1,17 +1,27 @@
-class StringUtil {
-  static camelCase(words: string[], isPascalCase: boolean = false) {
-    const casedWords = words.map(word => word.toLowerCase().charAt(0).toUpperCase() + word.slice(1));
+const StringUtil = {
+  camelCase(words: string[], isPascalCase: boolean = false): string {
+    const casedWords = words.map(
+      word =>
+        word
+          .toLowerCase()
+          .charAt(0)
+          .toUpperCase() + word.slice(1)
+    );
     if (!isPascalCase) {
       casedWords[0] = casedWords[0].toLowerCase();
     }
     return casedWords.join('');
-  }
+  },
 
-  static pascalCase(words: string[]) {
+  pascalCase(words: string[]): string {
     return StringUtil.camelCase(words, true);
-  }
+  },
 
-  static generateServiceName(url: string) {
+  camelize(resourceName: string): string {
+    return StringUtil.pascalCase(resourceName.split('-'));
+  },
+
+  generateServiceName(url: string): string {
     const urlPartFilter = (part: string) => {
       if (part.length === 0) {
         return false;
@@ -28,8 +38,8 @@ class StringUtil {
     const lastUrlPart = urlParts[urlParts.length - 1];
     const resourceName = lastUrlPart ? lastUrlPart : 'Root';
 
-    return StringUtil.pascalCase(resourceName.split('-').concat(['service']));
-  }
-}
+    return StringUtil.camelize(`${resourceName}-service`);
+  },
+};
 
 export {StringUtil};

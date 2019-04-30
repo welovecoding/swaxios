@@ -1,19 +1,21 @@
-import {StringUtil} from "../util/StringUtil";
-import {RequestMethod} from "./RequestMethod";
+import {Path} from 'swagger-schema-official';
+import {StringUtil} from '../util/StringUtil';
+import {RequestMethod} from './RequestMethod';
+import {SwaxiosGenerator} from './SwaxiosGenerator';
 
-class ParsedResource {
+class ParsedResource implements SwaxiosGenerator {
   public directory: string;
   public methods: RequestMethod[];
   public name: string;
   public url: string;
 
-  constructor(url: string, methodDefinitions: { [index: string]: any } = {}) {
+  constructor(url: string, methodDefinitions: Record<string, Path> = {}) {
     this.directory = url.substr(0, url.lastIndexOf('/'));
     this.methods = [];
     this.name = StringUtil.generateServiceName(url);
     this.url = url;
 
-    for (const [key, value] of Object.entries(methodDefinitions)) {
+    for (const key of Object.keys(methodDefinitions)) {
       const methodDefinition = new RequestMethod(url, key);
       this.methods.push(methodDefinition);
     }
@@ -23,10 +25,10 @@ class ParsedResource {
     return `${this.directory}/${this.name}.ts`;
   }
 
-  get context(): Object {
+  async getContext() {
     return {
       methods: this.methods,
-      name: this.name
+      name: this.name,
     };
   }
 }

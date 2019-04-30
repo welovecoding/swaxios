@@ -6,7 +6,7 @@ class RequestMethod {
   constructor(url: string, method: string) {
     this.url = url;
     if (method === 'delete' || method === 'head') {
-      this.returnType = '';
+      this.returnType = 'void';
     } else {
       this.returnType = '{}';
     }

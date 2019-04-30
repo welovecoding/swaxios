@@ -1,0 +1,10 @@
+{
+  "extends": ["@wireapp/tslint-config"],
+  "linterOptions": {
+    "exclude": ["src/temp/**", "**/node_modules/**", "**/*.d.ts"]
+  },
+  "rules": {
+    "file-header": false,
+    "prefer-conditional-expression": false
+  }
+}
