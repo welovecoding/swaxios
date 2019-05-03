@@ -1,15 +1,18 @@
 import {Response, Schema, Spec} from 'swagger-schema-official';
 import {inspect} from 'util';
+import {StringUtil} from '../util/StringUtil';
 
 class RequestMethod {
   public method: string;
   public returnType: string;
   public url: string;
+  public normalizedUrl: string;
   private readonly spec: Spec;
   private readonly responses: Record<string, Response>;
 
   constructor(url: string, method: string, responses: Record<string, Response>, spec: Spec) {
     this.url = url;
+    this.normalizedUrl = StringUtil.normalizeUrl(url);
     this.spec = spec;
     this.responses = responses;
 
@@ -75,7 +78,7 @@ class RequestMethod {
           return this.buildType(schema.items);
         }
 
-        const schemes = schema.items.map(itemSchema => this.buildType(itemSchema)).join(',');
+        const schemes = schema.items.map(itemSchema => this.buildType(itemSchema)).join('|');
         return `Array<${schemes}>`;
       }
       default: {

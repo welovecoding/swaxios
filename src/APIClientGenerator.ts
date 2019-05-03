@@ -9,13 +9,10 @@ import {SwaxiosGenerator} from './info/SwaxiosGenerator';
 import {StringUtil} from './util/StringUtil';
 import {validateConfig} from './validator/SwaggerValidator';
 
+require('handlebars-helpers')();
+
 Handlebars.registerHelper('surroundWithCurlyBraces', text => {
   return new Handlebars.SafeString(`{${text}}`);
-});
-
-Handlebars.registerHelper('ifNotEquals', (arg1, arg2, options) => {
-  //@ts-ignore
-  return arg1 != arg2 ? options.fn(this) : options.inverse(this);
 });
 
 function getTemplateFile(parsedInfo: SwaxiosGenerator): string | void {
@@ -80,8 +77,6 @@ export async function exportServices(swaggerJson: Spec): Promise<ParsedResource[
     const restResource = new ParsedResource(fullyQualifiedName, resourceDefinitions, swaggerJson);
     resources.push(restResource);
   }
-  // const restResource = new ParsedResource(url, swaggerJson.paths[url], swaggerJson);
-  // resources.push(restResource);
 
   return resources;
 }
@@ -89,11 +84,11 @@ export async function exportServices(swaggerJson: Spec): Promise<ParsedResource[
 export async function generateClient(swaggerJson: Spec, outputDirectory?: string) {
   const resources = await exportServices(swaggerJson);
 
-  resources.forEach(async restResource => {
+  for (const restResource of resources) {
     if (outputDirectory) {
       await writeTemplate(restResource, path.join(outputDirectory, restResource.filePath));
     }
-  });
+  }
 
   if (outputDirectory) {
     const baseClient = new BaseClient(outputDirectory);
