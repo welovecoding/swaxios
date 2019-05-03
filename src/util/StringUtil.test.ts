@@ -32,3 +32,11 @@ describe('generateServiceName', () => {
     expect(name).toBe('IdentityProvidersService');
   });
 });
+
+describe('normalizeUrl', () => {
+  it('strips out variables from URLs', () => {
+    const url = '/api/identity-providers/{id}';
+    const normalizedUrl = StringUtil.normalizeUrl(url);
+    expect(normalizedUrl).toBe('/api/identity-providers');
+  });
+});

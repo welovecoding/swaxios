@@ -2,10 +2,11 @@ import fs from 'fs-extra';
 import Handlebars from 'handlebars';
 import path from 'path';
 import prettier from 'prettier';
-import {Spec} from 'swagger-schema-official';
+import {Path, Spec} from 'swagger-schema-official';
 import {BaseClient} from './info/BaseClient';
 import {ParsedResource} from './info/ParsedResource';
 import {SwaxiosGenerator} from './info/SwaxiosGenerator';
+import {StringUtil} from './util/StringUtil';
 import {validateConfig} from './validator/SwaggerValidator';
 
 Handlebars.registerHelper('surroundWithCurlyBraces', text => {
@@ -59,13 +60,40 @@ export async function writeClient(inputFile: string, outputDirectory: string): P
   return generateClient(swaggerJson, outputDirectory);
 }
 
-export async function generateClient(swaggerJson: Spec, outputDirectory?: string) {
+export async function exportServices(swaggerJson: Spec): Promise<ParsedResource[]> {
+  const resources: ParsedResource[] = [];
+  const recordedUrls: Record<string, {[pathName: string]: Path}> = {};
+
   for (const url of Object.keys(swaggerJson.paths)) {
-    const restResource = new ParsedResource(url, swaggerJson.paths[url], swaggerJson);
+    const normalizedUrl = StringUtil.normalizeUrl(url);
+    const directory = normalizedUrl.substr(0, normalizedUrl.lastIndexOf('/'));
+    const serviceName = StringUtil.generateServiceName(normalizedUrl);
+    const fullyQualifiedName = `${directory}/${serviceName}`;
+
+    recordedUrls[fullyQualifiedName] = {
+      ...recordedUrls[fullyQualifiedName],
+
+      [url]: swaggerJson.paths[url],
+    };
+  }
+  for (const [fullyQualifiedName, resourceDefinitions] of Object.entries(recordedUrls)) {
+    const restResource = new ParsedResource(fullyQualifiedName, resourceDefinitions, swaggerJson);
+    resources.push(restResource);
+  }
+  // const restResource = new ParsedResource(url, swaggerJson.paths[url], swaggerJson);
+  // resources.push(restResource);
+
+  return resources;
+}
+
+export async function generateClient(swaggerJson: Spec, outputDirectory?: string) {
+  const resources = await exportServices(swaggerJson);
+
+  resources.forEach(async restResource => {
     if (outputDirectory) {
       await writeTemplate(restResource, path.join(outputDirectory, restResource.filePath));
     }
-  }
+  });
 
   if (outputDirectory) {
     const baseClient = new BaseClient(outputDirectory);
