@@ -111,6 +111,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/handlebars-helpers@0.5.2":
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/@types/handlebars-helpers/-/handlebars-helpers-0.5.2.tgz#3d75237da2eef5ba00fac771e4fb50ef3e001620"
+  integrity sha512-3FF6MQ/Lp32FHvYByqox4PN4ci9gDhekyFKU9LcHAFea9H4uCblJcSQsl3XD5U0LhqdszMejXa4O0NL+mpYvtw==
+  dependencies:
+    handlebars ">=4.1.0"
+
 "@types/jasmine@3.3.12":
   version "3.3.12"
   resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-3.3.12.tgz#bf282cb540e9ad7a0a04b742082c073b655eab39"
@@ -1266,7 +1273,7 @@ handlebars-utils@^1.0.2, handlebars-utils@^1.0.4, handlebars-utils@^1.0.6:
     kind-of "^6.0.0"
     typeof-article "^0.1.1"
 
-handlebars@4.1.2, handlebars@^4.0.11, handlebars@^4.1.0:
+handlebars@4.1.2, handlebars@>=4.1.0, handlebars@^4.0.11, handlebars@^4.1.0:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.1.2.tgz#b6b37c1ced0306b221e094fc7aca3ec23b131b67"
   integrity sha512-nvfrjqvt9xQ8Z/w0ijewdD/vvWDTOweBUm96NTr66Wfvo1mJenBLwcYmPs3TIBP5ruzYGD7Hx/DaM9RmhroGPw==
