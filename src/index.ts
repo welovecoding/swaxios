@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import Handlebars from 'handlebars';
 import path from 'path';
 import prettier from 'prettier';
+import {Spec} from 'swagger-schema-official';
 import {BaseClient} from './info/BaseClient';
 import {ParsedResource} from './info/ParsedResource';
 import {SwaxiosGenerator} from './info/SwaxiosGenerator';
@@ -57,11 +58,11 @@ export async function generateClient(
   outputDirectory: string,
   writeFiles: boolean = true
 ): Promise<void> {
-  const swaggerJson = await fs.readJson(inputFile);
+  const swaggerJson: Spec = await fs.readJson(inputFile);
   await validateConfig(swaggerJson);
 
   for (const url of Object.keys(swaggerJson.paths)) {
-    const restResource = new ParsedResource(url, swaggerJson.paths[url]);
+    const restResource = new ParsedResource(url, swaggerJson.paths[url], swaggerJson);
     if (writeFiles) {
       await writeTemplate(restResource, path.join(outputDirectory, restResource.filePath));
     }
