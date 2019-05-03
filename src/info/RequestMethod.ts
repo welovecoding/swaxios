@@ -1,4 +1,3 @@
-import os from 'os';
 import {Response, Schema, Spec} from 'swagger-schema-official';
 import {inspect} from 'util';
 
@@ -64,7 +63,7 @@ class RequestMethod {
         return inspect(schema)
           .replace(/'/gm, '')
           .replace(',', ';')
-          .replace(new RegExp(os.EOL, 'g'), '');
+          .replace(new RegExp('\\n', 'g'), '');
       }
       case 'array': {
         if (!schema.items) {

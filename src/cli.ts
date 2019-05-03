@@ -8,6 +8,6 @@ const inputFile = path.resolve(path.join(process.cwd(), argv.i));
 const outputDirectory = path.resolve(path.join(process.cwd(), argv.o));
 
 generateClient(inputFile, outputDirectory).catch(error => {
-  console.error(error.message);
+  console.error(error);
   process.exit(1);
 });
