@@ -12,7 +12,7 @@ Handlebars.registerHelper('surroundWithCurlyBraces', text => {
   return new Handlebars.SafeString(`{${text}}`);
 });
 
-Handlebars.registerHelper('ifNotEquals', function(arg1, arg2, options) {
+Handlebars.registerHelper('ifNotEquals', (arg1, arg2, options) => {
   //@ts-ignore
   return arg1 != arg2 ? options.fn(this) : options.inverse(this);
 });
@@ -53,22 +53,21 @@ async function writeTemplate(templatingClass: SwaxiosGenerator, outputFilePath: 
   await fs.outputFile(outputFilePath, prettified);
 }
 
-export async function generateClient(
-  inputFile: string,
-  outputDirectory: string,
-  writeFiles: boolean = true
-): Promise<void> {
+export async function writeClient(inputFile: string, outputDirectory: string): Promise<void> {
   const swaggerJson: Spec = await fs.readJson(inputFile);
   await validateConfig(swaggerJson);
+  return generateClient(swaggerJson, outputDirectory);
+}
 
+export async function generateClient(swaggerJson: Spec, outputDirectory?: string) {
   for (const url of Object.keys(swaggerJson.paths)) {
     const restResource = new ParsedResource(url, swaggerJson.paths[url], swaggerJson);
-    if (writeFiles) {
+    if (outputDirectory) {
       await writeTemplate(restResource, path.join(outputDirectory, restResource.filePath));
     }
   }
 
-  if (writeFiles) {
+  if (outputDirectory) {
     const baseClient = new BaseClient(outputDirectory);
     await writeTemplate(baseClient, path.join(outputDirectory, baseClient.filePath));
   }
