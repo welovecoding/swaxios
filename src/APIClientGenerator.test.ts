@@ -2,7 +2,7 @@ import {Spec} from 'swagger-schema-official';
 import {exportServices} from './APIClientGenerator';
 
 describe('exportServices', () => {
-  it('is defined', async () => {
+  it('merges resources if their belong to the same service', async () => {
     const swaggerJson: Spec = {
       info: {
         description: '',
