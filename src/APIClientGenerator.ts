@@ -9,7 +9,7 @@ import {SwaxiosGenerator} from './info/SwaxiosGenerator';
 import {StringUtil} from './util/StringUtil';
 import {validateConfig} from './validator/SwaggerValidator';
 
-require('handlebars-helpers')();
+require('handlebars-helpers')(['comparison'])
 
 Handlebars.registerHelper('surroundWithCurlyBraces', text => {
   return new Handlebars.SafeString(`{${text}}`);
