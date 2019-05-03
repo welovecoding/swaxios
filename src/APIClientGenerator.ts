@@ -73,6 +73,7 @@ export async function exportServices(swaggerJson: Spec): Promise<ParsedResource[
       [url]: swaggerJson.paths[url],
     };
   }
+
   for (const [fullyQualifiedName, resourceDefinitions] of Object.entries(recordedUrls)) {
     const restResource = new ParsedResource(fullyQualifiedName, resourceDefinitions, swaggerJson);
     resources.push(restResource);
