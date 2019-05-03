@@ -93,7 +93,7 @@ class RequestMethod {
     const responseSchema = response200 && response200.schema;
 
     if (!responseSchema) {
-      console.info('No schema for code 200 or schema has no definitions.');
+      console.info(`No schema for code 200 on url "${this.url}" or schema has no definitions.`);
       return emptyObject;
     }
 
