@@ -40,6 +40,10 @@ const StringUtil = {
 
     return StringUtil.camelize(`${resourceName}-service`);
   },
+
+  normalizeUrl(url: string): string {
+    return url.replace(/\/\{.*\}$/, '');
+  },
 };
 
 export {StringUtil};
