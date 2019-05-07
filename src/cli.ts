@@ -20,9 +20,9 @@ Options:
   -v, --version  Output the version number
 `;
 
+const helpArg = argv.h || argv.help;
 const inputArg = argv.i || argv.input;
 const outputArg = argv.i || argv.output;
-const helpArg = argv.h || argv.help;
 const versionArg = argv.v || argv.version;
 
 if (versionArg) {
