@@ -16,6 +16,7 @@
     "prettier": "1.17.0",
     "swagger-parser": "6.0.5"
   },
+  "description": "Generate Swagger API clients with axios",
   "devDependencies": {
     "@types/jasmine": "3.3.12",
     "@types/node": "11.13.7",
