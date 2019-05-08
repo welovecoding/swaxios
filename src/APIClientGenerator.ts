@@ -45,19 +45,15 @@ export async function exportServices(swaggerJson: Spec): Promise<ParsedResource[
   return resources;
 }
 
-export async function generateClient(swaggerJson: Spec, outputDirectory?: string) {
+export async function generateClient(swaggerJson: Spec, outputDirectory: string) {
   const resources = await exportServices(swaggerJson);
 
   for (const restResource of resources) {
-    if (outputDirectory) {
-      const rendered = await restResource.toString();
-      await fs.outputFile(path.join(outputDirectory, restResource.filePath), rendered, 'utf-8');
-    }
+    const rendered = await restResource.toString();
+    await fs.outputFile(path.join(outputDirectory, restResource.filePath), rendered, 'utf-8');
   }
 
-  if (outputDirectory) {
-    const baseClient = new BaseClient(outputDirectory);
-    const rendered = await baseClient.toString();
-    await fs.outputFile(path.join(outputDirectory, baseClient.filePath), rendered, 'utf-8');
-  }
+  const baseClient = new BaseClient(outputDirectory);
+  const rendered = await baseClient.toString();
+  await fs.outputFile(path.join(outputDirectory, baseClient.filePath), rendered, 'utf-8');
 }
