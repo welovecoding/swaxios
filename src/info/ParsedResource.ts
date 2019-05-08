@@ -7,7 +7,7 @@ class ParsedResource implements SwaxiosGenerator {
   public methods: RequestMethod[] = [];
   public name: string;
 
-  constructor(fullyQualifiedName: string, resourceDefinitions: {[pathName: string]: Path} = {}, spec: Spec) {
+  constructor(fullyQualifiedName: string, resourceDefinitions: Record<string, Path> = {}, spec: Spec) {
     const stopIndex = fullyQualifiedName.lastIndexOf('/');
 
     if (stopIndex > -1) {

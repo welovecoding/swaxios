@@ -22,7 +22,7 @@ Options:
 
 const helpArg = argv.h || argv.help;
 const inputArg = argv.i || argv.input;
-const outputArg = argv.i || argv.output;
+const outputArg = argv.o || argv.output;
 const versionArg = argv.v || argv.version;
 
 if (versionArg) {

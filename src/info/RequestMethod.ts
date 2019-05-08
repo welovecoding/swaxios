@@ -63,7 +63,7 @@ class RequestMethod {
           schema[propertyName] = this.buildType(properties[property]);
         }
 
-        return inspect(schema)
+        return inspect(schema, {breakLength: Infinity})
           .replace(/'/gm, '')
           .replace(',', ';')
           .replace(new RegExp('\\n', 'g'), '');

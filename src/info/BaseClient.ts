@@ -105,7 +105,7 @@ class BaseClient implements SwaxiosGenerator {
     delete fileIndex.files[this.filePath];
 
     const API = await this.generateAPI(fileIndex);
-    const apiString = inspect(API).replace(/'/gm, '');
+    const apiString = inspect(API, {breakLength: Infinity}).replace(/'/gm, '');
     const imports = await this.generateImports(fileIndex);
 
     return {
