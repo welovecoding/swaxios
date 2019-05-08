@@ -1,5 +1,5 @@
 import {Spec} from 'swagger-schema-official';
-import {exportServices} from './APIClientGenerator';
+import {exportServices} from './Swaxios';
 
 describe('exportServices', () => {
   it('merges resources if their belong to the same service', async () => {

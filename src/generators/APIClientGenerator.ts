@@ -3,8 +3,8 @@ import os from 'os';
 import path from 'path';
 import {inspect} from 'util';
 
-import {StringUtil} from '../util/StringUtil';
-import {SwaxiosGenerator} from './SwaxiosGenerator';
+import * as StringUtil from '../util/StringUtil';
+import {TemplateGenerator} from './TemplateGenerator';
 
 interface API {
   [name: string]: string | API;
@@ -21,7 +21,7 @@ interface DirEntry {
   name: string;
 }
 
-class BaseClient extends SwaxiosGenerator {
+export class APIClientGenerator extends TemplateGenerator {
   private readonly outputDirectory: string;
   readonly name: string;
 
@@ -118,5 +118,3 @@ class BaseClient extends SwaxiosGenerator {
     };
   }
 }
-
-export {BaseClient};

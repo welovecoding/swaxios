@@ -2,7 +2,7 @@ import fs from 'fs-extra';
 import Handlebars from 'handlebars';
 import prettier from 'prettier';
 
-export abstract class SwaxiosGenerator {
+export abstract class TemplateGenerator {
   abstract name: string;
   abstract getTemplateFile(): string;
 

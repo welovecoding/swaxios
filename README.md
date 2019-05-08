@@ -21,7 +21,7 @@ import axios, {AxiosInstance, AxiosRequestConfig} from 'axios';
 import {IdentityProvidersService} from './identity-providers/IdentityProvidersService';
 import {FinalizeLoginService} from './sso/FinalizeLoginService';
 
-class APIClient {
+export class APIClient {
   private readonly httpClient: AxiosInstance;
 
   constructor(baseURL: string);
@@ -47,8 +47,6 @@ class APIClient {
     return this.httpClient.interceptors;
   }
 }
-
-export {APIClient};
 ```
 
 **YourApp.ts**

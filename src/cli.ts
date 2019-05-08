@@ -3,7 +3,7 @@
 import minimist from 'minimist';
 import path from 'path';
 
-import {writeClient} from './APIClientGenerator';
+import {writeClient} from './Swaxios';
 const {bin, description, name, version} = require('../package.json');
 const binName = Object.keys(bin)[0] || name;
 

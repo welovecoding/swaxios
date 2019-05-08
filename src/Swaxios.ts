@@ -2,12 +2,13 @@ import fs from 'fs-extra';
 import path from 'path';
 import {Path, Spec} from 'swagger-schema-official';
 
-import {BaseClient} from './info/BaseClient';
-import {ParsedResource} from './info/ParsedResource';
-import {StringUtil} from './util/StringUtil';
+import {APIClientGenerator, ResourceGenerator} from './generators';
+import * as StringUtil from './util/StringUtil';
 import {validateConfig} from './validator/SwaggerValidator';
 
-require('handlebars-helpers')(['comparison']);
+import handlebarsHelpers from 'handlebars-helpers';
+
+handlebarsHelpers(['comparison']);
 
 export async function writeClient(inputFile: string, outputDirectory: string): Promise<void> {
   const swaggerJson: Spec = await fs.readJson(inputFile);
@@ -15,8 +16,8 @@ export async function writeClient(inputFile: string, outputDirectory: string): P
   return generateClient(swaggerJson, outputDirectory);
 }
 
-export async function exportServices(swaggerJson: Spec): Promise<ParsedResource[]> {
-  const resources: ParsedResource[] = [];
+export async function exportServices(swaggerJson: Spec): Promise<ResourceGenerator[]> {
+  const resources: ResourceGenerator[] = [];
   const recordedUrls: Record<string, Record<string, Path>> = {};
 
   for (const url of Object.keys(swaggerJson.paths)) {
@@ -32,7 +33,7 @@ export async function exportServices(swaggerJson: Spec): Promise<ParsedResource[
   }
 
   for (const [fullyQualifiedName, resourceDefinitions] of Object.entries(recordedUrls)) {
-    const restResource = new ParsedResource(fullyQualifiedName, resourceDefinitions, swaggerJson);
+    const restResource = new ResourceGenerator(fullyQualifiedName, resourceDefinitions, swaggerJson);
     resources.push(restResource);
   }
 
@@ -47,7 +48,7 @@ export async function generateClient(swaggerJson: Spec, outputDirectory: string)
     await fs.outputFile(path.join(outputDirectory, restResource.filePath), rendered, 'utf-8');
   }
 
-  const baseClient = new BaseClient(outputDirectory);
+  const baseClient = new APIClientGenerator(outputDirectory);
   const rendered = await baseClient.toString();
   await fs.outputFile(path.join(outputDirectory, baseClient.filePath), rendered, 'utf-8');
 }
