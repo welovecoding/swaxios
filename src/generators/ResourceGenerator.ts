@@ -1,16 +1,16 @@
 import path from 'path';
 
 import {Path, Spec} from 'swagger-schema-official';
-import {RequestMethod} from './RequestMethod';
-import {SwaxiosGenerator} from './SwaxiosGenerator';
+import {MethodGenerator} from './MethodGenerator';
+import {TemplateGenerator} from './TemplateGenerator';
 
-class ParsedResource extends SwaxiosGenerator {
+export class ResourceGenerator extends TemplateGenerator {
   directory: string;
-  methods: RequestMethod[] = [];
-  name: string;
   fullyQualifiedName: string;
+  methods: MethodGenerator[] = [];
+  name: string;
 
-  constructor(fullyQualifiedName: string, resourceDefinitions: Record<string, Path> = {}, spec: Spec) {
+  constructor(fullyQualifiedName: string, resources: Record<string, Path> = {}, spec: Spec) {
     super();
     const stopIndex = fullyQualifiedName.lastIndexOf('/');
 
@@ -22,9 +22,9 @@ class ParsedResource extends SwaxiosGenerator {
       this.name = fullyQualifiedName;
     }
 
-    Object.entries(resourceDefinitions).forEach(([url, definition]) => {
+    Object.entries(resources).forEach(([url, definition]) => {
       for (const [method, data] of Object.entries(definition)) {
-        const methodDefinition = new RequestMethod(url, method, data.responses, spec);
+        const methodDefinition = new MethodGenerator(url, method, data.responses, spec);
         this.methods.push(methodDefinition);
       }
     });
@@ -34,7 +34,7 @@ class ParsedResource extends SwaxiosGenerator {
 
   getTemplateFile(): string {
     const templateDirectory = path.join(process.cwd(), 'src/template');
-    return path.join(templateDirectory, 'APIClass.hbs');
+    return path.join(templateDirectory, 'Resource.hbs');
   }
 
   get filePath(): string {
@@ -48,5 +48,3 @@ class ParsedResource extends SwaxiosGenerator {
     };
   }
 }
-
-export {ParsedResource};

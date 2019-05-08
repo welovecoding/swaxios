@@ -1,8 +1,9 @@
 import {Response, Schema, Spec} from 'swagger-schema-official';
 import {inspect} from 'util';
-import {StringUtil} from '../util/StringUtil';
 
-class RequestMethod {
+import * as StringUtil from '../util/StringUtil';
+
+export class MethodGenerator {
   public parameterMethod: string;
   public parameterName?: string;
   public parameterData?: string;
@@ -121,5 +122,3 @@ class RequestMethod {
     return responseSchema;
   }
 }
-
-export {RequestMethod};
