@@ -1,13 +1,17 @@
+import path from 'path';
+
 import {Path, Spec} from 'swagger-schema-official';
 import {RequestMethod} from './RequestMethod';
 import {SwaxiosGenerator} from './SwaxiosGenerator';
 
-class ParsedResource implements SwaxiosGenerator {
-  public directory: string;
-  public methods: RequestMethod[] = [];
-  public name: string;
+class ParsedResource extends SwaxiosGenerator {
+  directory: string;
+  methods: RequestMethod[] = [];
+  name: string;
+  fullyQualifiedName: string;
 
   constructor(fullyQualifiedName: string, resourceDefinitions: Record<string, Path> = {}, spec: Spec) {
+    super();
     const stopIndex = fullyQualifiedName.lastIndexOf('/');
 
     if (stopIndex > -1) {
@@ -24,10 +28,13 @@ class ParsedResource implements SwaxiosGenerator {
         this.methods.push(methodDefinition);
       }
     });
+
+    this.fullyQualifiedName = `${this.directory}/${this.name}`;
   }
 
-  get fullyQualifiedName(): string {
-    return `${this.directory}/${this.name}`;
+  getTemplateFile(): string {
+    const templateDirectory = path.join(process.cwd(), 'src/template');
+    return path.join(templateDirectory, 'APIClass.hbs');
   }
 
   get filePath(): string {

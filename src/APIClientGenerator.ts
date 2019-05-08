@@ -1,55 +1,18 @@
 import fs from 'fs-extra';
 import Handlebars from 'handlebars';
 import path from 'path';
-import prettier from 'prettier';
 import {Path, Spec} from 'swagger-schema-official';
+
 import {BaseClient} from './info/BaseClient';
 import {ParsedResource} from './info/ParsedResource';
-import {SwaxiosGenerator} from './info/SwaxiosGenerator';
 import {StringUtil} from './util/StringUtil';
 import {validateConfig} from './validator/SwaggerValidator';
 
-require('handlebars-helpers')(['comparison'])
+require('handlebars-helpers')(['comparison']);
 
 Handlebars.registerHelper('surroundWithCurlyBraces', text => {
   return new Handlebars.SafeString(`{${text}}`);
 });
-
-function getTemplateFile(parsedInfo: SwaxiosGenerator): string | void {
-  const templateDirectory = path.join(process.cwd(), 'src/template');
-
-  if (parsedInfo instanceof ParsedResource) {
-    return path.join(templateDirectory, 'APIClass.hbs');
-  } else if (parsedInfo instanceof BaseClient) {
-    return path.join(templateDirectory, 'APIClient.hbs');
-  }
-}
-
-function getContext(parsedInfo: SwaxiosGenerator): Promise<any> | void {
-  if (parsedInfo instanceof ParsedResource || parsedInfo instanceof BaseClient) {
-    return parsedInfo.getContext();
-  }
-}
-
-async function renderTemplate(parsedInfo: SwaxiosGenerator): Promise<string> {
-  const templateFile = getTemplateFile(parsedInfo);
-  const context = await getContext(parsedInfo);
-  if (templateFile && context) {
-    const templateSource = await fs.readFile(templateFile, 'utf8');
-    const template = Handlebars.compile(templateSource);
-    return template(context);
-  }
-  return '';
-}
-
-async function writeTemplate(templatingClass: SwaxiosGenerator, outputFilePath: string): Promise<void> {
-  const renderedTemplate = await renderTemplate(templatingClass);
-  const prettified = prettier.format(renderedTemplate, {
-    parser: 'typescript',
-    singleQuote: true,
-  });
-  await fs.outputFile(outputFilePath, prettified);
-}
 
 export async function writeClient(inputFile: string, outputDirectory: string): Promise<void> {
   const swaggerJson: Spec = await fs.readJson(inputFile);
@@ -87,12 +50,14 @@ export async function generateClient(swaggerJson: Spec, outputDirectory?: string
 
   for (const restResource of resources) {
     if (outputDirectory) {
-      await writeTemplate(restResource, path.join(outputDirectory, restResource.filePath));
+      const rendered = await restResource.toString();
+      await fs.outputFile(path.join(outputDirectory, restResource.filePath), rendered, 'utf-8');
     }
   }
 
   if (outputDirectory) {
     const baseClient = new BaseClient(outputDirectory);
-    await writeTemplate(baseClient, path.join(outputDirectory, baseClient.filePath));
+    const rendered = await baseClient.toString();
+    await fs.outputFile(path.join(outputDirectory, baseClient.filePath), rendered, 'utf-8');
   }
 }
