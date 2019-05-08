@@ -3,6 +3,9 @@ import {inspect} from 'util';
 import {StringUtil} from '../util/StringUtil';
 
 class RequestMethod {
+  public parameterMethod: string;
+  public parameterName?: string;
+  public parameterData?: string;
   public method: string;
   public returnType: string;
   public url: string;
@@ -15,6 +18,16 @@ class RequestMethod {
     this.normalizedUrl = StringUtil.normalizeUrl(url);
     this.spec = spec;
     this.responses = responses;
+
+    const parameterMatch = url.match(/\{([^}]+)\}$/);
+
+    if (parameterMatch) {
+      this.parameterName = parameterMatch[1];
+      this.parameterData = `{data: ${this.parameterName}}`;
+    }
+
+    const postFix = parameterMatch ? `By${StringUtil.camelCase(parameterMatch.splice(1), true)}` : 'All';
+    this.parameterMethod = `${method}${postFix}`;
 
     if (method === 'delete' || method === 'head') {
       this.returnType = 'void';

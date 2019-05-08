@@ -1,5 +1,4 @@
 import fs from 'fs-extra';
-import Handlebars from 'handlebars';
 import path from 'path';
 import {Path, Spec} from 'swagger-schema-official';
 
@@ -10,10 +9,6 @@ import {validateConfig} from './validator/SwaggerValidator';
 
 require('handlebars-helpers')(['comparison']);
 
-Handlebars.registerHelper('surroundWithCurlyBraces', text => {
-  return new Handlebars.SafeString(`{${text}}`);
-});
-
 export async function writeClient(inputFile: string, outputDirectory: string): Promise<void> {
   const swaggerJson: Spec = await fs.readJson(inputFile);
   await validateConfig(swaggerJson);
@@ -22,7 +17,7 @@ export async function writeClient(inputFile: string, outputDirectory: string): P
 
 export async function exportServices(swaggerJson: Spec): Promise<ParsedResource[]> {
   const resources: ParsedResource[] = [];
-  const recordedUrls: Record<string, {[pathName: string]: Path}> = {};
+  const recordedUrls: Record<string, Record<string, Path>> = {};
 
   for (const url of Object.keys(swaggerJson.paths)) {
     const normalizedUrl = StringUtil.normalizeUrl(url);
@@ -32,7 +27,6 @@ export async function exportServices(swaggerJson: Spec): Promise<ParsedResource[
 
     recordedUrls[fullyQualifiedName] = {
       ...recordedUrls[fullyQualifiedName],
-
       [url]: swaggerJson.paths[url],
     };
   }
