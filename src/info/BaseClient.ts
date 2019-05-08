@@ -21,11 +21,19 @@ interface DirEntry {
   name: string;
 }
 
-class BaseClient implements SwaxiosGenerator {
+class BaseClient extends SwaxiosGenerator {
   private readonly outputDirectory: string;
+  readonly name: string;
 
   constructor(outputDirectory: string) {
+    super();
+    this.name = 'APIClient';
     this.outputDirectory = outputDirectory;
+  }
+
+  getTemplateFile(): string {
+    const templateDirectory = path.join(process.cwd(), 'src/template');
+    return path.join(templateDirectory, `${this.name}.hbs`);
   }
 
   private async generateFileIndex(directory: string): Promise<DirEntry> {
@@ -93,10 +101,6 @@ class BaseClient implements SwaxiosGenerator {
     }
 
     return imports;
-  }
-
-  get filePath(): string {
-    return `APIClient.ts`;
   }
 
   async getContext(): Promise<API> {

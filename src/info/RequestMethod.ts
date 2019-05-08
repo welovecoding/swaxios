@@ -90,14 +90,22 @@ class RequestMethod {
   private buildResponseSchema(): string {
     const emptyObject = '{}';
     const response200 = this.responses['200'];
-    const responseSchema = response200 && response200.schema;
+    const response201 = this.responses['201'];
+
+    const response200Schema = response200 && response200.schema ? this.buildType(response200.schema) : '';
+    const response201Schema = response201 && response201.schema ? this.buildType(response201.schema) : '';
+
+    const responseSchema =
+      response200Schema && response201Schema
+        ? `${response200Schema} | ${response201Schema}`
+        : response200Schema || response201Schema;
 
     if (!responseSchema) {
-      console.info(`No schema for code 200 on url "${this.url}" or schema has no definitions.`);
+      console.info(`No schema for code 200/201 on URL "${this.url}" or schema has no definitions.`);
       return emptyObject;
     }
 
-    return this.buildType(responseSchema);
+    return responseSchema;
   }
 }
 
