@@ -1,5 +1,4 @@
 import fs from 'fs-extra';
-import Handlebars from 'handlebars';
 import path from 'path';
 import {Path, Spec} from 'swagger-schema-official';
 
@@ -9,10 +8,6 @@ import {StringUtil} from './util/StringUtil';
 import {validateConfig} from './validator/SwaggerValidator';
 
 require('handlebars-helpers')(['comparison']);
-
-Handlebars.registerHelper('surroundWithCurlyBraces', text => {
-  return new Handlebars.SafeString(`{${text}}`);
-});
 
 export async function writeClient(inputFile: string, outputDirectory: string): Promise<void> {
   const swaggerJson: Spec = await fs.readJson(inputFile);
