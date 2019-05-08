@@ -20,8 +20,10 @@ export abstract class SwaxiosGenerator {
   private async writeTemplate(): Promise<string> {
     const renderedTemplate = await this.renderTemplate();
     return prettier.format(renderedTemplate, {
+      bracketSpacing: false,
       parser: 'typescript',
       singleQuote: true,
+      trailingComma: 'es5',
     });
   }
 

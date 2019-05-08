@@ -22,7 +22,7 @@ export async function writeClient(inputFile: string, outputDirectory: string): P
 
 export async function exportServices(swaggerJson: Spec): Promise<ParsedResource[]> {
   const resources: ParsedResource[] = [];
-  const recordedUrls: Record<string, {[pathName: string]: Path}> = {};
+  const recordedUrls: Record<string, Record<string, Path>> = {};
 
   for (const url of Object.keys(swaggerJson.paths)) {
     const normalizedUrl = StringUtil.normalizeUrl(url);
@@ -32,7 +32,6 @@ export async function exportServices(swaggerJson: Spec): Promise<ParsedResource[
 
     recordedUrls[fullyQualifiedName] = {
       ...recordedUrls[fullyQualifiedName],
-
       [url]: swaggerJson.paths[url],
     };
   }

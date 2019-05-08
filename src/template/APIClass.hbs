@@ -1,6 +1,6 @@
 import {AxiosInstance} from 'axios';
 
-class {{{name}}} {
+export class {{{name}}} {
   private readonly apiClient: AxiosInstance;
 
   constructor(apiClient: AxiosInstance) {
@@ -8,16 +8,19 @@ class {{{name}}} {
   }
   {{#each methods}}
 
-  async {{this.method}}(): Promise<{{{this.returnType}}}> {
+  async {{{this.parameterMethod}}}
+  (
+    {{#if this.parameterName}}{{{this.parameterName}}}: string{{/if}}
+  ): Promise<{{{this.returnType}}}> {
+
     const resource = '{{{this.normalizedUrl}}}';
-    {{#eq this.returnType "void"}}
-    const response = await this.apiClient.{{{this.method}}}(resource);
-    {{else}}
-    const response = await this.apiClient.{{{this.method}}}<{{{this.returnType}}}>(resource);
-    {{/eq}}
+    const response = await this.apiClient.{{{this.method}}}
+    {{#isnt this.returnType "void"}}<{{{this.returnType}}}>{{/isnt}}
+    (
+      resource
+      {{#if this.parameterName}}, {{{this.parameterData}}}{{/if}}
+    );
     return response.data;
   }
   {{/each}}
 }
-
-export {{#surroundWithCurlyBraces name}}{{/surroundWithCurlyBraces}};
