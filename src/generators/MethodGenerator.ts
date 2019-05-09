@@ -4,15 +4,15 @@ import {inspect} from 'util';
 import * as StringUtil from '../util/StringUtil';
 
 export class MethodGenerator {
-  public parameterMethod: string;
-  public parameterName?: string;
-  public parameterData?: string;
-  public method: string;
-  public returnType: string;
-  public url: string;
-  public normalizedUrl: string;
-  private readonly spec: Spec;
+  private readonly parameterName?: string;
   private readonly responses: Record<string, Response>;
+  private readonly spec: Spec;
+  private readonly url: string;
+  readonly method: string;
+  readonly normalizedUrl: string;
+  readonly parameterData?: string;
+  readonly parameterMethod: string;
+  readonly returnType: string;
 
   constructor(url: string, method: string, responses: Record<string, Response>, spec: Spec) {
     this.url = url;

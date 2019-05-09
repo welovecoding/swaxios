@@ -1,5 +1,4 @@
 import fs from 'fs-extra';
-import os from 'os';
 import path from 'path';
 import {inspect} from 'util';
 
@@ -11,21 +10,23 @@ interface API {
   [name: string]: string | API;
 }
 
+interface Import {
+  dir: string;
+  files: string[];
+}
+
 export class APIClientGenerator extends TemplateGenerator {
-  private readonly outputDirectory: string;
-  readonly name: string;
   private readonly fileIndex: DirEntry;
+  private readonly outputDirectory: string;
+  protected readonly name: string;
+  protected readonly templateFile: string;
 
   constructor(fileIndex: DirEntry, outputDirectory: string) {
     super();
     this.name = 'APIClient';
     this.outputDirectory = outputDirectory;
     this.fileIndex = fileIndex;
-  }
-
-  getTemplateFile(): string {
-    const templateDirectory = path.join(process.cwd(), 'src/template');
-    return path.join(templateDirectory, `${this.name}.hbs`);
+    this.templateFile = `${this.name}.hbs`;
   }
 
   async generateAPI(fileIndex: DirEntry): Promise<API> {
@@ -44,9 +45,9 @@ export class APIClientGenerator extends TemplateGenerator {
     return api;
   }
 
-  private generateImports(fileIndex: DirEntry): string[] {
+  private generateImports(fileIndex: DirEntry): Import[] {
     const bundledImports = this.bundleImports(fileIndex);
-    return Object.entries(bundledImports).map(([dir, files]) => `import {${files.join(', ')}} from './${dir}'`);
+    return Object.entries(bundledImports).map(([dir, files]) => ({dir, files}));
   }
 
   private bundleImports(fileIndex: DirEntry): Record<string, string[]> {
@@ -74,16 +75,16 @@ export class APIClientGenerator extends TemplateGenerator {
     return fs.outputFile(path.join(this.outputDirectory, this.filePath), renderedClient, 'utf-8');
   }
 
-  async getContext(): Promise<API> {
+  async getContext() {
     const fileIndex = this.fileIndex;
 
     const API = await this.generateAPI(fileIndex);
     const apiString = inspect(API, {breakLength: Infinity}).replace(/'/gm, '');
-    const imports = await this.generateImports(fileIndex);
+    const imports = this.generateImports(fileIndex);
 
     return {
       API: apiString,
-      imports: imports.join(os.EOL),
+      imports,
     };
   }
 }

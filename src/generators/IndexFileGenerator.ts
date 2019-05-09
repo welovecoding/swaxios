@@ -4,20 +4,17 @@ import path from 'path';
 import {TemplateGenerator} from './TemplateGenerator';
 
 export class IndexFileGenerator extends TemplateGenerator {
-  exportFiles: string[];
-  name: string;
-  outputDirectory: string;
+  private readonly exportFiles: string[];
+  private readonly outputDirectory: string;
+  protected readonly name: string;
+  protected readonly templateFile: string;
 
   constructor(exportFiles: string[], outputDirectory: string) {
     super();
     this.name = 'index';
     this.exportFiles = exportFiles;
     this.outputDirectory = outputDirectory;
-  }
-
-  getTemplateFile(): string {
-    const templateDirectory = path.join(process.cwd(), 'src/template');
-    return path.join(templateDirectory, `${this.name}.hbs`);
+    this.templateFile = `${this.name}.hbs`;
   }
 
   async write(): Promise<void> {

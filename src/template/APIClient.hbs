@@ -1,5 +1,11 @@
 import axios, {AxiosInstance, AxiosRequestConfig} from 'axios';
-{{{imports}}}
+{{#each imports}}
+import {
+  {{#each this.files}}
+  {{{this}}},
+  {{/each}}
+} from './{{{this.dir}}}';
+{{/each}}
 
 export class APIClient {
   private readonly httpClient: AxiosInstance;

@@ -10,7 +10,7 @@ import {validateConfig} from './validator/SwaggerValidator';
 
 initializeHelpers(['comparison']);
 
-async function exportServices(swaggerJson: Spec): Promise<ResourceGenerator[]> {
+export async function exportServices(swaggerJson: Spec): Promise<ResourceGenerator[]> {
   const resources: ResourceGenerator[] = [];
   const recordedUrls: Record<string, Record<string, Path>> = {};
 
@@ -53,6 +53,12 @@ async function generateClient(swaggerJson: Spec, outputDirectory: string) {
   const fileIndex = await generateFileIndex(outputDirectory);
 
   await new APIClientGenerator(fileIndex, outputDirectory).write();
+
+  fileIndex.files['APIClient'] = {
+    fullPath: path.resolve(outputDirectory, 'APIClient'),
+    name: 'APIClient',
+  };
+
   await buildIndexFiles(fileIndex);
 }
 
