@@ -1,22 +1,16 @@
 import fs from 'fs-extra';
+import initializeHelpers from 'handlebars-helpers';
 import path from 'path';
 import {Path, Spec} from 'swagger-schema-official';
 
-import {APIClientGenerator, ResourceGenerator} from './generators';
+import {APIClientGenerator, IndexFileGenerator, ResourceGenerator} from './generators';
+import {DirEntry, generateFileIndex} from './util/FileUtil';
 import * as StringUtil from './util/StringUtil';
 import {validateConfig} from './validator/SwaggerValidator';
 
-import handlebarsHelpers from 'handlebars-helpers';
+initializeHelpers(['comparison']);
 
-handlebarsHelpers(['comparison']);
-
-export async function writeClient(inputFile: string, outputDirectory: string): Promise<void> {
-  const swaggerJson: Spec = await fs.readJson(inputFile);
-  await validateConfig(swaggerJson);
-  return generateClient(swaggerJson, outputDirectory);
-}
-
-export async function exportServices(swaggerJson: Spec): Promise<ResourceGenerator[]> {
+async function exportServices(swaggerJson: Spec): Promise<ResourceGenerator[]> {
   const resources: ResourceGenerator[] = [];
   const recordedUrls: Record<string, Record<string, Path>> = {};
 
@@ -24,7 +18,7 @@ export async function exportServices(swaggerJson: Spec): Promise<ResourceGenerat
     const normalizedUrl = StringUtil.normalizeUrl(url);
     const directory = normalizedUrl.substr(0, normalizedUrl.lastIndexOf('/'));
     const serviceName = StringUtil.generateServiceName(normalizedUrl);
-    const fullyQualifiedName = `${directory}/${serviceName}`;
+    const fullyQualifiedName = `api${directory}/${serviceName}`;
 
     recordedUrls[fullyQualifiedName] = {
       ...recordedUrls[fullyQualifiedName],
@@ -40,15 +34,30 @@ export async function exportServices(swaggerJson: Spec): Promise<ResourceGenerat
   return resources;
 }
 
-export async function generateClient(swaggerJson: Spec, outputDirectory: string) {
+async function buildIndexFiles(fileIndex: DirEntry): Promise<void> {
+  await new IndexFileGenerator(Object.keys(fileIndex.files), fileIndex.fullPath).write();
+
+  for (const dir of Object.values(fileIndex.directories)) {
+    await buildIndexFiles(dir);
+  }
+}
+
+async function generateClient(swaggerJson: Spec, outputDirectory: string) {
   const resources = await exportServices(swaggerJson);
 
   for (const restResource of resources) {
-    const rendered = await restResource.toString();
-    await fs.outputFile(path.join(outputDirectory, restResource.filePath), rendered, 'utf-8');
+    const renderedResource = await restResource.toString();
+    await fs.outputFile(path.join(outputDirectory, restResource.filePath), renderedResource, 'utf-8');
   }
 
-  const baseClient = new APIClientGenerator(outputDirectory);
-  const rendered = await baseClient.toString();
-  await fs.outputFile(path.join(outputDirectory, baseClient.filePath), rendered, 'utf-8');
+  const fileIndex = await generateFileIndex(outputDirectory);
+
+  await new APIClientGenerator(fileIndex, outputDirectory).write();
+  await buildIndexFiles(fileIndex);
+}
+
+export async function writeClient(inputFile: string, outputDirectory: string): Promise<void> {
+  const swaggerJson: Spec = await fs.readJson(inputFile);
+  await validateConfig(swaggerJson);
+  return generateClient(swaggerJson, outputDirectory);
 }

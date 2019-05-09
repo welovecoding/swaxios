@@ -3,6 +3,7 @@ import os from 'os';
 import path from 'path';
 import {inspect} from 'util';
 
+import {DirEntry} from '../util/FileUtil';
 import * as StringUtil from '../util/StringUtil';
 import {TemplateGenerator} from './TemplateGenerator';
 
@@ -10,65 +11,21 @@ interface API {
   [name: string]: string | API;
 }
 
-interface FileEntry {
-  fullPath: string;
-  name: string;
-}
-
-interface DirEntry {
-  directories: Record<string, DirEntry>;
-  files: Record<string, FileEntry>;
-  name: string;
-}
-
 export class APIClientGenerator extends TemplateGenerator {
   private readonly outputDirectory: string;
   readonly name: string;
+  private readonly fileIndex: DirEntry;
 
-  constructor(outputDirectory: string) {
+  constructor(fileIndex: DirEntry, outputDirectory: string) {
     super();
     this.name = 'APIClient';
     this.outputDirectory = outputDirectory;
+    this.fileIndex = fileIndex;
   }
 
   getTemplateFile(): string {
     const templateDirectory = path.join(process.cwd(), 'src/template');
     return path.join(templateDirectory, `${this.name}.hbs`);
-  }
-
-  private async generateFileIndex(directory: string): Promise<DirEntry> {
-    const resolvedDir = path.resolve(directory);
-    const fileIndex: DirEntry = {
-      directories: {},
-      files: {},
-      name: path.basename(resolvedDir),
-    };
-
-    try {
-      const dirObjects = await fs.readdir(resolvedDir);
-
-      const generateIndices = dirObjects.sort().map(async fileName => {
-        const resolvedFile = path.join(resolvedDir, fileName);
-        const lstat = await fs.lstat(resolvedFile);
-        fileName = fileName.replace('.ts', '');
-
-        if (lstat.isFile()) {
-          fileIndex.files[fileName] = {
-            fullPath: resolvedFile.replace('.ts', ''),
-            name: fileName,
-          };
-        } else if (lstat.isDirectory()) {
-          const deepIndex = await this.generateFileIndex(resolvedFile);
-          fileIndex.directories[fileName] = deepIndex;
-        }
-      });
-
-      await Promise.all(generateIndices);
-    } catch (error) {
-      console.error(error);
-    }
-
-    return fileIndex;
   }
 
   async generateAPI(fileIndex: DirEntry): Promise<API> {
@@ -87,33 +44,45 @@ export class APIClientGenerator extends TemplateGenerator {
     return api;
   }
 
-  async generateImports(fileIndex: DirEntry): Promise<string[]> {
-    let imports = [];
+  private generateImports(fileIndex: DirEntry): string[] {
+    const bundledImports = this.bundleImports(fileIndex);
+    return Object.entries(bundledImports).map(([dir, files]) => `import {${files.join(', ')}} from './${dir}'`);
+  }
+
+  private bundleImports(fileIndex: DirEntry): Record<string, string[]> {
+    let bundledImports: Record<string, string[]> = {};
 
     for (const [fileName, file] of Object.entries(fileIndex.files)) {
-      const apiName = StringUtil.camelize(fileName);
-      const relativePath = path.relative(this.outputDirectory, file.fullPath).replace(/\\/g, '/');
-      imports.push(`import {${apiName}} from './${relativePath}'`);
+      const relativePath = path.dirname(path.relative(this.outputDirectory, file.fullPath)).replace(/\\/g, '/');
+
+      bundledImports[relativePath] = bundledImports[relativePath] || [];
+      bundledImports[relativePath].push(fileName);
     }
 
     for (const directory of Object.values(fileIndex.directories)) {
-      imports = imports.concat(await this.generateImports(directory));
+      bundledImports = {
+        ...bundledImports,
+        ...this.bundleImports(directory),
+      };
     }
 
-    return imports;
+    return bundledImports;
+  }
+
+  async write(): Promise<void> {
+    const renderedClient = await this.toString();
+    return fs.outputFile(path.join(this.outputDirectory, this.filePath), renderedClient, 'utf-8');
   }
 
   async getContext(): Promise<API> {
-    const fileIndex = await this.generateFileIndex(this.outputDirectory);
-    // FIXME: The file shouldn't exist in the first place!
-    delete fileIndex.files[this.filePath];
+    const fileIndex = this.fileIndex;
 
     const API = await this.generateAPI(fileIndex);
     const apiString = inspect(API, {breakLength: Infinity}).replace(/'/gm, '');
     const imports = await this.generateImports(fileIndex);
 
     return {
-      api: apiString,
+      API: apiString,
       imports: imports.join(os.EOL),
     };
   }
