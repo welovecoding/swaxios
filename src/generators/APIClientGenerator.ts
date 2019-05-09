@@ -76,8 +76,6 @@ export class APIClientGenerator extends TemplateGenerator {
 
   async getContext(): Promise<API> {
     const fileIndex = this.fileIndex;
-    // FIXME: The file shouldn't exist in the first place!
-    delete fileIndex.files[this.filePath];
 
     const API = await this.generateAPI(fileIndex);
     const apiString = inspect(API, {breakLength: Infinity}).replace(/'/gm, '');
