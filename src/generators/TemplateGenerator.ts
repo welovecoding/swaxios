@@ -9,8 +9,7 @@ export abstract class TemplateGenerator {
   abstract async getContext(): Promise<any>;
 
   protected getTemplateFile(): string {
-    const templateDirectory = path.join(process.cwd(), 'src/template');
-    return path.join(templateDirectory, this.templateFile);
+    return path.resolve(__dirname, '../../src/templates', this.templateFile);
   }
 
   private async renderTemplate(): Promise<string> {
