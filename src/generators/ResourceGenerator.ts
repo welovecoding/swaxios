@@ -32,14 +32,14 @@ export class ResourceGenerator extends TemplateGenerator {
     this.templateFile = 'Resource.hbs';
   }
 
-  get filePath(): string {
-    return `${this.directory}/${this.name}.ts`;
-  }
-
-  async getContext() {
+  protected async getContext() {
     return {
       methods: this.methods,
       name: this.name,
     };
+  }
+
+  get filePath(): string {
+    return `${this.directory}/${this.name}.ts`;
   }
 }

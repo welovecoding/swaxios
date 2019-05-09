@@ -23,7 +23,7 @@ export class IndexFileGenerator extends TemplateGenerator {
     return fs.outputFile(outputFile, renderedIndex, 'utf-8');
   }
 
-  async getContext() {
+  protected async getContext() {
     return {
       exports: this.exportFiles.map(fileName => `./${fileName}`),
     };

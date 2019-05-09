@@ -6,7 +6,7 @@ import prettier from 'prettier';
 export abstract class TemplateGenerator {
   protected abstract name: string;
   protected abstract templateFile: string;
-  abstract async getContext(): Promise<any>;
+  protected abstract async getContext(): Promise<any>;
 
   protected getTemplateFile(): string {
     return path.resolve(__dirname, '../../src/templates', this.templateFile);

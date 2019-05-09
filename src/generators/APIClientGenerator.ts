@@ -75,7 +75,7 @@ export class APIClientGenerator extends TemplateGenerator {
     return fs.outputFile(path.join(this.outputDirectory, this.filePath), renderedClient, 'utf-8');
   }
 
-  async getContext() {
+  protected async getContext() {
     const fileIndex = this.fileIndex;
 
     const API = await this.generateAPI(fileIndex);
