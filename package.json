@@ -51,6 +51,7 @@
   "prettier": "@wireapp/prettier-config",
   "scripts": {
     "clean": "rimraf src/temp",
+    "dist": "tsc",
     "fix": "yarn fix:other && yarn fix:ts",
     "fix:other": "yarn prettier --write",
     "fix:ts": "yarn lint:ts --fix",
