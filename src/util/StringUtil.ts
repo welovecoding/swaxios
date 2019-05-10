@@ -16,8 +16,8 @@ export function pascalCase(words: string[]): string {
   return camelCase(words, true);
 }
 
-export function camelize(resourceName: string): string {
-  return pascalCase(resourceName.split('-'));
+export function camelize(resourceName: string, isPascalCase = false): string {
+  return camelCase(resourceName.split('-'), isPascalCase);
 }
 
 export function generateServiceName(url: string): string {
@@ -37,7 +37,7 @@ export function generateServiceName(url: string): string {
   const lastUrlPart = urlParts[urlParts.length - 1];
   const resourceName = lastUrlPart ? lastUrlPart : 'Root';
 
-  return camelize(`${resourceName}-service`);
+  return camelize(`${resourceName}-service`, true);
 }
 
 export function normalizeUrl(url: string): string {

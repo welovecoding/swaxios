@@ -18,8 +18,8 @@ swaxios -i ./path/to/swagger.json -o ./path/to/output/directory
 
 ```ts
 import axios, {AxiosInstance, AxiosRequestConfig} from 'axios';
-import {IdentityProvidersService} from './identity-providers/IdentityProvidersService';
-import {FinalizeLoginService} from './sso/FinalizeLoginService';
+import {IdentityProvidersService} from './identity-providers/';
+import {FinalizeLoginService} from './sso/';
 
 export class APIClient {
   private readonly httpClient: AxiosInstance;

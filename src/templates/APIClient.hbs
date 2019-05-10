@@ -4,7 +4,7 @@ import {
   {{#each this.files}}
   {{{this}}},
   {{/each}}
-} from './{{{this.dir}}}';
+} from './{{{this.dir}}}/';
 {{/each}}
 
 export class APIClient {
@@ -20,7 +20,7 @@ export class APIClient {
     this.httpClient = axios.create(configOrBaseURL);
   }
 
-  get API() {
+  get api() {
     return {{{API}}};
   }
 

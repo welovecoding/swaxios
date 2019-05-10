@@ -12,14 +12,10 @@ export class {{{name}}} {
   (
     {{#if this.parameterName}}{{{this.parameterName}}}: string{{/if}}
   ): Promise<{{{this.returnType}}}> {
-
-    const resource = '{{{this.normalizedUrl}}}';
+    const resource = {{{this.formattedUrl}}};
     const response = await this.apiClient.{{{this.method}}}
     {{#isnt this.returnType "void"}}<{{{this.returnType}}}>{{/isnt}}
-    (
-      resource
-      {{#if this.parameterName}}, {{{this.parameterData}}}{{/if}}
-    );
+    (resource);
     return response.data;
   }
   {{/each}}
