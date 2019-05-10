@@ -3,6 +3,22 @@ import {inspect} from 'util';
 
 import * as StringUtil from '../util/StringUtil';
 
+export enum SwaggerType {
+  ARRAY = 'array',
+  INTEGER = 'integer',
+  NUMBER = 'number',
+  OBJECT = 'object',
+  STRING = 'string',
+}
+
+export enum TypeScriptType {
+  ANY = 'any',
+  ARRAY = 'Array',
+  EMPTY_OBJECT = '{}',
+  NUMBER = 'number',
+  STRING = 'string',
+}
+
 export class MethodGenerator {
   private readonly responses: Record<string, Response>;
   private readonly spec: Spec;
@@ -41,41 +57,39 @@ export class MethodGenerator {
   }
 
   private buildType(schema: Schema, schemaName: string): string {
-    const emptyObject = '{}';
-
-    let {required, properties, type} = schema;
+    let {required: requiredProperties, properties, type: schemaType} = schema;
 
     if (schema.$ref && schema.$ref.startsWith('#/definitions')) {
       if (!this.spec.definitions) {
         console.info('Spec has no definitions.');
-        return emptyObject;
+        return TypeScriptType.EMPTY_OBJECT;
       }
       const definition = schema.$ref.replace('#/definitions', '');
-      required = this.spec.definitions[definition].required;
+      requiredProperties = this.spec.definitions[definition].required;
       properties = this.spec.definitions[definition].properties;
-      type = this.spec.definitions[definition].type;
+      schemaType = this.spec.definitions[definition].type;
     }
 
-    type = type || 'object';
+    schemaType = schemaType || SwaggerType.OBJECT;
 
-    switch (type) {
-      case 'string':
-      case 'number': {
-        return type;
+    switch (schemaType.toLowerCase()) {
+      case SwaggerType.STRING: {
+        return TypeScriptType.STRING;
       }
-      case 'integer': {
-        return 'number';
+      case SwaggerType.NUMBER:
+      case SwaggerType.INTEGER: {
+        return TypeScriptType.NUMBER;
       }
-      case 'object': {
+      case SwaggerType.OBJECT: {
         if (!properties) {
           console.info(`Schema type for "${schemaName}" is "object" but has no properties.`);
-          return emptyObject;
+          return TypeScriptType.EMPTY_OBJECT;
         }
 
         const schema: Record<string, string> = {};
 
         for (const property of Object.keys(properties)) {
-          const propertyName = required && !required.includes(property) ? `${property}?` : property;
+          const propertyName = requiredProperties && !requiredProperties.includes(property) ? `${property}?` : property;
           schema[propertyName] = this.buildType(properties[property], property);
         }
 
@@ -84,27 +98,27 @@ export class MethodGenerator {
           .replace(',', ';')
           .replace(new RegExp('\\n', 'g'), '');
       }
-      case 'array': {
+      case SwaggerType.ARRAY: {
         if (!schema.items) {
           console.info(`Schema type for "${schemaName}" is "array" but has no items.`);
-          return 'any[]';
+          return `${TypeScriptType.ARRAY}<${TypeScriptType.ANY}>`;
         }
 
         if (!(schema.items instanceof Array)) {
-          return this.buildType(schema.items, schemaName);
+          const itemType = this.buildType(schema.items, schemaName);
+          return `${TypeScriptType.ARRAY}<${itemType}>`;
         }
 
         const schemes = schema.items.map(itemSchema => this.buildType(itemSchema, schemaName)).join('|');
-        return `Array<${schemes}>`;
+        return `${TypeScriptType.ARRAY}<${schemes}>`;
       }
       default: {
-        return emptyObject;
+        return TypeScriptType.EMPTY_OBJECT;
       }
     }
   }
 
   private buildResponseSchema(): string {
-    const emptyObject = '{}';
     const response200 = this.responses['200'];
     const response201 = this.responses['201'];
 
@@ -120,7 +134,7 @@ export class MethodGenerator {
 
     if (!responseSchema) {
       console.info(`No schema for code 200/201 on URL "${this.url}" or schema has no definitions.`);
-      return emptyObject;
+      return TypeScriptType.EMPTY_OBJECT;
     }
 
     return responseSchema;
