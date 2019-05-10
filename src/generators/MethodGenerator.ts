@@ -94,7 +94,7 @@ export class MethodGenerator {
       case ObjectType.ARRAY: {
         if (!schema.items) {
           console.info(`Schema type for "${schemaName}" is "array" but has no items.`);
-          return 'any[]';
+          return 'Array<any>';
         }
 
         if (!(schema.items instanceof Array)) {
