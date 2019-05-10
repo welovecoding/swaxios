@@ -33,8 +33,8 @@ export class APIClientGenerator extends TemplateGenerator {
     const api: API = {};
 
     for (const fileName of Object.keys(fileIndex.files)) {
-      const apiName = StringUtil.camelize(fileName);
-      api[apiName] = `new ${apiName}(this.httpClient)`;
+      const objectName = `${fileName.charAt(0).toLowerCase()}${fileName.slice(1)}`;
+      api[objectName] = `new ${fileName}(this.httpClient)`;
     }
 
     for (let [directoryName, directory] of Object.entries(fileIndex.directories)) {
@@ -76,11 +76,9 @@ export class APIClientGenerator extends TemplateGenerator {
   }
 
   protected async getContext() {
-    const fileIndex = this.fileIndex;
-
-    const API = await this.generateAPI(fileIndex);
+    const API = await this.generateAPI(this.fileIndex.directories.api);
     const apiString = inspect(API, {breakLength: Infinity}).replace(/'/gm, '');
-    const imports = this.generateImports(fileIndex);
+    const imports = this.generateImports(this.fileIndex);
 
     return {
       API: apiString,
