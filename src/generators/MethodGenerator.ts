@@ -12,8 +12,8 @@ export enum ObjectType {
 }
 
 export enum ReturnType {
-  EMPTY_OBJECT = '{}',
   ARRAY = 'Array',
+  EMPTY_OBJECT = '{}',
   NUMBER = 'number',
   STRING = 'string',
 }
