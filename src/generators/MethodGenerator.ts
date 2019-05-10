@@ -3,6 +3,15 @@ import {inspect} from 'util';
 
 import * as StringUtil from '../util/StringUtil';
 
+export enum ObjectType {
+  ARRAY = 'array',
+  EMPTY = '{}',
+  INTEGER = 'integer',
+  NUMBER = 'number',
+  OBJECT = 'object',
+  STRING = 'string',
+}
+
 export class MethodGenerator {
   private readonly responses: Record<string, Response>;
   private readonly spec: Spec;
@@ -41,14 +50,12 @@ export class MethodGenerator {
   }
 
   private buildType(schema: Schema, schemaName: string): string {
-    const emptyObject = '{}';
-
     let {required, properties, type} = schema;
 
     if (schema.$ref && schema.$ref.startsWith('#/definitions')) {
       if (!this.spec.definitions) {
         console.info('Spec has no definitions.');
-        return emptyObject;
+        return ObjectType.EMPTY;
       }
       const definition = schema.$ref.replace('#/definitions', '');
       required = this.spec.definitions[definition].required;
@@ -58,18 +65,18 @@ export class MethodGenerator {
 
     type = type || 'object';
 
-    switch (type) {
-      case 'string':
-      case 'number': {
+    switch (type.toLowerCase()) {
+      case ObjectType.STRING:
+      case ObjectType.NUMBER: {
         return type;
       }
-      case 'integer': {
-        return 'number';
+      case ObjectType.INTEGER: {
+        return ObjectType.NUMBER;
       }
-      case 'object': {
+      case ObjectType.OBJECT: {
         if (!properties) {
           console.info(`Schema type for "${schemaName}" is "object" but has no properties.`);
-          return emptyObject;
+          return ObjectType.EMPTY;
         }
 
         const schema: Record<string, string> = {};
@@ -84,27 +91,27 @@ export class MethodGenerator {
           .replace(',', ';')
           .replace(new RegExp('\\n', 'g'), '');
       }
-      case 'array': {
+      case ObjectType.ARRAY: {
         if (!schema.items) {
           console.info(`Schema type for "${schemaName}" is "array" but has no items.`);
           return 'any[]';
         }
 
         if (!(schema.items instanceof Array)) {
-          return this.buildType(schema.items, schemaName);
+          const itemType = this.buildType(schema.items, schemaName);
+          return `Array<${itemType}>`;
         }
 
         const schemes = schema.items.map(itemSchema => this.buildType(itemSchema, schemaName)).join('|');
         return `Array<${schemes}>`;
       }
       default: {
-        return emptyObject;
+        return ObjectType.EMPTY;
       }
     }
   }
 
   private buildResponseSchema(): string {
-    const emptyObject = '{}';
     const response200 = this.responses['200'];
     const response201 = this.responses['201'];
 
@@ -120,7 +127,7 @@ export class MethodGenerator {
 
     if (!responseSchema) {
       console.info(`No schema for code 200/201 on URL "${this.url}" or schema has no definitions.`);
-      return emptyObject;
+      return ObjectType.EMPTY;
     }
 
     return responseSchema;
