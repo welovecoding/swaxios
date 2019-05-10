@@ -24,6 +24,10 @@ export class APIClient {
     return {{{API}}};
   }
 
+  get defaults() {
+    return this.httpClient.defaults;
+  }
+
   get interceptors() {
     return this.httpClient.interceptors;
   }
