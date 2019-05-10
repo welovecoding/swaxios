@@ -57,7 +57,7 @@ export class MethodGenerator {
   }
 
   private buildType(schema: Schema, schemaName: string): string {
-    let {required, properties, type: parsedType} = schema;
+    let {required: requiredProperties, properties, type: schemaType} = schema;
 
     if (schema.$ref && schema.$ref.startsWith('#/definitions')) {
       if (!this.spec.definitions) {
@@ -65,14 +65,14 @@ export class MethodGenerator {
         return ReturnType.EMPTY_OBJECT;
       }
       const definition = schema.$ref.replace('#/definitions', '');
-      required = this.spec.definitions[definition].required;
+      requiredProperties = this.spec.definitions[definition].required;
       properties = this.spec.definitions[definition].properties;
-      parsedType = this.spec.definitions[definition].type;
+      schemaType = this.spec.definitions[definition].type;
     }
 
-    parsedType = parsedType || ObjectType.OBJECT;
+    schemaType = schemaType || ObjectType.OBJECT;
 
-    switch (parsedType.toLowerCase()) {
+    switch (schemaType.toLowerCase()) {
       case ObjectType.STRING: {
         return ReturnType.STRING;
       }
@@ -89,7 +89,7 @@ export class MethodGenerator {
         const schema: Record<string, string> = {};
 
         for (const property of Object.keys(properties)) {
-          const propertyName = required && !required.includes(property) ? `${property}?` : property;
+          const propertyName = requiredProperties && !requiredProperties.includes(property) ? `${property}?` : property;
           schema[propertyName] = this.buildType(properties[property], property);
         }
 
