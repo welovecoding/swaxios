@@ -3,7 +3,7 @@ import {inspect} from 'util';
 
 import * as StringUtil from '../util/StringUtil';
 
-export enum ObjectType {
+export enum SwaggerType {
   ARRAY = 'array',
   INTEGER = 'integer',
   NUMBER = 'number',
@@ -11,7 +11,7 @@ export enum ObjectType {
   STRING = 'string',
 }
 
-export enum ReturnType {
+export enum TypeScriptType {
   ANY = 'any',
   ARRAY = 'Array',
   EMPTY_OBJECT = '{}',
@@ -62,7 +62,7 @@ export class MethodGenerator {
     if (schema.$ref && schema.$ref.startsWith('#/definitions')) {
       if (!this.spec.definitions) {
         console.info('Spec has no definitions.');
-        return ReturnType.EMPTY_OBJECT;
+        return TypeScriptType.EMPTY_OBJECT;
       }
       const definition = schema.$ref.replace('#/definitions', '');
       requiredProperties = this.spec.definitions[definition].required;
@@ -70,20 +70,20 @@ export class MethodGenerator {
       schemaType = this.spec.definitions[definition].type;
     }
 
-    schemaType = schemaType || ObjectType.OBJECT;
+    schemaType = schemaType || SwaggerType.OBJECT;
 
     switch (schemaType.toLowerCase()) {
-      case ObjectType.STRING: {
-        return ReturnType.STRING;
+      case SwaggerType.STRING: {
+        return TypeScriptType.STRING;
       }
-      case ObjectType.NUMBER:
-      case ObjectType.INTEGER: {
-        return ReturnType.NUMBER;
+      case SwaggerType.NUMBER:
+      case SwaggerType.INTEGER: {
+        return TypeScriptType.NUMBER;
       }
-      case ObjectType.OBJECT: {
+      case SwaggerType.OBJECT: {
         if (!properties) {
           console.info(`Schema type for "${schemaName}" is "object" but has no properties.`);
-          return ReturnType.EMPTY_OBJECT;
+          return TypeScriptType.EMPTY_OBJECT;
         }
 
         const schema: Record<string, string> = {};
@@ -98,22 +98,22 @@ export class MethodGenerator {
           .replace(',', ';')
           .replace(new RegExp('\\n', 'g'), '');
       }
-      case ObjectType.ARRAY: {
+      case SwaggerType.ARRAY: {
         if (!schema.items) {
           console.info(`Schema type for "${schemaName}" is "array" but has no items.`);
-          return `${ReturnType.ARRAY}<${ReturnType.ANY}>`;
+          return `${TypeScriptType.ARRAY}<${TypeScriptType.ANY}>`;
         }
 
         if (!(schema.items instanceof Array)) {
           const itemType = this.buildType(schema.items, schemaName);
-          return `${ReturnType.ARRAY}<${itemType}>`;
+          return `${TypeScriptType.ARRAY}<${itemType}>`;
         }
 
         const schemes = schema.items.map(itemSchema => this.buildType(itemSchema, schemaName)).join('|');
-        return `${ReturnType.ARRAY}<${schemes}>`;
+        return `${TypeScriptType.ARRAY}<${schemes}>`;
       }
       default: {
-        return ReturnType.EMPTY_OBJECT;
+        return TypeScriptType.EMPTY_OBJECT;
       }
     }
   }
@@ -134,7 +134,7 @@ export class MethodGenerator {
 
     if (!responseSchema) {
       console.info(`No schema for code 200/201 on URL "${this.url}" or schema has no definitions.`);
-      return ReturnType.EMPTY_OBJECT;
+      return TypeScriptType.EMPTY_OBJECT;
     }
 
     return responseSchema;
