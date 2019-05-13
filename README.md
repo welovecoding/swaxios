@@ -6,7 +6,7 @@ A [Swagger](https://swagger.io/) API httpClient generator based on [axios](https
 
 ## Usage
 
-If you pass a [Swagger definition](https://swagger.io/docs/specification/2-0/basic-structure/) (v2.0; valid JSON) to Swaxios, then it will generate you an API httpClient that uses axios under the hood and is written in TypeScript.
+If you pass a [Swagger definition](https://swagger.io/docs/specification/2-0/basic-structure/) (v2.0; valid JSON) to Swaxios, then it will generate you an API client that uses axios under the hood and is written in TypeScript.
 
 ```
 swaxios -i ./path/to/swagger.json -o ./path/to/output/directory
