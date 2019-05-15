@@ -271,6 +271,9 @@
           ],
           "format": "string"
         },
+        "timestamp": {
+          "type": "string"
+        },
         "type": {
           "format": "string"
         }
