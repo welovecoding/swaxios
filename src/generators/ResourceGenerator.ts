@@ -1,4 +1,5 @@
 import {Path, Spec} from 'swagger-schema-official';
+import {camelCase} from '../util/StringUtil';
 import {MethodGenerator} from './MethodGenerator';
 import {TemplateGenerator} from './TemplateGenerator';
 
@@ -11,11 +12,15 @@ export class ResourceGenerator extends TemplateGenerator {
 
   constructor(fullyQualifiedName: string, resources: Record<string, Path>, spec: Spec) {
     super();
-    const stopIndex = fullyQualifiedName.lastIndexOf('/');
+    const directories = fullyQualifiedName.split('/');
 
-    if (stopIndex > -1) {
-      this.directory = fullyQualifiedName.substr(0, stopIndex);
-      this.name = fullyQualifiedName.substr(stopIndex + 1);
+    if (directories.length > 2) {
+      this.name = camelCase(directories.slice(1), true);
+      directories.pop();
+      this.directory = directories.join('/');
+    } else if (directories.length > 1) {
+      this.name = directories.pop()!;
+      this.directory = directories.join('/');
     } else {
       this.directory = '/';
       this.name = fullyQualifiedName;

@@ -41,5 +41,5 @@ export function generateServiceName(url: string): string {
 }
 
 export function normalizeUrl(url: string): string {
-  return url.replace(/\/\{.*\}$/, '');
+  return url.replace(/\/\{.*\}/g, '');
 }

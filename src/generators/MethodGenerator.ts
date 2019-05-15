@@ -38,7 +38,7 @@ export class MethodGenerator {
     this.spec = spec;
     this.responses = responses;
 
-    const parameterMatch = url.match(/\{([^}]+)\}$/);
+    const parameterMatch = url.match(/\{([^}]+)\}/);
 
     if (parameterMatch) {
       this.parameterName = parameterMatch[1];
