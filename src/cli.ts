@@ -4,6 +4,7 @@ import program from 'commander';
 import path from 'path';
 
 import {writeClient} from './Swaxios';
+
 const {bin, description, name, version} = require('../package.json');
 const binName = Object.keys(bin)[0] || name;
 
@@ -23,7 +24,11 @@ if (!program.input || !program.output) {
 const inputFile = path.resolve(process.cwd(), program.input);
 const outputDirectory = path.resolve(process.cwd(), program.output);
 
-writeClient(inputFile, outputDirectory).catch(error => {
-  console.error(error);
-  process.exit(1);
-});
+writeClient(inputFile, outputDirectory)
+  .then(() => {
+    console.log(`Created API client in "${outputDirectory}".`);
+  })
+  .catch(error => {
+    console.error(error);
+    process.exit(1);
+  });
