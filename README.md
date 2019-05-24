@@ -7,15 +7,22 @@ A [Swagger](https://swagger.io/) API client generator based on [axios](https://g
 ## CLI Usage
 
 ```
-Usage: swaxios [options]
+USAGE
 
-Generate Swagger API clients with axios
+  swaxios
 
-Options:
-  -v, --version             output the version number
-  -i, --input <file>        Set the input file
-  -o, --output <directory>  Set the output directory
-  -h, --help                output usage information
+OPTIONS
+
+  -i, --input <file>           Set the input file           required
+  -o, --output <directory>     Set the output directory     required
+
+GLOBAL OPTIONS
+
+  -h, --help        Display help
+  -V, --version     Display version
+  --no-color        Disable colors
+  --quiet           Quiet mode - only displays warn and error messages
+  -v, --verbose     Verbose mode - will also output debug messages
 ```
 
 If you pass an [OpenAPI definition](https://swagger.io/docs/specification/2-0/basic-structure/) file (v2.0; valid JSON or YAML) to Swaxios, then it will generate you an API client that uses axios under the hood and is written in TypeScript.
