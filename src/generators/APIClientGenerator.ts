@@ -4,7 +4,7 @@ import {inspect} from 'util';
 
 import {DirEntry} from '../util/FileUtil';
 import * as StringUtil from '../util/StringUtil';
-import {TemplateGenerator} from './TemplateGenerator';
+import {GeneratorContext, TemplateGenerator} from './TemplateGenerator';
 
 interface API {
   [name: string]: string | API;
@@ -13,6 +13,11 @@ interface API {
 interface Import {
   dir: string;
   files: string[];
+}
+
+interface Context extends GeneratorContext {
+  API: string;
+  imports: Import[];
 }
 
 export class APIClientGenerator extends TemplateGenerator {
@@ -75,7 +80,7 @@ export class APIClientGenerator extends TemplateGenerator {
     return fs.outputFile(path.join(this.outputDirectory, this.filePath), renderedClient, 'utf-8');
   }
 
-  protected async getContext() {
+  protected async getContext(): Promise<Context> {
     const API = await this.generateAPI(this.fileIndex.directories.api);
     const apiString = inspect(API, {breakLength: Infinity}).replace(/'/gm, '');
     const imports = this.generateImports(this.fileIndex);
