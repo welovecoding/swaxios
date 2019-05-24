@@ -42,7 +42,7 @@ async function buildIndexFiles(fileIndex: DirEntry): Promise<void> {
   }
 }
 
-async function generateClient(swaggerJson: Spec, outputDirectory: string) {
+async function generateClient(swaggerJson: Spec, outputDirectory: string): Promise<void> {
   const resources = await exportServices(swaggerJson);
 
   for (const restResource of resources) {

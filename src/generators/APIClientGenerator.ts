@@ -75,6 +75,7 @@ export class APIClientGenerator extends TemplateGenerator {
     return fs.outputFile(path.join(this.outputDirectory, this.filePath), renderedClient, 'utf-8');
   }
 
+  // tslint:disable-next-line:typedef
   protected async getContext() {
     const API = await this.generateAPI(this.fileIndex.directories.api);
     const apiString = inspect(API, {breakLength: Infinity}).replace(/'/gm, '');

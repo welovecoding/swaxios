@@ -37,6 +37,7 @@ export class ResourceGenerator extends TemplateGenerator {
     this.templateFile = 'Resource.hbs';
   }
 
+  // tslint:disable-next-line:typedef
   protected async getContext() {
     return {
       methods: this.methods,
