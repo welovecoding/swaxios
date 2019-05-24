@@ -69,7 +69,10 @@ async function readInputFile(inputFile: string): Promise<Spec> {
   try {
     await fs.access(inputFile);
   } catch (error) {
-    throw new Error(`Input file "${inputFile}" could not be found or is not readable`);
+    if (error.code === 'ENOENT') {
+      throw new Error(`Input file "${inputFile}" could not be found or is not readable`);
+    }
+    throw error;
   }
 
   try {
