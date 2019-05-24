@@ -8,5 +8,6 @@
     "rootDir": "src",
     "strict": true,
     "target": "es6"
-  }
+  },
+  "exclude": ["src/temp"]
 }
