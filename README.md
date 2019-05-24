@@ -34,7 +34,7 @@ const accessToken = 'secret-access-token';
 
 const client = new APIClient('https://staging-nginz-https.zinfra.io');
 client.defaults.headers.common['Authorization'] = `Bearer ${decodeURIComponent(accessToken)}`;
-client.api.identityProvidersService
+client.rest.identityProvidersService
   .getById('some-id')
   .then(response => console.log('Response', response))
   .catch(error => {

@@ -61,7 +61,7 @@ export class MethodGenerator {
 
     if (schema.$ref && schema.$ref.startsWith('#/definitions')) {
       if (!this.spec.definitions) {
-        console.info('Spec has no definitions.');
+        console.warn(`No reference found for "${schema.$ref}".`);
         return TypeScriptType.EMPTY_OBJECT;
       }
       const definition = schema.$ref.replace('#/definitions', '');

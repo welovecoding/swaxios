@@ -19,7 +19,7 @@ export async function exportServices(swaggerJson: Spec): Promise<ResourceGenerat
     const normalizedUrl = StringUtil.normalizeUrl(url);
     const directory = normalizedUrl.substr(0, normalizedUrl.lastIndexOf('/'));
     const serviceName = StringUtil.generateServiceName(normalizedUrl);
-    const fullyQualifiedName = `api${directory}/${serviceName}`;
+    const fullyQualifiedName = `rest${directory}/${serviceName}`;
 
     recordedUrls[fullyQualifiedName] = {
       ...recordedUrls[fullyQualifiedName],
