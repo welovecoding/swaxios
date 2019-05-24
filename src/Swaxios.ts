@@ -81,7 +81,7 @@ async function readInputFile(inputFile: string): Promise<Spec> {
     try {
       swaggerJson = yaml.load(inputFile);
     } catch (error) {
-      throw new Error(`Input file "${inputFile}" is neither valid JSON nor valid yaml.`);
+      throw new Error(`Input file "${inputFile}" is neither valid JSON nor valid YAML.`);
     }
   }
 
