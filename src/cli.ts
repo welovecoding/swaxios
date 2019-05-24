@@ -11,8 +11,8 @@ program
   .name(binName)
   .description(description)
   .version(version, '-v, --version')
-  .option('-i, --input <file>', 'Set the input file')
-  .option('-o, --output <directory>', 'Set the output directory')
+  .option('-i, --input <file>', 'Set the input file (required)')
+  .option('-o, --output <directory>', 'Set the output directory (required)')
   .parse(process.argv);
 
 if (!program.input || !program.output) {
