@@ -1,7 +1,11 @@
 import fs from 'fs-extra';
 import path from 'path';
 
-import {TemplateGenerator} from './TemplateGenerator';
+import {GeneratorContext, TemplateGenerator} from './TemplateGenerator';
+
+interface Context extends GeneratorContext {
+  exports: string[];
+}
 
 export class IndexFileGenerator extends TemplateGenerator {
   private readonly exportFiles: string[];
@@ -23,8 +27,7 @@ export class IndexFileGenerator extends TemplateGenerator {
     return fs.outputFile(outputFile, renderedIndex, 'utf-8');
   }
 
-  // tslint:disable-next-line:typedef
-  protected async getContext() {
+  protected async getContext(): Promise<Context> {
     return {
       exports: this.exportFiles.map(fileName => `./${fileName}`),
     };

@@ -1,7 +1,12 @@
 import {Path, Spec} from 'swagger-schema-official';
 import {camelCase} from '../util/StringUtil';
 import {MethodGenerator} from './MethodGenerator';
-import {TemplateGenerator} from './TemplateGenerator';
+import {GeneratorContext, TemplateGenerator} from './TemplateGenerator';
+
+interface Context extends GeneratorContext {
+  methods: MethodGenerator[];
+  name: string;
+}
 
 export class ResourceGenerator extends TemplateGenerator {
   private readonly directory: string;
@@ -37,8 +42,7 @@ export class ResourceGenerator extends TemplateGenerator {
     this.templateFile = 'Resource.hbs';
   }
 
-  // tslint:disable-next-line:typedef
-  protected async getContext() {
+  protected async getContext(): Promise<Context> {
     return {
       methods: this.methods,
       name: this.name,

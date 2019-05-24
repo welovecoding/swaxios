@@ -3,10 +3,12 @@ import Handlebars from 'handlebars';
 import path from 'path';
 import prettier from 'prettier';
 
+export interface GeneratorContext {}
+
 export abstract class TemplateGenerator {
   protected abstract name: string;
   protected abstract templateFile: string;
-  protected abstract async getContext(): Promise<any>;
+  protected abstract async getContext(): Promise<GeneratorContext>;
 
   protected getTemplateFile(): string {
     return path.resolve(__dirname, '../../src/templates', this.templateFile);
