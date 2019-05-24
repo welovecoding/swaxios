@@ -1,4 +1,4 @@
-![Swaxios](./logo.png)
+![Swaxios](https://github.com/bennyn/swaxios/raw/master/logo.png)
 
 # Swaxios
 
