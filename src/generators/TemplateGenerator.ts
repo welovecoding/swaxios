@@ -11,7 +11,7 @@ export abstract class TemplateGenerator {
   protected abstract async getContext(): Promise<GeneratorContext>;
 
   protected getTemplateFile(): string {
-    return path.resolve(__dirname, '../../src/templates', this.templateFile);
+    return path.resolve(__dirname, '../templates', this.templateFile);
   }
 
   private async renderTemplate(): Promise<string> {
