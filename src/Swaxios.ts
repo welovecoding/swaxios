@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import initializeHelpers from 'handlebars-helpers';
 import path from 'path';
 import {Path, Spec} from 'swagger-schema-official';
+import yaml from 'yamljs';
 
 import {APIClientGenerator, IndexFileGenerator, ResourceGenerator} from './generators';
 import {DirEntry, generateFileIndex} from './util/FileUtil';
@@ -62,8 +63,33 @@ async function generateClient(swaggerJson: Spec, outputDirectory: string): Promi
   await buildIndexFiles(fileIndex);
 }
 
+async function readInputFile(inputFile: string): Promise<Spec> {
+  let swaggerJson: Spec;
+
+  try {
+    await fs.access(inputFile);
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      throw new Error(`Input file "${inputFile}" could not be found or is not readable`);
+    }
+    throw error;
+  }
+
+  try {
+    swaggerJson = await fs.readJson(inputFile);
+  } catch (error) {
+    try {
+      swaggerJson = yaml.load(inputFile);
+    } catch (error) {
+      throw new Error(`Input file "${inputFile}" is neither valid JSON nor valid YAML.`);
+    }
+  }
+
+  return swaggerJson;
+}
+
 export async function writeClient(inputFile: string, outputDirectory: string): Promise<void> {
-  const swaggerJson: Spec = await fs.readJson(inputFile);
+  const swaggerJson = await readInputFile(inputFile);
   await validateConfig(swaggerJson);
   return generateClient(swaggerJson, outputDirectory);
 }
