@@ -9,5 +9,5 @@
     "strict": true,
     "target": "es6"
   },
-  "exclude": ["src/temp"]
+  "exclude": ["**/*.test.ts", "src/temp"]
 }
