@@ -20,7 +20,7 @@ export class ResourceGenerator extends TemplateGenerator {
     const directories = fullyQualifiedName.split('/');
 
     if (directories.length > 2) {
-      this.name = camelCase(directories.slice(1), true);
+      this.name = camelCase([directories[directories.length - 1]], true);
       directories.pop();
       this.directory = directories.join('/');
     } else if (directories.length > 1) {
