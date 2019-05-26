@@ -1,3 +1,4 @@
+import axios from 'axios';
 import fs from 'fs-extra';
 import initializeHelpers from 'handlebars-helpers';
 import path from 'path';
@@ -63,8 +64,16 @@ async function generateClient(swaggerJson: Spec, outputDirectory: string): Promi
   await buildIndexFiles(fileIndex);
 }
 
+async function readInputURL(inputURL: string): Promise<Spec> {
+  console.info(`Reading OpenAPI specification from URL "${inputURL}" ...`);
+  const response = await axios.get<Spec>(inputURL);
+  return response.data;
+}
+
 async function readInputFile(inputFile: string): Promise<Spec> {
   let swaggerJson: Spec;
+
+  console.info(`Reading OpenAPI specification from file "${inputFile}" ...`);
 
   try {
     await fs.access(inputFile);
@@ -89,7 +98,7 @@ async function readInputFile(inputFile: string): Promise<Spec> {
 }
 
 export async function writeClient(inputFile: string, outputDirectory: string): Promise<void> {
-  const swaggerJson = await readInputFile(inputFile);
+  const swaggerJson = inputFile.startsWith('http:') ? await readInputURL(inputFile) : await readInputFile(inputFile);
   await validateConfig(swaggerJson);
   return generateClient(swaggerJson, outputDirectory);
 }

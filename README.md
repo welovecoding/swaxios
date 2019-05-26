@@ -12,7 +12,7 @@ Display the CLI options by running
 swaxios --help
 ```
 
-If you pass an [OpenAPI definition](https://swagger.io/docs/specification/2-0/basic-structure/) file (v2.0; valid JSON or YAML) to Swaxios, then it will generate you an API client that uses axios under the hood and is written in TypeScript.
+If you pass an [OpenAPI Specification (OAS)](https://swagger.io/docs/specification/2-0/basic-structure/) (v2.0; JSON or YAML) to Swaxios, then it will generate you an API client that uses axios under the hood and is written in TypeScript.
 
 Examples:
 
@@ -44,4 +44,4 @@ client.rest.identityProvidersService
   });
 ```
 
-Inspired by [swagger-codegen](https://github.com/swagger-api/swagger-codegen).
+This project is inspired by [swagger-codegen](https://github.com/swagger-api/swagger-codegen).
