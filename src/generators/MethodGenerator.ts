@@ -82,7 +82,7 @@ export class MethodGenerator {
       }
       case SwaggerType.OBJECT: {
         if (!properties) {
-          console.info(`Schema type for "${schemaName}" is "object" but has no properties.`);
+          console.warn(`Schema type for "${schemaName}" is "object" but has no properties.`);
           return TypeScriptType.EMPTY_OBJECT;
         }
 
@@ -100,7 +100,7 @@ export class MethodGenerator {
       }
       case SwaggerType.ARRAY: {
         if (!schema.items) {
-          console.info(`Schema type for "${schemaName}" is "array" but has no items.`);
+          console.warn(`Schema type for "${schemaName}" is "array" but has no items.`);
           return `${TypeScriptType.ARRAY}<${TypeScriptType.ANY}>`;
         }
 
@@ -133,7 +133,7 @@ export class MethodGenerator {
         : response200Schema || response201Schema;
 
     if (!responseSchema) {
-      console.info(`No schema for code 200/201 on URL "${this.url}" or schema has no definitions.`);
+      console.warn(`No schema for code 200/201 on URL "${this.url}" or schema has no definitions.`);
       return TypeScriptType.EMPTY_OBJECT;
     }
 

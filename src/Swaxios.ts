@@ -65,7 +65,7 @@ async function generateClient(swaggerJson: Spec, outputDirectory: string): Promi
 }
 
 async function readInputURL(inputURL: string): Promise<Spec> {
-  console.info(`Reading OpenAPI specification from URL "${inputURL}" ...`);
+  console.log(`Reading OpenAPI specification from URL "${inputURL}" ...`);
   const response = await axios.get<Spec>(inputURL);
   return response.data;
 }
@@ -73,7 +73,7 @@ async function readInputURL(inputURL: string): Promise<Spec> {
 async function readInputFile(inputFile: string): Promise<Spec> {
   let swaggerJson: Spec;
 
-  console.info(`Reading OpenAPI specification from file "${inputFile}" ...`);
+  console.log(`Reading OpenAPI specification from file "${inputFile}" ...`);
 
   try {
     await fs.access(inputFile);
