@@ -15,11 +15,7 @@
           "$ref": "#/definitions/NameIdPolicy"
         }
       },
-      "required": [
-        "iD",
-        "issueInstant",
-        "issuer"
-      ],
+      "required": ["iD", "issueInstant", "issuer"],
       "type": "object"
     },
     "CreateScimToken": {
@@ -31,9 +27,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "description"
-      ],
+      "required": ["description"],
       "type": "object"
     },
     "CreateScimTokenResponse": {
@@ -46,10 +40,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "token",
-        "info"
-      ],
+      "required": ["token", "info"],
       "type": "object"
     },
     "FormRedirect": {
@@ -71,9 +62,7 @@
           "$ref": "#/definitions/XmlText"
         }
       },
-      "required": [
-        "iD"
-      ],
+      "required": ["iD"],
       "type": "object"
     },
     "IdPConfig": {
@@ -88,11 +77,7 @@
           "$ref": "#/definitions/IdPMetadata"
         }
       },
-      "required": [
-        "id",
-        "metadata",
-        "extraInfo"
-      ],
+      "required": ["id", "metadata", "extraInfo"],
       "type": "object"
     },
     "IdPList": {
@@ -104,9 +89,7 @@
           "type": "array"
         }
       },
-      "required": [
-        "providers"
-      ],
+      "required": ["providers"],
       "type": "object"
     },
     "IdPMetadata": {
@@ -125,24 +108,11 @@
           "type": "string"
         }
       },
-      "required": [
-        "issuer",
-        "requestURI",
-        "certAuthnResponse"
-      ],
+      "required": ["issuer", "requestURI", "certAuthnResponse"],
       "type": "object"
     },
     "NameIDFormat": {
-      "enum": [
-        "NameIDFUnspecified",
-        "NameIDFEmail",
-        "NameIDFX509",
-        "NameIDFWindows",
-        "NameIDFKerberos",
-        "NameIDFEntity",
-        "NameIDFPersistent",
-        "NameIDFTransient"
-      ],
+      "enum": ["NameIDFUnspecified", "NameIDFEmail", "NameIDFX509", "NameIDFWindows", "NameIDFKerberos", "NameIDFEntity", "NameIDFPersistent", "NameIDFTransient"],
       "type": "string"
     },
     "NameIdPolicy": {
@@ -157,10 +127,7 @@
           "$ref": "#/definitions/XmlText"
         }
       },
-      "required": [
-        "format",
-        "allowCreate"
-      ],
+      "required": ["format", "allowCreate"],
       "type": "object"
     },
     "ScimTokenInfo": {
@@ -181,12 +148,7 @@
           "$ref": "#/definitions/UUID"
         }
       },
-      "required": [
-        "team",
-        "id",
-        "created_at",
-        "description"
-      ],
+      "required": ["team", "id", "created_at", "description"],
       "type": "object"
     },
     "ScimTokenList": {
@@ -198,9 +160,7 @@
           "type": "array"
         }
       },
-      "required": [
-        "tokens"
-      ],
+      "required": ["tokens"],
       "type": "object"
     },
     "Time": {
@@ -209,9 +169,7 @@
           "$ref": "#/definitions/UTCTime"
         }
       },
-      "required": [
-        "time"
-      ],
+      "required": ["time"],
       "type": "object"
     },
     "UTCTime": {
@@ -230,9 +188,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "fromXmlText"
-      ],
+      "required": ["fromXmlText"],
       "type": "object"
     }
   },
@@ -244,9 +200,7 @@
   "paths": {
     "/identity-providers": {
       "get": {
-        "produces": [
-          "application/json;charset=utf-8"
-        ],
+        "produces": ["application/json;charset=utf-8"],
         "responses": {
           "200": {
             "description": "",
@@ -257,9 +211,7 @@
         }
       },
       "post": {
-        "consumes": [
-          "application/xml"
-        ],
+        "consumes": ["application/xml"],
         "parameters": [
           {
             "in": "body",
@@ -270,9 +222,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json;charset=utf-8"
-        ],
+        "produces": ["application/json;charset=utf-8"],
         "responses": {
           "201": {
             "description": "",
@@ -297,9 +247,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json;charset=utf-8"
-        ],
+        "produces": ["application/json;charset=utf-8"],
         "responses": {
           "204": {
             "description": ""
@@ -319,9 +267,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json;charset=utf-8"
-        ],
+        "produces": ["application/json;charset=utf-8"],
         "responses": {
           "200": {
             "description": "",
@@ -346,9 +292,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json;charset=utf-8"
-        ],
+        "produces": ["application/json;charset=utf-8"],
         "responses": {
           "204": {
             "description": ""
@@ -359,9 +303,7 @@
         }
       },
       "get": {
-        "produces": [
-          "application/json;charset=utf-8"
-        ],
+        "produces": ["application/json;charset=utf-8"],
         "responses": {
           "200": {
             "description": "",
@@ -372,9 +314,7 @@
         }
       },
       "post": {
-        "consumes": [
-          "application/json;charset=utf-8"
-        ],
+        "consumes": ["application/json;charset=utf-8"],
         "parameters": [
           {
             "in": "body",
@@ -385,9 +325,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json;charset=utf-8"
-        ],
+        "produces": ["application/json;charset=utf-8"],
         "responses": {
           "200": {
             "description": "",
@@ -424,9 +362,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "text/html"
-        ],
+        "produces": ["text/html"],
         "responses": {
           "200": {
             "description": "",
@@ -458,9 +394,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "text/plain;charset=utf-8"
-        ],
+        "produces": ["text/plain;charset=utf-8"],
         "responses": {
           "200": {
             "description": "",
@@ -497,9 +431,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "text/html"
-        ],
+        "produces": ["text/html"],
         "responses": {
           "200": {
             "description": "",
@@ -542,9 +474,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "text/plain;charset=utf-8"
-        ],
+        "produces": ["text/plain;charset=utf-8"],
         "responses": {
           "200": {
             "description": ""
@@ -560,9 +490,7 @@
     },
     "/sso/metadata": {
       "get": {
-        "produces": [
-          "application/xml"
-        ],
+        "produces": ["application/xml"],
         "responses": {
           "200": {
             "description": "",

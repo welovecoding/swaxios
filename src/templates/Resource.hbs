@@ -16,12 +16,20 @@ export class {{{name}}} {
 
   async {{{this.parameterMethod}}}
   (
-    {{#if this.parameterName}}{{{this.parameterName}}}: string{{/if}}
+    {{#if this.parameterName}}{{{this.parameterName}}}: string,{{/if}}
+    {{#each bodyParameters}}
+      {{{this.name}}}{{#isnt this.required}}?{{/isnt}}: {{{this.type}}},
+    {{/each}}
   ): Promise<{{{this.returnType}}}> {
     const resource = {{{this.formattedUrl}}};
     const response = await this.apiClient.{{{this.method}}}
     {{#isnt this.returnType "void"}}<{{{this.returnType}}}>{{/isnt}}
-    (resource);
+    (
+      resource
+      {{#if bodyParameters}}
+        , { {{#each bodyParameters}}{{this.name}},{{/each}} }
+      {{/if}}
+    );
     return response.data;
   }
   {{/each}}

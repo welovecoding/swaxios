@@ -1,4 +1,4 @@
-import {Response, Schema, Spec} from 'swagger-schema-official';
+import {Operation, Parameter, Reference, Response, Schema, Spec} from 'swagger-schema-official';
 import {inspect} from 'util';
 
 import * as StringUtil from '../util/StringUtil';
@@ -19,24 +19,31 @@ export enum TypeScriptType {
   STRING = 'string',
 }
 
+interface BodyParameter {
+  name: string;
+  type: string;
+}
+
 export class MethodGenerator {
-  private readonly responses: Record<string, Response>;
+  private readonly responses: Record<string, Response | Reference>;
   private readonly spec: Spec;
   private readonly url: string;
+  private readonly operation: Operation;
   readonly formattedUrl: string;
   readonly method: string;
   readonly normalizedUrl: string;
-  readonly parameterData?: string;
+  readonly bodyParameters?: BodyParameter[];
   readonly parameterMethod: string;
   readonly parameterName?: string;
   readonly returnType: string;
 
-  constructor(url: string, method: string, responses: Record<string, Response>, spec: Spec) {
+  constructor(url: string, method: string, operation: Operation, spec: Spec) {
     this.url = url;
+    this.operation = operation;
     this.normalizedUrl = StringUtil.normalizeUrl(url);
     this.formattedUrl = `'${url}'`;
     this.spec = spec;
-    this.responses = responses;
+    this.responses = operation.responses;
 
     const parameterMatch = url.match(/\{([^}]+)\}/);
 
@@ -48,18 +55,79 @@ export class MethodGenerator {
     const postFix = parameterMatch ? `By${StringUtil.camelCase(parameterMatch.splice(1), true)}` : 'All';
     this.parameterMethod = `${method}${postFix}`;
 
-    if (method === 'delete' || method === 'head') {
+    this.method = method;
+
+    if (this.method === 'delete' || this.method === 'head') {
       this.returnType = 'void';
     } else {
       this.returnType = this.buildResponseSchema();
     }
-    this.method = method;
+
+    this.bodyParameters = this.buildBodyParameters(this.operation.parameters);
+  }
+
+  private parameterIsReference(parameter: Reference | Parameter): parameter is Reference {
+    return !!(parameter as Reference).$ref;
+  }
+
+  private buildBodyParameters(parameters?: (Parameter | Reference)[]): BodyParameter[] | undefined {
+    if (!parameters) {
+      return undefined;
+    }
+
+    return parameters
+      .map(parameter => {
+        if (this.parameterIsReference(parameter)) {
+          if (!parameter.$ref.startsWith('#/definitions')) {
+            console.warn(`Invalid reference "${parameter.$ref}".`);
+            return undefined;
+          }
+          if (!this.spec.definitions) {
+            console.warn(`No reference found for "${parameter.$ref}".`);
+            return undefined;
+          }
+          const definition = parameter.$ref.replace('#/definitions', '');
+          return this.buildBodyParameters([this.spec.definitions[definition]] as Parameter[]);
+        }
+
+        if (parameter.in === 'path') {
+          return undefined;
+        }
+
+        if (parameter.in !== 'body') {
+          console.warn(
+            `Skipping parameter "${parameter.name}" because it's located in "${
+              parameter.in
+            }", which is not supported yet.`
+          );
+          return undefined;
+        }
+
+        return {
+          name: parameter.name,
+          type: parameter.schema ? this.buildType(parameter.schema, parameter.name) : TypeScriptType.EMPTY_OBJECT,
+        };
+      })
+      .filter(Boolean) as BodyParameter[];
   }
 
   private buildType(schema: Schema, schemaName: string): string {
     let {required: requiredProperties, properties, type: schemaType} = schema;
+    const {allOf: multipleSchemas, enum: enumType} = schema;
 
-    if (schema.$ref && schema.$ref.startsWith('#/definitions')) {
+    if (multipleSchemas) {
+      return multipleSchemas.map(includedSchema => this.buildType(includedSchema, schemaName)).join('|');
+    }
+
+    if (enumType) {
+      return `"${enumType.join('" | "')}"`;
+    }
+
+    if (schema.$ref) {
+      if (!schema.$ref.startsWith('#/definitions')) {
+        console.warn(`Invalid reference "${schema.$ref}".`);
+        return TypeScriptType.EMPTY_OBJECT;
+      }
       if (!this.spec.definitions) {
         console.warn(`No reference found for "${schema.$ref}".`);
         return TypeScriptType.EMPTY_OBJECT;
@@ -90,7 +158,7 @@ export class MethodGenerator {
 
         for (const property of Object.keys(properties)) {
           const propertyName = requiredProperties && !requiredProperties.includes(property) ? `${property}?` : property;
-          schema[propertyName] = this.buildType(properties[property], property);
+          schema[propertyName] = this.buildType(properties[property], `${schemaName}/${property}`);
         }
 
         return inspect(schema, {breakLength: Infinity})
@@ -109,7 +177,9 @@ export class MethodGenerator {
           return `${TypeScriptType.ARRAY}<${itemType}>`;
         }
 
-        const schemes = schema.items.map(itemSchema => this.buildType(itemSchema, schemaName)).join('|');
+        const schemes = schema.items
+          .map((itemSchema, index) => this.buildType(itemSchema, `${schemaName}[${index}]`))
+          .join('|');
         return `${TypeScriptType.ARRAY}<${schemes}>`;
       }
       default: {
@@ -119,13 +189,13 @@ export class MethodGenerator {
   }
 
   private buildResponseSchema(): string {
-    const response200 = this.responses['200'];
-    const response201 = this.responses['201'];
+    const response200 = this.responses['200'] as Response;
+    const response201 = this.responses['201'] as Response;
 
     const response200Schema =
-      response200 && response200.schema ? this.buildType(response200.schema, 'response200') : '';
+      response200 && response200.schema ? this.buildType(response200.schema, `${this.url}/${this.method}/200`) : '';
     const response201Schema =
-      response201 && response201.schema ? this.buildType(response201.schema, 'response200') : '';
+      response201 && response201.schema ? this.buildType(response201.schema, `${this.url}/${this.method}/201`) : '';
 
     const responseSchema =
       response200Schema && response201Schema

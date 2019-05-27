@@ -69,7 +69,7 @@
     "lint:ts": "tslint --config tslint.json --project tsconfig.json \"**/*.ts?(x)\"",
     "prettier": "prettier \"**/*.{json,md}\"",
     "release:patch": "git pull && yarn && yarn dist && npm version patch && npm publish && git push --follow-tags",
-    "start": "yarn clean:temp && ts-node src/cli.ts -i ./samples/wire-sso.json -o ./src/temp",
+    "start": "yarn clean:temp && ts-node src/cli.ts -i ./src/test/fixtures/wire-sso.json -o ./src/temp",
     "test": "yarn lint && yarn test:node",
     "test:node": "nyc jasmine --config=jasmine.json"
   },

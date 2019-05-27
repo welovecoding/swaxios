@@ -275,7 +275,7 @@
           "type": "string"
         },
         "type": {
-          "format": "string"
+          "type": "string"
         }
       },
       "required": [
@@ -1990,10 +1990,7 @@
           "200": {
             "description": "",
             "schema": {
-              "additionalProperties": {
-                "$ref": "#/definitions/Instance"
-              },
-              "type": "object"
+              "$ref": "#/definitions/Instance"
             }
           },
           "404": {
