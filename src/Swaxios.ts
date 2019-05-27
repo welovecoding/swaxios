@@ -3,6 +3,7 @@ import fs from 'fs-extra';
 import initializeHelpers from 'handlebars-helpers';
 import path from 'path';
 import {Path, Spec} from 'swagger-schema-official';
+import url from 'url';
 import yaml from 'yamljs';
 
 import {APIClientGenerator, IndexFileGenerator, ResourceGenerator} from './generators';
@@ -98,7 +99,8 @@ async function readInputFile(inputFile: string): Promise<Spec> {
 }
 
 export async function writeClient(inputFile: string, outputDirectory: string): Promise<void> {
-  const swaggerJson = inputFile.startsWith('http:') ? await readInputURL(inputFile) : await readInputFile(inputFile);
+  const parsedInput = url.parse(inputFile);
+  const swaggerJson = parsedInput.protocol ? await readInputURL(inputFile) : await readInputFile(inputFile);
   await validateConfig(swaggerJson);
   return generateClient(swaggerJson, outputDirectory);
 }
