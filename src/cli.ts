@@ -21,10 +21,9 @@ if (!program.input || !program.output) {
   process.exit(1);
 }
 
-const inputFile = program.input.startsWith('http:') ? program.input : path.resolve(process.cwd(), program.input);
 const outputDirectory = path.resolve(process.cwd(), program.output);
 
-writeClient(inputFile, outputDirectory)
+writeClient(program.input, outputDirectory)
   .then(() => {
     console.log(`Created API client in "${outputDirectory}".`);
   })
