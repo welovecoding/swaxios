@@ -16,15 +16,21 @@ export interface DirEntry {
 
 const fileNames: string[] = [];
 
-function getUniqueFileName(fileName: string, fileNames: string[]): string | null {
+export function getUniqueFileName(fileName: string): string | null {
   if (!fileNames.includes(fileName)) {
     fileNames.push(fileName);
     return null;
   }
 
-  const indexAndExtension = fileName.match(/(\d+)\.(\w+)$/);
-  const indexNumber = indexAndExtension ? parseInt(indexAndExtension[0], 10) + 1 : 1;
-  const alternativeFilename = `${fileName}${indexNumber}`;
+  let newName = fileName;
+
+  while (fileNames.includes(newName)) {
+    const indexNumberMatch = newName.match(/(\d+)$/);
+    const indexNumber = indexNumberMatch ? parseInt(indexNumberMatch[0], 10) + 1 : 1;
+    newName = `${fileName}${indexNumber}`;
+  }
+
+  const alternativeFilename = newName;
   fileNames.push(alternativeFilename);
   return alternativeFilename;
 }
@@ -48,7 +54,7 @@ export async function generateFileIndex(directory: string): Promise<DirEntry> {
 
       if (lstat.isFile()) {
         fileIndex.files[fileName] = {
-          alternativeName: getUniqueFileName(fileName, fileNames),
+          alternativeName: getUniqueFileName(fileName),
           fullPath: resolvedFile.replace('.ts', ''),
           name: fileName,
         };
