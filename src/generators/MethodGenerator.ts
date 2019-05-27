@@ -26,7 +26,6 @@ export class MethodGenerator {
   readonly formattedUrl: string;
   readonly method: string;
   readonly normalizedUrl: string;
-  readonly parameterData?: string;
   readonly parameterMethod: string;
   readonly parameterName?: string;
   readonly returnType: string;
