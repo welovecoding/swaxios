@@ -22,15 +22,14 @@ export function getUniqueFileName(fileName: string): string | null {
     return null;
   }
 
-  let newName = fileName;
+  let alternativeFilename = fileName;
 
-  while (fileNames.includes(newName)) {
-    const indexNumberMatch = newName.match(/(\d+)$/);
+  while (fileNames.includes(alternativeFilename)) {
+    const indexNumberMatch = alternativeFilename.match(/(\d+)$/);
     const indexNumber = indexNumberMatch ? parseInt(indexNumberMatch[0], 10) + 1 : 1;
-    newName = `${fileName}${indexNumber}`;
+    alternativeFilename = `${fileName}${indexNumber}`;
   }
 
-  const alternativeFilename = newName;
   fileNames.push(alternativeFilename);
   return alternativeFilename;
 }
