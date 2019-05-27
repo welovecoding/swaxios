@@ -33,7 +33,7 @@ export class ResourceGenerator extends TemplateGenerator {
 
     Object.entries(resources).forEach(([url, definition]) => {
       for (const [method, data] of Object.entries(definition)) {
-        const methodDefinition = new MethodGenerator(url, method, data.responses, spec);
+        const methodDefinition = new MethodGenerator(url, method, data, spec);
         this.methods.push(methodDefinition);
       }
     });
