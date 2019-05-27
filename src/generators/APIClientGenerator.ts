@@ -2,17 +2,17 @@ import fs from 'fs-extra';
 import path from 'path';
 import {inspect} from 'util';
 
-import {DirEntry} from '../util/FileUtil';
+import {DirEntry, FileEntry} from '../util/FileUtil';
 import * as StringUtil from '../util/StringUtil';
 import {GeneratorContext, TemplateGenerator} from './TemplateGenerator';
 
-interface API {
+export interface API {
   [name: string]: string | API;
 }
 
 interface Import {
   dir: string;
-  files: string[];
+  files: FileEntry[];
 }
 
 interface Context extends GeneratorContext {
@@ -37,8 +37,9 @@ export class APIClientGenerator extends TemplateGenerator {
   async generateAPI(fileIndex: DirEntry): Promise<API> {
     const api: API = {};
 
-    for (const fileName of Object.keys(fileIndex.files)) {
-      const objectName = `${fileName.charAt(0).toLowerCase()}${fileName.slice(1)}`;
+    for (const {alternativeName, name} of Object.values(fileIndex.files)) {
+      const fileName = alternativeName || name;
+      const objectName = `${name.charAt(0).toLowerCase()}${name.slice(1)}`;
       api[objectName] = `new ${fileName}(this.httpClient)`;
     }
 
@@ -55,14 +56,14 @@ export class APIClientGenerator extends TemplateGenerator {
     return Object.entries(bundledImports).map(([dir, files]) => ({dir, files}));
   }
 
-  private bundleImports(fileIndex: DirEntry): Record<string, string[]> {
-    let bundledImports: Record<string, string[]> = {};
+  private bundleImports(fileIndex: DirEntry): Record<string, FileEntry[]> {
+    let bundledImports: Record<string, FileEntry[]> = {};
 
-    for (const [fileName, file] of Object.entries(fileIndex.files)) {
+    for (const file of Object.values(fileIndex.files)) {
       const relativePath = path.dirname(path.relative(this.outputDirectory, file.fullPath)).replace(/\\/g, '/');
 
       bundledImports[relativePath] = bundledImports[relativePath] || [];
-      bundledImports[relativePath].push(fileName);
+      bundledImports[relativePath].push(file);
     }
 
     for (const directory of Object.values(fileIndex.directories)) {

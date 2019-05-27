@@ -2,7 +2,7 @@ import {Spec} from 'swagger-schema-official';
 import {exportServices} from './Swaxios';
 
 describe('exportServices', () => {
-  it('merges resources if their belong to the same service', async () => {
+  it('merges resources if they belong to the same service', async () => {
     const swaggerJson: Spec = {
       info: {
         description: '',

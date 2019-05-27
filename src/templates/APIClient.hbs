@@ -8,7 +8,10 @@ import axios, {AxiosInstance, AxiosRequestConfig} from 'axios';
 {{#each imports}}
 import {
   {{#each this.files}}
-  {{{this}}},
+    {{{this.name}}}
+    {{#if this.alternativeName}}
+      as {{{this.alternativeName}}}
+    {{/if}},
   {{/each}}
 } from './{{{this.dir}}}/';
 {{/each}}
