@@ -58,6 +58,7 @@ async function generateClient(swaggerJson: Spec, outputDirectory: string): Promi
   await new APIClientGenerator(fileIndex, outputDirectory).write();
 
   fileIndex.files['APIClient'] = {
+    alternativeName: null,
     fullPath: path.resolve(outputDirectory, 'APIClient'),
     name: 'APIClient',
   };

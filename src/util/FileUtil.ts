@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import path from 'path';
 
 export interface FileEntry {
+  alternativeName: string | null;
   fullPath: string;
   name: string;
 }
@@ -11,6 +12,26 @@ export interface DirEntry {
   fullPath: string;
   files: Record<string, FileEntry>;
   name: string;
+}
+
+const fileNames: string[] = [];
+
+export function getUniqueFileName(fileName: string): string | null {
+  if (!fileNames.includes(fileName)) {
+    fileNames.push(fileName);
+    return null;
+  }
+
+  let alternativeFilename = fileName;
+
+  while (fileNames.includes(alternativeFilename)) {
+    const indexNumberMatch = alternativeFilename.match(/(\d+)$/);
+    const indexNumber = indexNumberMatch ? parseInt(indexNumberMatch[0], 10) + 1 : 1;
+    alternativeFilename = `${fileName}${indexNumber}`;
+  }
+
+  fileNames.push(alternativeFilename);
+  return alternativeFilename;
 }
 
 export async function generateFileIndex(directory: string): Promise<DirEntry> {
@@ -32,6 +53,7 @@ export async function generateFileIndex(directory: string): Promise<DirEntry> {
 
       if (lstat.isFile()) {
         fileIndex.files[fileName] = {
+          alternativeName: getUniqueFileName(fileName),
           fullPath: resolvedFile.replace('.ts', ''),
           name: fileName,
         };
