@@ -102,21 +102,18 @@ async function readInputFile(inputFile: string): Promise<Spec> {
 }
 
 async function checkOutputDirectory(outputDirectory: string, forceDeletion?: boolean): Promise<void> {
+  const shouldDelete = () =>
+    forceDeletion ||
+    (!isCI && getYesNo(`The output directory "${outputDirectory}" exists already. Would you like to delete it?`));
   const directoryExists = await fs.pathExists(outputDirectory);
+
   if (directoryExists) {
-    if (forceDeletion) {
+    if (shouldDelete()) {
       console.info(`Deleting "${outputDirectory}" ...`);
       await fs.remove(outputDirectory);
       return;
     }
 
-    if (!isCI) {
-      const yes = getYesNo(`The output directory "${outputDirectory}" exists already. Would you like to delete it?`);
-      if (yes) {
-        await fs.remove(outputDirectory);
-        return;
-      }
-    }
     throw new Error(`Output directory "${outputDirectory}" exists already`);
   }
 }
