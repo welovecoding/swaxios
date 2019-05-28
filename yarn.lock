@@ -104,6 +104,13 @@
   dependencies:
     any-observable "^0.3.0"
 
+"@types/cli-interact@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@types/cli-interact/-/cli-interact-0.1.0.tgz#63379a2009727dd3d893d098bc183700c28ee711"
+  integrity sha512-Xq/ucHBj2GLoW0bWEm4KnzUy+joweC1A/ce4W4qxie84c0OFyZ2Q2Uli+2q6nkDBNQfm+wccJp8NGvExg+xj1g==
+  dependencies:
+    "@types/readline-sync" "*"
+
 "@types/fs-extra@7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@types/fs-extra/-/fs-extra-7.0.0.tgz#9c4ad9e1339e7448a76698829def1f159c1b636c"
@@ -142,6 +149,11 @@
   version "1.16.4"
   resolved "https://registry.yarnpkg.com/@types/prettier/-/prettier-1.16.4.tgz#5e5e97702cb68498aaba7349b941648daaf2385c"
   integrity sha512-MG7ExKBo7AQ5UrL1awyYLNinNM/kyXgE4iP4Ul9fB+T7n768Z5Xem8IZeP6Bna0xze8gkDly49Rgge2HOEw4xA==
+
+"@types/readline-sync@*":
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/@types/readline-sync/-/readline-sync-1.4.3.tgz#eac55a39d5a349912062c9e5216cd550c07fd9c8"
+  integrity sha512-YP9NVli96E+qQLAF2db+VjnAUEeZcFVg4YnMgr8kpDUFwQBnj31rPLOVHmazbKQhaIkJ9cMHsZhpKdzUeL0KTg==
 
 "@types/swagger-parser@4.0.3":
   version "4.0.3"
@@ -755,7 +767,7 @@ chownr@^1.1.1:
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.1.1.tgz#54726b8b8fff4df053c42187e801fb4412df1494"
   integrity sha512-j38EvO5+LHX84jlo6h4UzmOwi0UgW61WRyPtJz4qaadK5eY3BTS5TY/S1Stc3Uk2lIM6TPevAlULiEJwie860g==
 
-ci-info@^2.0.0:
+ci-info@2.0.0, ci-info@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-2.0.0.tgz#67a9e964be31a51e15e5010d58e6f12834002f46"
   integrity sha512-5tK7EtrZ0N+OLFMthtqOj4fI2Jeb88C4CAZPu25LDVUgXJ0A3Js4PMGqrn0JU1W0Mh1/Z8wZzYPxqUrXeBboCQ==
@@ -776,6 +788,13 @@ cli-cursor@^2.0.0, cli-cursor@^2.1.0:
   integrity sha1-s12sN2R5+sw+lHR9QdDQ9SOP/LU=
   dependencies:
     restore-cursor "^2.0.0"
+
+cli-interact@0.1.9:
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/cli-interact/-/cli-interact-0.1.9.tgz#e58ae8505bbf7ed2e12671057cd559b12fdce28f"
+  integrity sha1-5YroUFu/ftLhJnEFfNVZsS/c4o8=
+  dependencies:
+    readline-sync "~0.4.9"
 
 cli-truncate@^0.2.1:
   version "0.2.1"
@@ -3057,6 +3076,11 @@ readdirp@^2.0.0:
     graceful-fs "^4.1.11"
     micromatch "^3.1.10"
     readable-stream "^2.0.2"
+
+readline-sync@~0.4.9:
+  version "0.4.10"
+  resolved "https://registry.yarnpkg.com/readline-sync/-/readline-sync-0.4.10.tgz#bef03d993eca3585fd064f5d56d7276765dfc121"
+  integrity sha1-vvA9mT7KNYX9Bk9dVtcnZ2XfwSE=
 
 regenerator-runtime@^0.11.0:
   version "0.11.1"

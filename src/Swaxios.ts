@@ -1,10 +1,12 @@
 import axios from 'axios';
+import {getYesNo} from 'cli-interact';
 import fs from 'fs-extra';
 import initializeHelpers from 'handlebars-helpers';
 import path from 'path';
 import {Path, Spec} from 'swagger-schema-official';
 import url from 'url';
 import yaml from 'yamljs';
+const {isCI} = require('ci-info');
 
 import {APIClientGenerator, IndexFileGenerator, ResourceGenerator} from './generators';
 import {DirEntry, generateFileIndex} from './util/FileUtil';
@@ -99,7 +101,28 @@ async function readInputFile(inputFile: string): Promise<Spec> {
   return swaggerJson;
 }
 
-export async function writeClient(inputFile: string, outputDirectory: string): Promise<void> {
+async function checkOutputDirectory(outputDirectory: string, forceDeletion?: boolean): Promise<void> {
+  const directoryExists = await fs.pathExists(outputDirectory);
+  if (directoryExists) {
+    if (forceDeletion) {
+      console.info(`Deleting "${outputDirectory}" ...`);
+      await fs.remove(outputDirectory);
+      return;
+    }
+
+    if (!isCI) {
+      const yes = getYesNo(`The output directory "${outputDirectory}" exists already. Would you like to delete it?`);
+      if (yes) {
+        await fs.remove(outputDirectory);
+        return;
+      }
+    }
+    throw new Error(`Output directory "${outputDirectory}" exists already`);
+  }
+}
+
+export async function writeClient(inputFile: string, outputDirectory: string, forceDeletion?: boolean): Promise<void> {
+  await checkOutputDirectory(outputDirectory, forceDeletion);
   const parsedInput = url.parse(inputFile);
   const swaggerJson = parsedInput.protocol ? await readInputURL(inputFile) : await readInputFile(inputFile);
   await validateConfig(swaggerJson);

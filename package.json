@@ -4,6 +4,8 @@
   },
   "dependencies": {
     "axios": "0.18.0",
+    "ci-info": "2.0.0",
+    "cli-interact": "0.1.9",
     "commander": "2.20.0",
     "fs-extra": "8.0.1",
     "handlebars": "4.1.2",
@@ -14,6 +16,7 @@
   },
   "description": "Generate Swagger API clients with axios",
   "devDependencies": {
+    "@types/cli-interact": "0.1.0",
     "@types/fs-extra": "7.0.0",
     "@types/handlebars-helpers": "0.5.2",
     "@types/jasmine": "3.3.12",
@@ -56,11 +59,9 @@
   "name": "swaxios",
   "prettier": "@wireapp/prettier-config",
   "scripts": {
-    "clean:temp": "rimraf src/temp",
-    "clean:dist": "rimraf dist",
-    "clean": "yarn clean:temp && yarn clean:dist",
+    "clean": "rimraf dist",
     "copy": "cpx src/templates/**/* dist/templates/",
-    "dist": "yarn clean:dist && tsc && yarn copy",
+    "dist": "yarn clean && tsc && yarn copy",
     "fix": "yarn fix:other && yarn fix:ts",
     "fix:other": "yarn prettier --write",
     "fix:ts": "yarn lint:ts --fix",
@@ -69,7 +70,7 @@
     "lint:ts": "tslint --config tslint.json --project tsconfig.json \"**/*.ts?(x)\"",
     "prettier": "prettier \"**/*.{json,md}\"",
     "release:patch": "git pull && yarn && yarn dist && npm version patch && npm publish && git push --follow-tags",
-    "start": "yarn clean:temp && ts-node src/cli.ts -i ./src/test/fixtures/wire-sso.json -o ./src/temp",
+    "start": "ts-node src/cli.ts -i ./src/test/fixtures/wire-sso.json -o ./src/temp -f",
     "test": "yarn lint && yarn test:node",
     "test:node": "nyc jasmine --config=jasmine.json"
   },
