@@ -38,7 +38,8 @@ export async function exportServices(swaggerJson: Spec): Promise<ResourceGenerat
 }
 
 async function buildIndexFiles(fileIndex: DirEntry): Promise<void> {
-  await new IndexFileGenerator(Object.keys(fileIndex.files), fileIndex.fullPath).write();
+  const filesAndDirs = Object.keys(fileIndex.files).concat(Object.keys(fileIndex.directories).map(dir => `${dir}/`));
+  await new IndexFileGenerator(filesAndDirs, fileIndex.fullPath).write();
 
   for (const dir of Object.values(fileIndex.directories)) {
     await buildIndexFiles(dir);
