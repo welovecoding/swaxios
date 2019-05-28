@@ -102,10 +102,11 @@ async function readInputFile(inputFile: string): Promise<Spec> {
 }
 
 async function checkOutputDirectory(outputDirectory: string, forceDeletion?: boolean): Promise<void> {
-  const shouldDelete = () =>
-    forceDeletion ||
-    (!isCI && getYesNo(`The output directory "${outputDirectory}" exists already. Would you like to delete it?`));
   const directoryExists = await fs.pathExists(outputDirectory);
+  function shouldDelete(): boolean {
+    const question = `The output directory "${outputDirectory}" exists already. Would you like to delete it?\nNOTE: Without deletion, Swaxios can generate unexpected results.`;
+    return forceDeletion || (!isCI && getYesNo(question));
+  }
 
   if (directoryExists) {
     if (shouldDelete()) {
@@ -114,7 +115,9 @@ async function checkOutputDirectory(outputDirectory: string, forceDeletion?: boo
       return;
     }
 
-    throw new Error(`Output directory "${outputDirectory}" exists already`);
+    if (isCI) {
+      throw new Error(`Output directory "${outputDirectory}" exists already`);
+    }
   }
 }
 
