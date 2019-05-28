@@ -14,6 +14,7 @@ program
   .version(version, '-v, --version')
   .option('-i, --input <file>', 'File path (or URL) to OpenAPI Specification, i.e. swagger.json (required)')
   .option('-o, --output <directory>', 'Path to output directory for generated TypeScript code (required)')
+  .option('-f, --force', 'Force deleting the output directory before generating')
   .parse(process.argv);
 
 if (!program.input || !program.output) {
@@ -21,12 +22,10 @@ if (!program.input || !program.output) {
   process.exit(1);
 }
 
-const outputDirectory = path.resolve(process.cwd(), program.output);
+const outputDirectory = path.resolve(program.output || '.');
 
-writeClient(program.input, outputDirectory)
-  .then(() => {
-    console.log(`Created API client in "${outputDirectory}".`);
-  })
+writeClient(program.input, outputDirectory, program.force)
+  .then(() => console.log(`Created API client in "${outputDirectory}".`))
   .catch(error => {
     console.error(error);
     process.exit(1);
