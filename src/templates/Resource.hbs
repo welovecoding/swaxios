@@ -35,7 +35,16 @@ export class {{{name}}} {
       (
         resource
         {{#if bodyParameters}}
-          , { {{#each bodyParameters}}{{this.name}},{{/each}} }
+          ,
+          {
+            {{#if this.needsDataObj}}
+              data: {
+            {{/if}}
+            {{#each bodyParameters}}{{this.name}},{{/each}}
+            {{#if this.needsDataObj}}
+                }
+            {{/if}}
+          }
         {{/if}}
       );
       return response.data;

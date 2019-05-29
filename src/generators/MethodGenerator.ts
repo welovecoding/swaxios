@@ -29,21 +29,32 @@ interface Description {
   text: string;
 }
 
+export enum HttpMethod {
+  DELETE = 'delete',
+  GET = 'get',
+  HEAD = 'head',
+  PATCH = 'patch',
+  POST = 'post',
+  PUT = 'put',
+  REQUEST = 'request',
+}
+
 export class MethodGenerator {
   private readonly responses: Record<string, Response | Reference>;
   private readonly spec: Spec;
   private readonly url: string;
   private readonly operation: Operation;
   readonly formattedUrl: string;
-  readonly method: string;
+  readonly method: HttpMethod;
   readonly normalizedUrl: string;
   readonly bodyParameters?: BodyParameter[];
   readonly parameterMethod: string;
   readonly parameterName?: string;
   readonly returnType: string;
   readonly descriptions?: Description[];
+  readonly needsDataObj: boolean;
 
-  constructor(url: string, method: string, operation: Operation, spec: Spec) {
+  constructor(url: string, method: HttpMethod, operation: Operation, spec: Spec) {
     this.url = url;
     this.operation = operation;
     this.normalizedUrl = StringUtil.normalizeUrl(url);
@@ -68,6 +79,12 @@ export class MethodGenerator {
     } else {
       this.returnType = this.buildResponseSchema();
     }
+
+    this.needsDataObj = !(
+      this.method === HttpMethod.PATCH ||
+      this.method === HttpMethod.POST ||
+      this.method === HttpMethod.PUT
+    );
 
     this.bodyParameters = this.buildBodyParameters(this.operation.parameters);
     this.descriptions = this.buildDescriptions();

@@ -1,6 +1,6 @@
 import {Path, Spec} from 'swagger-schema-official';
 import {camelCase} from '../util/StringUtil';
-import {MethodGenerator} from './MethodGenerator';
+import {HttpMethod, MethodGenerator} from './MethodGenerator';
 import {GeneratorContext, TemplateGenerator} from './TemplateGenerator';
 
 interface Context extends GeneratorContext {
@@ -33,7 +33,7 @@ export class ResourceGenerator extends TemplateGenerator {
 
     Object.entries(resources).forEach(([url, definition]) => {
       for (const [method, data] of Object.entries(definition)) {
-        const methodDefinition = new MethodGenerator(url, method, data, spec);
+        const methodDefinition = new MethodGenerator(url, method as HttpMethod, data, spec);
         this.methods.push(methodDefinition);
       }
     });
