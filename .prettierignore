@@ -6,6 +6,6 @@
 /node_modules
 /package-lock.json
 /src/temp
-/samples
+/src/test/snapshots
 npm-debug.log
 yarn-error.log

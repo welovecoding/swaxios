@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import {inspect} from 'util';
 
+import {Spec} from 'swagger-schema-official';
 import {DirEntry, FileEntry} from '../util/FileUtil';
 import * as StringUtil from '../util/StringUtil';
 import {GeneratorContext, TemplateGenerator} from './TemplateGenerator';
@@ -17,21 +18,24 @@ interface Import {
 
 interface Context extends GeneratorContext {
   API: string;
+  description?: string;
   imports: Import[];
 }
 
 export class APIClientGenerator extends TemplateGenerator {
   private readonly fileIndex: DirEntry;
   private readonly outputDirectory: string;
+  protected readonly description?: string;
   protected readonly name: string;
   protected readonly templateFile: string;
 
-  constructor(fileIndex: DirEntry, outputDirectory: string) {
+  constructor(fileIndex: DirEntry, outputDirectory: string, spec: Spec) {
     super();
     this.name = 'APIClient';
     this.outputDirectory = outputDirectory;
     this.fileIndex = fileIndex;
     this.templateFile = `${this.name}.hbs`;
+    this.description = StringUtil.addStarsToNewline(spec.info.description);
   }
 
   async generateAPI(fileIndex: DirEntry): Promise<API> {
@@ -88,6 +92,7 @@ export class APIClientGenerator extends TemplateGenerator {
 
     return {
       API: apiString,
+      description: this.description,
       imports,
     };
   }

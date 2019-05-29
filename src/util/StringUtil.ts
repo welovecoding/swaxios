@@ -43,3 +43,7 @@ export function generateServiceName(url: string): string {
 export function normalizeUrl(url: string): string {
   return url.replace(/\/\{.*\}/g, '');
 }
+
+export function addStarsToNewline(text?: string): string {
+  return text ? text.replace(/([\r\n])/g, '$1   * ') : '';
+}

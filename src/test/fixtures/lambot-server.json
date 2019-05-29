@@ -13,11 +13,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "apiKey",
-        "apiSecret",
-        "id"
-      ],
+      "required": ["apiKey", "apiSecret", "id"],
       "type": "object"
     }
   },
@@ -29,12 +25,8 @@
   "paths": {
     "/": {
       "get": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": ""
@@ -44,12 +36,8 @@
     },
     "/api/v1/exchange": {
       "get": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": ""
@@ -57,9 +45,7 @@
         }
       },
       "post": {
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "parameters": [
           {
             "in": "body",
@@ -70,9 +56,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "201": {
             "description": ""
@@ -81,9 +65,7 @@
       }
     }
   },
-  "schemes": [
-    "http"
-  ],
+  "schemes": ["http"],
   "swagger": "2.0",
   "tags": []
 }

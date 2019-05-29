@@ -48,7 +48,7 @@ async function buildIndexFiles(fileIndex: DirEntry): Promise<void> {
   }
 }
 
-async function generateClient(swaggerJson: Spec, outputDirectory: string): Promise<void> {
+export async function generateClient(swaggerJson: Spec, outputDirectory: string): Promise<void> {
   const resources = await exportServices(swaggerJson);
 
   for (const restResource of resources) {
@@ -58,9 +58,9 @@ async function generateClient(swaggerJson: Spec, outputDirectory: string): Promi
 
   const fileIndex = await generateFileIndex(outputDirectory);
 
-  await new APIClientGenerator(fileIndex, outputDirectory).write();
+  await new APIClientGenerator(fileIndex, outputDirectory, swaggerJson).write();
 
-  fileIndex.files['APIClient'] = {
+  fileIndex.files.APIClient = {
     alternativeName: null,
     fullPath: path.resolve(outputDirectory, 'APIClient'),
     name: 'APIClient',
@@ -125,7 +125,8 @@ async function checkOutputDirectory(outputDirectory: string, forceDeletion?: boo
 export async function writeClient(inputFile: string, outputDirectory: string, forceDeletion?: boolean): Promise<void> {
   await checkOutputDirectory(outputDirectory, forceDeletion);
   const parsedInput = url.parse(inputFile);
-  const swaggerJson = parsedInput.protocol ? await readInputURL(inputFile) : await readInputFile(inputFile);
+  const isUrl = parsedInput.protocol && /^https?:\/\//.test(parsedInput.protocol);
+  const swaggerJson = isUrl ? await readInputURL(inputFile) : await readInputFile(inputFile);
   await validateConfig(swaggerJson);
   return generateClient(swaggerJson, outputDirectory);
 }

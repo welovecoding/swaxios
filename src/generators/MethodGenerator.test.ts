@@ -1,5 +1,5 @@
 import {Operation} from 'swagger-schema-official';
-import {MethodGenerator} from './MethodGenerator';
+import {HttpMethod, MethodGenerator} from './MethodGenerator';
 
 const WireSSO = require('../test/fixtures/wire-sso.json');
 
@@ -7,7 +7,7 @@ describe('MethodGenerator', () => {
   describe('constructor', () => {
     it('constructs a RESTful method name', () => {
       const url = '/identity-providers';
-      const method = 'post';
+      const method = HttpMethod.POST;
       const operation: Operation = {
         responses: {
           '201': {
@@ -68,7 +68,7 @@ describe('MethodGenerator', () => {
 
     it('recognizes URL variables', () => {
       const url = '/identity-providers/{id}';
-      const method = 'delete';
+      const method = HttpMethod.DELETE;
       const operation: Operation = {responses: {'204': {description: ''}, '404': {description: '`id` not found'}}};
 
       const methodDefinition = new MethodGenerator(url, method, operation, WireSSO);
@@ -81,7 +81,7 @@ describe('MethodGenerator', () => {
 
     it('builds body parameters', () => {
       const url = '/identity-providers/{id}';
-      const method = 'post';
+      const method = HttpMethod.POST;
       const operation: Operation = {
         parameters: [
           {

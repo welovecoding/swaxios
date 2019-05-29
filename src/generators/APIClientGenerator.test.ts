@@ -1,6 +1,8 @@
 import {DirEntry} from '../util/FileUtil';
 import {API, APIClientGenerator} from './APIClientGenerator';
 
+const WireSSO = require('../test/fixtures/wire-sso.json');
+
 describe('ResourceGenerator', () => {
   describe('constructor', () => {
     it('creates unique service names', async () => {
@@ -36,7 +38,7 @@ describe('ResourceGenerator', () => {
         name: '',
       };
 
-      const generator = new APIClientGenerator(fileIndex, '.');
+      const generator = new APIClientGenerator(fileIndex, '.', WireSSO);
       const services = (await generator.generateAPI(fileIndex)) as Record<string, API>;
       expect(services.login.authService).not.toBe(services.post.authService);
     });
