@@ -24,6 +24,11 @@ interface BodyParameter {
   type: string;
 }
 
+interface Description {
+  name: string;
+  text: string;
+}
+
 export class MethodGenerator {
   private readonly responses: Record<string, Response | Reference>;
   private readonly spec: Spec;
@@ -36,6 +41,7 @@ export class MethodGenerator {
   readonly parameterMethod: string;
   readonly parameterName?: string;
   readonly returnType: string;
+  readonly descriptions?: Description[];
 
   constructor(url: string, method: string, operation: Operation, spec: Spec) {
     this.url = url;
@@ -64,30 +70,61 @@ export class MethodGenerator {
     }
 
     this.bodyParameters = this.buildBodyParameters(this.operation.parameters);
+    this.descriptions = this.buildDescriptions();
+  }
+
+  private buildDescriptions(): Description[] | undefined {
+    if (this.operation.parameters) {
+      const parameters = this.operation.parameters.filter(
+        parameter => !this.parameterIsReference(parameter)
+      ) as Parameter[];
+
+      const extractDescription = (parameter: Parameter): Description | undefined => {
+        if (parameter.description) {
+          return {
+            name: parameter.name,
+            text: StringUtil.addStarsToNewline(parameter.description),
+          };
+        }
+      };
+
+      return parameters.map(extractDescription).filter(Boolean) as Description[];
+    }
+
+    return undefined;
   }
 
   private parameterIsReference(parameter: Reference | Parameter): parameter is Reference {
     return !!(parameter as Reference).$ref;
   }
 
+  private getSchemaFromRef(ref: string): Schema | undefined {
+    if (!ref.startsWith('#/definitions')) {
+      console.warn(`Invalid reference "${ref}".`);
+      return;
+    }
+    if (!this.spec.definitions) {
+      console.warn(`No reference found for "${ref}".`);
+      return;
+    }
+    const definitionString = ref.replace('#/definitions', '');
+    const definition = this.spec.definitions[definitionString];
+    return definition.$ref ? this.getSchemaFromRef(definition.$ref) : definition;
+  }
+
   private buildBodyParameters(parameters?: (Parameter | Reference)[]): BodyParameter[] | undefined {
     if (!parameters) {
-      return undefined;
+      return;
     }
 
     return parameters
       .map(parameter => {
         if (this.parameterIsReference(parameter)) {
-          if (!parameter.$ref.startsWith('#/definitions')) {
-            console.warn(`Invalid reference "${parameter.$ref}".`);
-            return undefined;
+          const definition = this.getSchemaFromRef(parameter.$ref);
+          if (definition) {
+            return this.buildBodyParameters([definition] as Parameter[]);
           }
-          if (!this.spec.definitions) {
-            console.warn(`No reference found for "${parameter.$ref}".`);
-            return undefined;
-          }
-          const definition = parameter.$ref.replace('#/definitions', '');
-          return this.buildBodyParameters([this.spec.definitions[definition]] as Parameter[]);
+          return;
         }
 
         if (parameter.in === 'path') {

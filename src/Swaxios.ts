@@ -58,9 +58,9 @@ async function generateClient(swaggerJson: Spec, outputDirectory: string): Promi
 
   const fileIndex = await generateFileIndex(outputDirectory);
 
-  await new APIClientGenerator(fileIndex, outputDirectory).write();
+  await new APIClientGenerator(fileIndex, outputDirectory, swaggerJson).write();
 
-  fileIndex.files['APIClient'] = {
+  fileIndex.files.APIClient = {
     alternativeName: null,
     fullPath: path.resolve(outputDirectory, 'APIClient'),
     name: 'APIClient',
