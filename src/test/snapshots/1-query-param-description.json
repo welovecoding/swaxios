@@ -1,0 +1,115 @@
+{
+  "basePath": "/api/v1",
+  "definitions": {
+    "InstanceAndName": {
+      "properties": {
+        "instanceId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "NotFoundError": {
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "stack": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ValidationError": {
+      "properties": {
+        "error": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "info": {
+    "contact": {
+      "email": "opensource@wire.com"
+    },
+    "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
+    "license": {
+      "name": "GPL-3.0",
+      "url": "https://github.com/wireapp/wire-web-ets/blob/master/LICENSE"
+    },
+    "termsOfService": "https://wire.com/legal/",
+    "title": "E2E Test Service",
+    "version": "1.16.1"
+  },
+  "paths": {
+    "/instance/{instanceId}/archive": {
+      "post": {
+        "operationId": "archiveConversation",
+        "parameters": [
+          {
+            "description": "ID of instance to return",
+            "format": "uuid",
+            "in": "path",
+            "name": "instanceId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "properties": {
+                "archive": {
+                  "type": "boolean"
+                },
+                "conversationId": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InstanceAndName"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/NotFoundError"
+            }
+          },
+          "422": {
+            "description": "Validation error",
+            "schema": {
+              "$ref": "#/definitions/ValidationError"
+            }
+          }
+        },
+        "summary": "Archive a conversation",
+        "tags": [
+          "Instance"
+        ]
+      }
+    }
+  },
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0"
+}

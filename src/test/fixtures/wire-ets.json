@@ -4,11 +4,7 @@
     "BasicLogin": {
       "properties": {
         "backend": {
-          "enum": [
-            "staging",
-            "prod",
-            "production"
-          ],
+          "enum": ["staging", "prod", "production"],
           "type": "string"
         },
         "email": {
@@ -45,10 +41,7 @@
               "type": "integer"
             }
           },
-          "required": [
-            "lat",
-            "lon"
-          ],
+          "required": ["lat", "lon"],
           "type": "object"
         },
         "model": {
@@ -78,17 +71,11 @@
           "type": "array"
         },
         "type": {
-          "enum": [
-            0,
-            1
-          ],
+          "enum": [0, 1],
           "type": "integer"
         }
       },
-      "required": [
-        "firstMessageId",
-        "type"
-      ],
+      "required": ["firstMessageId", "type"],
       "type": "object"
     },
     "Instance": {
@@ -194,11 +181,7 @@
           "type": "object"
         }
       ],
-      "required": [
-        "backend",
-        "email",
-        "password"
-      ]
+      "required": ["backend", "email", "password"]
     },
     "Mention": {
       "properties": {
@@ -265,10 +248,7 @@
           "type": "string"
         },
         "state": {
-          "enum": [
-            "PayloadBundleState.INCOMING",
-            "PayloadBundleState.OUTGOING_SENT"
-          ],
+          "enum": ["PayloadBundleState.INCOMING", "PayloadBundleState.OUTGOING_SENT"],
           "format": "string"
         },
         "timestamp": {
@@ -278,15 +258,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "conversation",
-        "from",
-        "id",
-        "messageTimer",
-        "state",
-        "timestamp",
-        "type"
-      ],
+      "required": ["conversation", "from", "id", "messageTimer", "state", "timestamp", "type"],
       "type": "object"
     },
     "NotFoundError": {
@@ -366,9 +338,7 @@
   "paths": {
     "/clients": {
       "delete": {
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "description": "",
         "operationId": "deleteAllClients",
         "parameters": [
@@ -382,9 +352,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -400,16 +368,12 @@
           }
         },
         "summary": "Delete all clients",
-        "tags": [
-          "Clients"
-        ]
+        "tags": ["Clients"]
       }
     },
     "/instance": {
       "put": {
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "description": "",
         "operationId": "createInstance",
         "parameters": [
@@ -423,9 +387,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -441,9 +403,7 @@
           }
         },
         "summary": "Create a new instance",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}": {
@@ -460,9 +420,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -484,9 +442,7 @@
           }
         },
         "summary": "Delete an instance",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       },
       "get": {
         "operationId": "getInstance",
@@ -500,9 +456,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -518,9 +472,7 @@
           }
         },
         "summary": "Get information about an instance",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/archive": {
@@ -554,9 +506,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -578,9 +528,7 @@
           }
         },
         "summary": "Archive a conversation",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/availability": {
@@ -607,12 +555,7 @@
                   "type": "string"
                 },
                 "type": {
-                  "enum": [
-                    0,
-                    1,
-                    2,
-                    3
-                  ],
+                  "enum": [0, 1, 2, 3],
                   "type": "string"
                 }
               },
@@ -620,9 +563,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -644,9 +585,7 @@
           }
         },
         "summary": "Set a user's availability",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/clear": {
@@ -677,9 +616,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -701,9 +638,7 @@
           }
         },
         "summary": "Clear a conversation",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/clients": {
@@ -719,9 +654,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -740,9 +673,7 @@
           }
         },
         "summary": "Get all clients of an instance",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/delete": {
@@ -777,9 +708,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -801,9 +730,7 @@
           }
         },
         "summary": "Delete a message locally",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/deleteEverywhere": {
@@ -838,9 +765,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -862,9 +787,7 @@
           }
         },
         "summary": "Delete a message for everyone",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/fingerprint": {
@@ -880,9 +803,7 @@
             "type": "string"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -907,9 +828,7 @@
           }
         },
         "summary": "Get the fingerprint from the instance's client",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/getMessages": {
@@ -940,9 +859,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -967,9 +884,7 @@
           }
         },
         "summary": "Get all messages",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/mute": {
@@ -1003,9 +918,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -1027,9 +940,7 @@
           }
         },
         "summary": "Mute a conversation",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/sendConfirmationDelivered": {
@@ -1067,17 +978,12 @@
                   "type": "array"
                 }
               },
-              "required": [
-                "conversationId",
-                "firstMessageId"
-              ],
+              "required": ["conversationId", "firstMessageId"],
               "type": "object"
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -1099,9 +1005,7 @@
           }
         },
         "summary": "Send a delivery confirmation for a message",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/sendConfirmationRead": {
@@ -1139,17 +1043,12 @@
                   "type": "array"
                 }
               },
-              "required": [
-                "conversationId",
-                "firstMessageId"
-              ],
+              "required": ["conversationId", "firstMessageId"],
               "type": "object"
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -1171,9 +1070,7 @@
           }
         },
         "summary": "Send a read confirmation for a message",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/sendEphemeralConfirmationDelivered": {
@@ -1208,9 +1105,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -1232,9 +1127,7 @@
           }
         },
         "summary": "Send a delivery confirmation for an ephemeral message",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/sendEphemeralConfirmationRead": {
@@ -1269,9 +1162,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -1293,9 +1184,7 @@
           }
         },
         "summary": "Send a read confirmation for an ephemeral message",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/sendFile": {
@@ -1343,9 +1232,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -1379,9 +1266,7 @@
           }
         },
         "summary": "Send a file to a conversation",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/sendImage": {
@@ -1434,9 +1319,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -1470,9 +1353,7 @@
           }
         },
         "summary": "Send an image to a conversation",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/sendLocation": {
@@ -1525,9 +1406,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -1561,9 +1440,7 @@
           }
         },
         "summary": "Send a location to a conversation",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/sendPing": {
@@ -1601,9 +1478,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -1637,9 +1512,7 @@
           }
         },
         "summary": "Send a ping to a conversation",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/sendReaction": {
@@ -1670,10 +1543,7 @@
                   "type": "string"
                 },
                 "type": {
-                  "enum": [
-                    "❤️",
-                    ""
-                  ],
+                  "enum": ["❤️", ""],
                   "type": "string"
                 }
               },
@@ -1681,9 +1551,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -1717,9 +1585,7 @@
           }
         },
         "summary": "Send a reaction to a message",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/sendSessionReset": {
@@ -1750,9 +1616,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -1786,9 +1650,7 @@
           }
         },
         "summary": "Send a session reset message",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/sendText": {
@@ -1813,9 +1675,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -1849,9 +1709,7 @@
           }
         },
         "summary": "Send a text message to a conversation",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/sendTyping": {
@@ -1878,19 +1736,14 @@
                   "type": "string"
                 },
                 "status": {
-                  "enum": [
-                    "started",
-                    "stopped"
-                  ],
+                  "enum": ["started", "stopped"],
                   "type": "string"
                 }
               }
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -1912,9 +1765,7 @@
           }
         },
         "summary": "Send a typing indicator to a conversation",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instance/{instanceId}/updateText": {
@@ -1939,9 +1790,7 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -1975,17 +1824,13 @@
           }
         },
         "summary": "Update a text message in a conversation",
-        "tags": [
-          "Instance"
-        ]
+        "tags": ["Instance"]
       }
     },
     "/instances": {
       "get": {
         "operationId": "getInstances",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "",
@@ -2001,15 +1846,11 @@
           }
         },
         "summary": "Get all instances",
-        "tags": [
-          "Instances"
-        ]
+        "tags": ["Instances"]
       }
     }
   },
-  "schemes": [
-    "http"
-  ],
+  "schemes": ["http"],
   "swagger": "2.0",
   "tags": [
     {
