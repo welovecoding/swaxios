@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {isCI} from 'ci-info';
 import {getYesNo} from 'cli-interact';
 import fs from 'fs-extra';
 import initializeHelpers from 'handlebars-helpers';
@@ -6,7 +7,6 @@ import path from 'path';
 import {Path, Spec} from 'swagger-schema-official';
 import url from 'url';
 import yaml from 'yamljs';
-const {isCI} = require('ci-info');
 
 import {APIClientGenerator, IndexFileGenerator, ResourceGenerator} from './generators';
 import {DirEntry, generateFileIndex} from './util/FileUtil';
@@ -125,7 +125,7 @@ async function checkOutputDirectory(outputDirectory: string, forceDeletion?: boo
 export async function writeClient(inputFile: string, outputDirectory: string, forceDeletion?: boolean): Promise<void> {
   await checkOutputDirectory(outputDirectory, forceDeletion);
   const parsedInput = url.parse(inputFile);
-  const isUrl = parsedInput.protocol && /^https?:\/\//.test(parsedInput.protocol);
+  const isUrl = parsedInput.protocol && /^https?/.test(parsedInput.protocol);
   const swaggerJson = isUrl ? await readInputURL(inputFile) : await readInputFile(inputFile);
   await validateConfig(swaggerJson);
   return generateClient(swaggerJson, outputDirectory);

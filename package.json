@@ -3,7 +3,7 @@
     "swaxios": "dist/cli.js"
   },
   "dependencies": {
-    "axios": "0.18.0",
+    "axios": "0.19.0",
     "ci-info": "2.0.0",
     "cli-interact": "0.1.9",
     "commander": "2.20.0",
@@ -16,6 +16,7 @@
   },
   "description": "Generate Swagger API clients with axios",
   "devDependencies": {
+    "@types/ci-info": "2.0.0",
     "@types/cli-interact": "0.1.0",
     "@types/fs-extra": "7.0.0",
     "@types/handlebars-helpers": "0.5.2",
@@ -39,7 +40,7 @@
     "tslint-plugin-prettier": "2.0.1",
     "tslint-react": "4.0.0",
     "tslint-react-hooks": "2.1.0",
-    "typescript": "3.4.5"
+    "typescript": "3.5.1"
   },
   "files": [
     "dist"
