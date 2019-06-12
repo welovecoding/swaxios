@@ -1,11 +1,42 @@
 {
   "basePath": "/api/v1",
   "definitions": {
+    "Availability": {
+      "properties": {
+        "teamId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "type": {
+          "enum": [0, 1, 2, 3],
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "BackendData": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "rest": {
+          "type": "string"
+        },
+        "ws": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "rest", "ws"],
+      "type": "object"
+    },
     "BasicLogin": {
       "properties": {
         "backend": {
           "enum": ["staging", "prod", "production"],
           "type": "string"
+        },
+        "customBackend": {
+          "$ref": "#/definitions/BackendData"
         },
         "email": {
           "format": "email",
@@ -16,6 +47,7 @@
           "type": "string"
         }
       },
+      "required": ["email", "password"],
       "type": "object"
     },
     "Client": {
@@ -71,6 +103,7 @@
           "type": "array"
         },
         "type": {
+          "description": "Type can be `0` (Delivered) or `1` (Read).",
           "enum": [0, 1],
           "type": "integer"
         }
@@ -108,6 +141,11 @@
       },
       "type": "object"
     },
+    "LegalHoldStatus": {
+      "description": "Type can be `0` (Disabled) or `1` (Enabled).",
+      "enum": [0, 1],
+      "type": "integer"
+    },
     "LinkPreview": {
       "properties": {
         "image": {
@@ -117,15 +155,13 @@
               "type": "string"
             },
             "height": {
-              "format": "number",
-              "type": "string"
+              "type": "integer"
             },
             "type": {
               "type": "string"
             },
             "width": {
-              "format": "number",
-              "type": "string"
+              "type": "integer"
             }
           },
           "type": "object"
@@ -155,10 +191,36 @@
           "type": "string"
         },
         "urlOffset": {
-          "format": "number",
-          "type": "string"
+          "type": "integer"
         }
       },
+      "type": "object"
+    },
+    "Location": {
+      "properties": {
+        "expectsReadConfirmation": {
+          "type": "boolean"
+        },
+        "latitude": {
+          "type": "integer"
+        },
+        "legalHoldStatus": {
+          "$ref": "#/definitions/LegalHoldStatus"
+        },
+        "locationName": {
+          "type": "string"
+        },
+        "longitude": {
+          "type": "integer"
+        },
+        "messageTimer": {
+          "type": "integer"
+        },
+        "zoom": {
+          "type": "integer"
+        }
+      },
+      "required": ["latitude", "longitude"],
       "type": "object"
     },
     "Login": {
@@ -168,6 +230,10 @@
         },
         {
           "properties": {
+            "deviceClass": {
+              "enum": ["desktop", "phone", "tablet"],
+              "type": "string"
+            },
             "deviceLabel": {
               "type": "string"
             },
@@ -181,17 +247,16 @@
           "type": "object"
         }
       ],
-      "required": ["backend", "email", "password"]
+      "description": "**Notes**:\n\nYou can either set `backend` or `customBackend`. If you set neither, the \"staging\" backend will be used. If you set both, `backend` takes the precedence.\n`deviceClass` can be set to any string if `backend` is unset and `customBackend` is set.",
+      "required": ["email", "password"]
     },
     "Mention": {
       "properties": {
         "length": {
-          "format": "number",
-          "type": "string"
+          "type": "integer"
         },
         "start": {
-          "format": "number",
-          "type": "string"
+          "type": "integer"
         },
         "userId": {
           "format": "uuid",
@@ -202,14 +267,6 @@
     },
     "Message": {
       "properties": {
-        "content": {
-          "properties": {
-            "text": {
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
         "confirmations": {
           "items": {
             "allOf": [
@@ -222,18 +279,19 @@
                     "format": "uuid",
                     "type": "string"
                   }
-                }
+                },
+                "required": ["from"]
               }
             ]
           },
           "type": "array"
         },
+        "content": {
+          "$ref": "#/definitions/MessageContent"
+        },
         "conversation": {
           "format": "uuid",
           "type": "string"
-        },
-        "expectsReadConfirmation": {
-          "type": "boolean"
         },
         "from": {
           "format": "uuid",
@@ -244,12 +302,11 @@
           "type": "string"
         },
         "messageTimer": {
-          "format": "number",
-          "type": "string"
+          "type": "integer"
         },
         "state": {
           "enum": ["PayloadBundleState.INCOMING", "PayloadBundleState.OUTGOING_SENT"],
-          "format": "string"
+          "type": "string"
         },
         "timestamp": {
           "type": "string"
@@ -259,6 +316,21 @@
         }
       },
       "required": ["conversation", "from", "id", "messageTimer", "state", "timestamp", "type"],
+      "type": "object"
+    },
+    "MessageContent": {
+      "properties": {
+        "expectsReadConfirmation": {
+          "type": "boolean"
+        },
+        "legalHoldStatus": {
+          "$ref": "#/definitions/LegalHoldStatus"
+        },
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": ["text"],
       "type": "object"
     },
     "NotFoundError": {
@@ -272,14 +344,76 @@
       },
       "type": "object"
     },
-    "TextMessage": {
+    "Reaction": {
       "properties": {
-        "conversationId": {
+        "legalHoldStatus": {
+          "$ref": "#/definitions/LegalHoldStatus"
+        },
+        "originalMessageId": {
           "format": "uuid",
           "type": "string"
         },
+        "type": {
+          "enum": ["❤️", ""],
+          "type": "string"
+        }
+      },
+      "required": ["originalMessageId", "type"],
+      "type": "object"
+    },
+    "ServerError": {
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "stack": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ServerInfo": {
+      "properties": {
+        "code": {
+          "type": "integer"
+        },
+        "commit": {
+          "type": "string"
+        },
+        "instance": {
+          "properties": {
+            "env": {
+              "properties": {
+                "LOG_ERROR": {
+                  "type": "string"
+                },
+                "LOG_OUTPUT": {
+                  "type": "string"
+                },
+                "NODE_DEBUG": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "required": ["env", "uptime"],
+          "type": "object"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": ["code", "instance", "message"],
+      "type": "object"
+    },
+    "TextMessage": {
+      "properties": {
         "expectsReadConfirmation": {
           "type": "boolean"
+        },
+        "legalHoldStatus": {
+          "$ref": "#/definitions/LegalHoldStatus"
         },
         "linkPreview": {
           "$ref": "#/definitions/LinkPreview"
@@ -291,8 +425,7 @@
           "type": "array"
         },
         "messageTimer": {
-          "format": "number",
-          "type": "string"
+          "type": "integer"
         },
         "quote": {
           "properties": {
@@ -308,6 +441,19 @@
           "type": "object"
         },
         "text": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Typing": {
+      "properties": {
+        "conversationId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "status": {
+          "enum": ["started", "stopped"],
           "type": "string"
         }
       },
@@ -336,10 +482,26 @@
     "version": "1.16.1"
   },
   "paths": {
+    "/": {
+      "get": {
+        "operationId": "getServerInfo",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ServerInfo"
+            }
+          }
+        },
+        "summary": "Get information about the server",
+        "tags": ["Server"]
+      }
+    },
     "/clients": {
       "delete": {
         "consumes": ["application/json"],
-        "description": "",
+        "description": "**Notes**:\n\nYou can either set `backend` or `customBackend`. If you set neither, the \"staging\" backend will be used. If you set both, `backend` takes the precedence.",
         "operationId": "deleteAllClients",
         "parameters": [
           {
@@ -357,7 +519,10 @@
           "200": {
             "description": "",
             "schema": {
-              "type": "object"
+              "items": {
+                "$ref": "#/definitions/Client"
+              },
+              "type": "array"
             }
           },
           "422": {
@@ -369,6 +534,28 @@
         },
         "summary": "Delete all clients",
         "tags": ["Clients"]
+      }
+    },
+    "/commit": {
+      "get": {
+        "operationId": "getLatestCommit",
+        "produces": ["text/plain"],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ServerError"
+            }
+          }
+        },
+        "summary": "Get the latest commit hash as plain text",
+        "tags": ["Server"]
       }
     },
     "/instance": {
@@ -549,17 +736,7 @@
             "name": "body",
             "required": true,
             "schema": {
-              "properties": {
-                "teamId": {
-                  "format": "uuid",
-                  "type": "string"
-                },
-                "type": {
-                  "enum": [0, 1, 2, 3],
-                  "type": "string"
-                }
-              },
-              "type": "object"
+              "$ref": "#/definitions/Availability"
             }
           }
         ],
@@ -961,25 +1138,21 @@
             "name": "body",
             "required": true,
             "schema": {
-              "properties": {
-                "conversationId": {
-                  "format": "uuid",
-                  "type": "string"
-                },
-                "firstMessageId": {
-                  "format": "uuid",
-                  "type": "string"
-                },
-                "moreMessageIds": {
-                  "items": {
-                    "format": "uuid",
-                    "type": "string"
+              "allOf": [
+                {
+                  "properties": {
+                    "conversationId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
                   },
-                  "type": "array"
+                  "required": ["conversationId"],
+                  "type": "object"
+                },
+                {
+                  "$ref": "#/definitions/Confirmation"
                 }
-              },
-              "required": ["conversationId", "firstMessageId"],
-              "type": "object"
+              ]
             }
           }
         ],
@@ -1220,9 +1393,11 @@
                 "fileName": {
                   "type": "string"
                 },
+                "legalHoldStatus": {
+                  "$ref": "#/definitions/LegalHoldStatus"
+                },
                 "messageTimer": {
-                  "format": "number",
-                  "type": "string"
+                  "type": "integer"
                 },
                 "type": {
                   "type": "string"
@@ -1300,19 +1475,19 @@
                   "type": "boolean"
                 },
                 "height": {
-                  "format": "number",
-                  "type": "string"
+                  "type": "integer"
+                },
+                "legalHoldStatus": {
+                  "$ref": "#/definitions/LegalHoldStatus"
                 },
                 "messageTimer": {
-                  "format": "number",
-                  "type": "string"
+                  "type": "integer"
                 },
                 "type": {
                   "type": "string"
                 },
                 "width": {
-                  "format": "number",
-                  "type": "string"
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -1374,35 +1549,21 @@
             "name": "body",
             "required": true,
             "schema": {
-              "properties": {
-                "conversationId": {
-                  "format": "uuid",
-                  "type": "string"
+              "allOf": [
+                {
+                  "properties": {
+                    "conversationId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  },
+                  "required": ["conversationId"],
+                  "type": "object"
                 },
-                "expectsReadConfirmation": {
-                  "type": "boolean"
-                },
-                "latitude": {
-                  "format": "number",
-                  "type": "string"
-                },
-                "locationName": {
-                  "type": "string"
-                },
-                "longitude": {
-                  "format": "number",
-                  "type": "string"
-                },
-                "messageTimer": {
-                  "format": "number",
-                  "type": "string"
-                },
-                "zoom": {
-                  "format": "number",
-                  "type": "string"
+                {
+                  "$ref": "#/definitions/Location"
                 }
-              },
-              "type": "object"
+              ]
             }
           }
         ],
@@ -1469,9 +1630,11 @@
                 "expectsReadConfirmation": {
                   "type": "boolean"
                 },
+                "legalHoldStatus": {
+                  "$ref": "#/definitions/LegalHoldStatus"
+                },
                 "messageTimer": {
-                  "format": "number",
-                  "type": "string"
+                  "type": "integer"
                 }
               },
               "type": "object"
@@ -1533,21 +1696,21 @@
             "name": "body",
             "required": true,
             "schema": {
-              "properties": {
-                "conversationId": {
-                  "format": "uuid",
-                  "type": "string"
+              "allOf": [
+                {
+                  "properties": {
+                    "conversationId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  },
+                  "required": ["conversationId"],
+                  "type": "object"
                 },
-                "originalMessageId": {
-                  "format": "uuid",
-                  "type": "string"
-                },
-                "type": {
-                  "enum": ["❤️", ""],
-                  "type": "string"
+                {
+                  "$ref": "#/definitions/Reaction"
                 }
-              },
-              "type": "object"
+              ]
             }
           }
         ],
@@ -1671,7 +1834,21 @@
             "name": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/TextMessage"
+              "allOf": [
+                {
+                  "properties": {
+                    "conversationId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  },
+                  "required": ["conversationId"],
+                  "type": "object"
+                },
+                {
+                  "$ref": "#/definitions/TextMessage"
+                }
+              ]
             }
           }
         ],
@@ -1690,7 +1867,9 @@
                       "format": "uuid",
                       "type": "string"
                     }
-                  }
+                  },
+                  "required": ["messageId"],
+                  "type": "object"
                 }
               ]
             }
@@ -1730,16 +1909,7 @@
             "name": "body",
             "required": true,
             "schema": {
-              "properties": {
-                "conversationId": {
-                  "format": "uuid",
-                  "type": "string"
-                },
-                "status": {
-                  "enum": ["started", "stopped"],
-                  "type": "string"
-                }
-              }
+              "$ref": "#/definitions/Typing"
             }
           }
         ],
@@ -1786,7 +1956,24 @@
             "name": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/TextMessage"
+              "allOf": [
+                {
+                  "$ref": "#/definitions/TextMessage"
+                },
+                {
+                  "properties": {
+                    "conversationId": {
+                      "format": "uuid",
+                      "type": "string"
+                    },
+                    "firstMessageId": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              ]
             }
           }
         ],
@@ -1848,6 +2035,22 @@
         "summary": "Get all instances",
         "tags": ["Instances"]
       }
+    },
+    "/log": {
+      "get": {
+        "operationId": "getLog",
+        "produces": ["text/plain"],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "summary": "Get the complete log as plain text",
+        "tags": ["Server"]
+      }
     }
   },
   "schemes": ["http"],
@@ -1864,6 +2067,10 @@
     {
       "description": "Wire User Clients",
       "name": "Clients"
+    },
+    {
+      "description": "Server information",
+      "name": "Server"
     }
   ]
 }
