@@ -21,21 +21,9 @@ export function camelize(resourceName: string, isPascalCase = false): string {
 }
 
 export function generateServiceName(url: string): string {
-  const urlPartFilter = (part: string) => {
-    if (part.length === 0) {
-      return false;
-    }
-
-    if (part.startsWith('{')) {
-      return false;
-    }
-
-    return true;
-  };
-
-  const urlParts = url.split('/').filter(urlPartFilter);
+  const urlParts = url.split('/').filter(part => part.length && !part.startsWith('{'));
   const lastUrlPart = urlParts[urlParts.length - 1];
-  const resourceName = lastUrlPart ? lastUrlPart : 'Root';
+  const resourceName = lastUrlPart || 'Root';
 
   return camelize(`${resourceName}-service`, true);
 }
