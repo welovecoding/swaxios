@@ -87,7 +87,7 @@ export class APIClientGenerator extends TemplateGenerator {
 
   protected async getContext(): Promise<Context> {
     const API = await this.generateAPI(this.fileIndex.directories.rest);
-    const apiString = inspect(API, {breakLength: Infinity}).replace(/'/gm, '');
+    const apiString = inspect(API, {breakLength: Infinity, depth: Infinity}).replace(/'/gm, '');
     const imports = this.generateImports(this.fileIndex);
 
     return {
