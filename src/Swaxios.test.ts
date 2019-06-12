@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import os from 'os';
 import path from 'path';
 import {Spec} from 'swagger-schema-official';
+
 import {exportServices, writeClient} from './Swaxios';
 
 let tempDir: string;
@@ -22,7 +23,18 @@ describe('writeClient', () => {
     await writeClient(inputFile, tempDir, true);
     const actual = await fs.readFile(path.join(tempDir, 'rest/instance/ArchiveService.ts'), 'utf-8');
     const expected = await fs.readFile(
-      path.resolve(__dirname, './test/snapshots/1-query-param-description.ts'),
+      path.resolve(__dirname, './test/snapshots/1-query-param-description.ts.fixture'),
+      'utf-8'
+    );
+    expect(actual).toBe(expected);
+  });
+
+  it('resolves deep nested endpoints', async () => {
+    const inputFile = path.resolve(__dirname, './test/snapshots/2-deep-nested-endpoints.json');
+    await writeClient(inputFile, tempDir, true);
+    const actual = await fs.readFile(path.join(tempDir, 'APIClient.ts'), 'utf-8');
+    const expected = await fs.readFile(
+      path.resolve(__dirname, './test/snapshots/2-deep-nested-endpoints.ts.fixture'),
       'utf-8'
     );
     expect(actual).toBe(expected);
