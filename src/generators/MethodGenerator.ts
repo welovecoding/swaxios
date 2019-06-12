@@ -215,7 +215,7 @@ export class MethodGenerator {
           schema[propertyName] = this.buildType(properties[property], `${schemaName}/${property}`);
         }
 
-        return inspect(schema, {breakLength: Infinity})
+        return inspect(schema, {breakLength: Infinity, depth: Infinity})
           .replace(/'/gm, '')
           .replace(',', ';')
           .replace(new RegExp('\\n', 'g'), '');
