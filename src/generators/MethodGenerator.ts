@@ -150,9 +150,7 @@ export class MethodGenerator {
 
         if (parameter.in !== 'body') {
           console.warn(
-            `Skipping parameter "${parameter.name}" because it's located in "${
-              parameter.in
-            }", which is not supported yet.`
+            `Skipping parameter "${parameter.name}" because it's located in "${parameter.in}", which is not supported yet.`
           );
           return undefined;
         }
