@@ -70,7 +70,7 @@
     "lint:other": "yarn prettier --list-different",
     "lint:ts": "tslint --config tslint.json --project tsconfig.json \"**/*.ts?(x)\"",
     "prettier": "prettier \"**/*.{json,md}\"",
-    "release:patch": "git pull && yarn && yarn dist && npm version patch && npm publish && git push --follow-tags",
+    "release:patch": "git pull && yarn && yarn dist && npm version patch && git push --follow-tags && npm publish",
     "start": "ts-node src/cli.ts -i ./src/test/fixtures/wire-sso.json -o ./src/temp -f",
     "test": "yarn lint && yarn test:node",
     "test:node": "nyc jasmine --config=jasmine.json"
