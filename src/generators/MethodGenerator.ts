@@ -130,7 +130,7 @@ export class MethodGenerator {
   }
 
   private buildBodyParameters(parameters?: (Parameter | Reference)[]): BodyParameter[] | undefined {
-    if (!parameters) {
+    if (!parameters || !parameters.length) {
       return;
     }
 
@@ -155,9 +155,11 @@ export class MethodGenerator {
           return undefined;
         }
 
+        const type = parameter.schema ? this.buildType(parameter.schema, parameter.name) : TypeScriptType.EMPTY_OBJECT;
+
         return {
           name: parameter.name,
-          type: parameter.schema ? this.buildType(parameter.schema, parameter.name) : TypeScriptType.EMPTY_OBJECT,
+          type,
         };
       })
       .filter(Boolean) as BodyParameter[];

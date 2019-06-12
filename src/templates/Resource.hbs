@@ -30,24 +30,29 @@ export class {{{name}}} {
       {{/each}}
     ): Promise<{{{this.returnType}}}> {
       const resource = {{{this.formattedUrl}}};
-      const response = await this.apiClient.{{{this.method}}}
-      {{#isnt this.returnType "void"}}<{{{this.returnType}}}>{{/isnt}}
+      {{#eq this.returnType "void"}}
+        await this.apiClient.{{{this.method}}}
+      {{else}}
+        const {data} = await this.apiClient.{{{this.method}}}<{{{this.returnType}}}>
+      {{/eq}}
       (
         resource
         {{#if bodyParameters}}
           ,
-          {
-            {{#if this.needsDataObj}}
+          {{#if this.needsDataObj}}
+            {
               data: {
             {{/if}}
-            {{#each bodyParameters}}{{this.name}},{{/each}}
+              {{#each bodyParameters}}{{this.name}},{{/each}}
             {{#if this.needsDataObj}}
-                }
-            {{/if}}
-          }
+              }
+            }
+          {{/if}}
         {{/if}}
       );
-      return response.data;
+      {{#isnt this.returnType "void"}}
+        return data;
+      {{/isnt}}
     }
   {{/each}}
 }

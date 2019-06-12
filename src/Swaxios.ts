@@ -5,7 +5,6 @@ import fs from 'fs-extra';
 import initializeHelpers from 'handlebars-helpers';
 import path from 'path';
 import {Path, Spec} from 'swagger-schema-official';
-import url from 'url';
 import yaml from 'yamljs';
 
 import {APIClientGenerator, IndexFileGenerator, ResourceGenerator} from './generators';
@@ -124,8 +123,7 @@ async function checkOutputDirectory(outputDirectory: string, forceDeletion?: boo
 
 export async function writeClient(inputFile: string, outputDirectory: string, forceDeletion?: boolean): Promise<void> {
   await checkOutputDirectory(outputDirectory, forceDeletion);
-  const parsedInput = url.parse(inputFile);
-  const isUrl = parsedInput.protocol && /^https?/.test(parsedInput.protocol);
+  const isUrl = /^(https?|ftps?):\/\//.test(inputFile);
   const swaggerJson = isUrl ? await readInputURL(inputFile) : await readInputFile(inputFile);
   await validateConfig(swaggerJson);
   return generateClient(swaggerJson, outputDirectory);
