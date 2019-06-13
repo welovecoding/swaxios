@@ -19,7 +19,7 @@ export enum TypeScriptType {
   STRING = 'string',
 }
 
-interface BodyParameter {
+interface InternalParameter {
   name: string;
   type: string;
 }
@@ -44,15 +44,16 @@ export class MethodGenerator {
   private readonly spec: Spec;
   private readonly url: string;
   private readonly operation: Operation;
+  readonly bodyParameters: InternalParameter[];
+  readonly descriptions?: Description[];
   readonly formattedUrl: string;
   readonly method: HttpMethod;
-  readonly normalizedUrl: string;
-  readonly bodyParameters?: BodyParameter[];
-  readonly parameterMethod: string;
-  readonly parameterName?: string;
-  readonly returnType: string;
-  readonly descriptions?: Description[];
   readonly needsDataObj: boolean;
+  readonly normalizedUrl: string;
+  readonly parameterMethod: string;
+  readonly pathParameters: InternalParameter[];
+  readonly queryParameters: InternalParameter[];
+  readonly returnType: string;
 
   constructor(url: string, method: HttpMethod, operation: Operation, spec: Spec) {
     this.url = url;
@@ -62,10 +63,21 @@ export class MethodGenerator {
     this.spec = spec;
     this.responses = operation.responses;
 
+    this.bodyParameters = [];
+    this.pathParameters = [];
+    this.queryParameters = [];
+    this.buildParameters(this.operation.parameters);
+    this.descriptions = this.buildDescriptions();
+
     const parameterMatch = url.match(/\{([^}]+)\}/);
 
     if (parameterMatch) {
-      this.parameterName = parameterMatch[1];
+      if (!this.pathParameters.length) {
+        this.pathParameters.push({
+          name: parameterMatch[1],
+          type: TypeScriptType.ANY,
+        });
+      }
       this.formattedUrl = this.formattedUrl.replace(/\{/g, '${').replace(/'/g, '`');
     }
 
@@ -85,9 +97,6 @@ export class MethodGenerator {
       this.method === HttpMethod.POST ||
       this.method === HttpMethod.PUT
     );
-
-    this.bodyParameters = this.buildBodyParameters(this.operation.parameters);
-    this.descriptions = this.buildDescriptions();
   }
 
   private buildDescriptions(): Description[] | undefined {
@@ -129,48 +138,54 @@ export class MethodGenerator {
     return definition.$ref ? this.getSchemaFromRef(definition.$ref) : definition;
   }
 
-  private buildBodyParameters(parameters?: (Parameter | Reference)[]): BodyParameter[] | undefined {
+  private buildParameters(parameters?: (Parameter | Reference)[]): void {
     if (!parameters || !parameters.length) {
       return;
     }
 
-    return parameters
-      .map(parameter => {
-        if (this.parameterIsReference(parameter)) {
-          const definition = this.getSchemaFromRef(parameter.$ref);
-          if (definition) {
-            return this.buildBodyParameters([definition] as Parameter[]);
-          }
-          return;
+    for (const parameter of parameters) {
+      if (this.parameterIsReference(parameter)) {
+        const definition = this.getSchemaFromRef(parameter.$ref);
+        if (definition) {
+          return this.buildParameters([definition] as Parameter[]);
         }
+        return;
+      }
 
-        if (parameter.in === 'path') {
-          return undefined;
-        }
-
-        if (parameter.in !== 'body') {
-          console.warn(
-            `Skipping parameter "${parameter.name}" because it's located in "${parameter.in}", which is not supported yet.`
-          );
-          return undefined;
-        }
-
-        const type = parameter.schema ? this.buildType(parameter.schema, parameter.name) : TypeScriptType.EMPTY_OBJECT;
-
-        return {
+      if (parameter.in === 'path') {
+        const type = this.buildSimpleType(parameter.type);
+        this.pathParameters.push({
           name: parameter.name,
           type,
-        };
-      })
-      .filter(Boolean) as BodyParameter[];
+        });
+      }
+
+      if (parameter.in === 'body') {
+        const type = parameter.schema
+          ? this.buildTypeFromSchema(parameter.schema, parameter.name)
+          : TypeScriptType.EMPTY_OBJECT;
+        this.bodyParameters.push({
+          name: parameter.name,
+          type,
+        });
+      }
+
+      if (parameter.in === 'query') {
+        const type = this.buildSimpleType(parameter.type);
+        this.queryParameters.push({
+          name: parameter.name,
+          type,
+        });
+      }
+    }
   }
 
-  private buildType(schema: Schema, schemaName: string): string {
+  private buildTypeFromSchema(schema: Schema, schemaName: string): string {
     let {required: requiredProperties, properties, type: schemaType} = schema;
     const {allOf: multipleSchemas, enum: enumType} = schema;
 
     if (multipleSchemas) {
-      return multipleSchemas.map(includedSchema => this.buildType(includedSchema, schemaName)).join('|');
+      return multipleSchemas.map(includedSchema => this.buildTypeFromSchema(includedSchema, schemaName)).join('|');
     }
 
     if (enumType) {
@@ -195,13 +210,6 @@ export class MethodGenerator {
     schemaType = schemaType || SwaggerType.OBJECT;
 
     switch (schemaType.toLowerCase()) {
-      case SwaggerType.STRING: {
-        return TypeScriptType.STRING;
-      }
-      case SwaggerType.NUMBER:
-      case SwaggerType.INTEGER: {
-        return TypeScriptType.NUMBER;
-      }
       case SwaggerType.OBJECT: {
         if (!properties) {
           console.warn(`Schema type for "${schemaName}" is "object" but has no properties.`);
@@ -212,7 +220,7 @@ export class MethodGenerator {
 
         for (const property of Object.keys(properties)) {
           const propertyName = requiredProperties && !requiredProperties.includes(property) ? `${property}?` : property;
-          schema[propertyName] = this.buildType(properties[property], `${schemaName}/${property}`);
+          schema[propertyName] = this.buildTypeFromSchema(properties[property], `${schemaName}/${property}`);
         }
 
         return inspect(schema, {breakLength: Infinity, depth: Infinity})
@@ -227,14 +235,29 @@ export class MethodGenerator {
         }
 
         if (!(schema.items instanceof Array)) {
-          const itemType = this.buildType(schema.items, schemaName);
+          const itemType = this.buildTypeFromSchema(schema.items, schemaName);
           return `${TypeScriptType.ARRAY}<${itemType}>`;
         }
 
         const schemes = schema.items
-          .map((itemSchema, index) => this.buildType(itemSchema, `${schemaName}[${index}]`))
+          .map((itemSchema, index) => this.buildTypeFromSchema(itemSchema, `${schemaName}[${index}]`))
           .join('|');
         return `${TypeScriptType.ARRAY}<${schemes}>`;
+      }
+      default: {
+        return this.buildSimpleType(schemaType);
+      }
+    }
+  }
+
+  private buildSimpleType(schemaType: string): TypeScriptType {
+    switch (schemaType.toLowerCase()) {
+      case SwaggerType.STRING: {
+        return TypeScriptType.STRING;
+      }
+      case SwaggerType.NUMBER:
+      case SwaggerType.INTEGER: {
+        return TypeScriptType.NUMBER;
       }
       default: {
         return TypeScriptType.EMPTY_OBJECT;
@@ -247,9 +270,13 @@ export class MethodGenerator {
     const response201 = this.responses['201'] as Response;
 
     const response200Schema =
-      response200 && response200.schema ? this.buildType(response200.schema, `${this.url}/${this.method}/200`) : '';
+      response200 && response200.schema
+        ? this.buildTypeFromSchema(response200.schema, `${this.url}/${this.method}/200`)
+        : '';
     const response201Schema =
-      response201 && response201.schema ? this.buildType(response201.schema, `${this.url}/${this.method}/201`) : '';
+      response201 && response201.schema
+        ? this.buildTypeFromSchema(response201.schema, `${this.url}/${this.method}/201`)
+        : '';
 
     const responseSchema =
       response200Schema && response201Schema
