@@ -52,11 +52,14 @@ export class {{{name}}} {
             {{/if}}
           }
         {{else}}
-          {{#if this.bodyParameters.length}}
+          {{#eq this.bodyParameters.length 1}}
+            const data = {{{this.bodyParameters.[0].name}}};
+          {{/eq}}
+          {{#gt this.bodyParameters.length}}
             const data = {
-              {{#each this.bodyParameters}}{{this.name}},{{/each}}
+              {{#each this.bodyParameters}}{{{this.name}}},{{/each}}
             };
-          {{/if}}
+          {{/gt}}
           {{#if this.queryParameters.length}}
             const config = {params};
           {{/if}}

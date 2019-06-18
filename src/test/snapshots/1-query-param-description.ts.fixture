@@ -22,9 +22,7 @@ export class ArchiveService {
     body: {archive: {}; conversationId: string}
   ): Promise<{instanceId: string; name: string}> {
     const resource = `/instance/${instanceId}/archive`;
-    const data = {
-      body,
-    };
+    const data = body;
     const response = await this.apiClient.post<{
       instanceId: string;
       name: string;
