@@ -39,6 +39,17 @@ describe('writeClient', () => {
     );
     expect(actual).toBe(expected);
   });
+
+  it('resolves types for query parameters', async () => {
+    const inputFile = path.resolve(__dirname, './test/snapshots/3-delete-by-id-number.json');
+    await writeClient(inputFile, tempDir, true);
+    const actual = await fs.readFile(path.join(tempDir, 'rest/api/v1/ExchangeService.ts'), 'utf-8');
+    const expected = await fs.readFile(
+      path.resolve(__dirname, './test/snapshots/3-delete-by-id-number.ts.fixture'),
+      'utf-8'
+    );
+    expect(actual).toBe(expected);
+  });
 });
 
 describe('exportServices', () => {
