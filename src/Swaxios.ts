@@ -68,37 +68,40 @@ export async function generateClient(swaggerJson: Spec, outputDirectory: string)
   await buildIndexFiles(fileIndex);
 }
 
-async function readInputURL(inputURL: string): Promise<Spec> {
-  console.log(`Reading OpenAPI specification from URL "${inputURL}" ...`);
-  const response = await axios.get<Spec>(inputURL);
-  return response.data;
+function parseInputFile(inputFile: string): Spec {
+  try {
+    return JSON.parse(inputFile);
+  } catch (error) {
+    try {
+      return yaml.parse(inputFile);
+    } catch (error) {
+      throw new Error(`Input file "${inputFile}" is neither valid JSON nor valid YAML.`);
+    }
+  }
 }
 
 async function readInputFile(inputFile: string): Promise<Spec> {
-  let swaggerJson: Spec;
-
   console.log(`Reading OpenAPI specification from file "${inputFile}" ...`);
 
   try {
-    await fs.access(inputFile);
+    const data = await fs.readFile(inputFile, 'utf-8');
+    return parseInputFile(data);
   } catch (error) {
     if (error.code === 'ENOENT') {
       throw new Error(`Input file "${inputFile}" could not be found or is not readable`);
     }
     throw error;
   }
+}
 
+async function readInputURL(inputUrl: string): Promise<Spec> {
+  console.log(`Reading OpenAPI specification from URL "${inputUrl}" ...`);
   try {
-    swaggerJson = await fs.readJson(inputFile);
+    const {data} = await axios.get<string>(inputUrl, {transformResponse: data => data});
+    return parseInputFile(data);
   } catch (error) {
-    try {
-      swaggerJson = yaml.load(inputFile);
-    } catch (error) {
-      throw new Error(`Input file "${inputFile}" is neither valid JSON nor valid YAML.`);
-    }
+    throw new Error(error.message);
   }
-
-  return swaggerJson;
 }
 
 async function checkOutputDirectory(outputDirectory: string, forceDeletion?: boolean): Promise<void> {
