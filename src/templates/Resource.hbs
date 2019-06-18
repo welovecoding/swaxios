@@ -24,34 +24,61 @@ export class {{{name}}} {
     {{/if}}
     async {{{this.parameterMethod}}}
     (
-      {{#if this.parameterName}}{{{this.parameterName}}}: string,{{/if}}
-      {{#each bodyParameters}}
+      {{#each this.pathParameters}}
+        {{{this.name}}}: {{{this.type}}},
+      {{/each}}
+      {{#each this.bodyParameters}}
         {{{this.name}}}{{#isnt this.required}}?{{/isnt}}: {{{this.type}}},
       {{/each}}
+      {{#if this.queryParameters.length}}
+        params?: {
+          {{#each this.queryParameters}}
+            {{{this.name}}}{{#isnt this.required}}?{{/isnt}}: {{{this.type}}};
+          {{/each}}
+        }
+      {{/if}}
     ): Promise<{{{this.returnType}}}> {
       const resource = {{{this.formattedUrl}}};
+      {{#or this.queryParameters.length this.bodyParameters.length}}
+        {{#if this.needsDataObj}}
+          const config = {
+            {{#if this.bodyParameters.length}}
+              data: {
+                {{#each this.bodyParameters}}{{this.name}},{{/each}}
+              },
+            {{/if}}
+            {{#if this.queryParameters.length}}
+              params,
+            {{/if}}
+          }
+        {{else}}
+          {{#if this.bodyParameters.length}}
+            const data = {
+              {{#each this.bodyParameters}}{{this.name}},{{/each}}
+            };
+          {{/if}}
+          {{#if this.queryParameters.length}}
+            const config = {params};
+          {{/if}}
+        {{/if}}
+      {{/or}}
       {{#eq this.returnType "void"}}
         await this.apiClient.{{{this.method}}}
       {{else}}
-        const {data} = await this.apiClient.{{{this.method}}}<{{{this.returnType}}}>
+        const response = await this.apiClient.{{{this.method}}}<{{{this.returnType}}}>
       {{/eq}}
       (
-        resource
-        {{#if bodyParameters}}
-          ,
+        resource,
+        {{#or this.queryParameters.length this.bodyParameters.length}}
           {{#if this.needsDataObj}}
-            {
-              data: {
-            {{/if}}
-              {{#each bodyParameters}}{{this.name}},{{/each}}
-            {{#if this.needsDataObj}}
-              }
-            }
+            config,
+          {{else}}
+            data
           {{/if}}
-        {{/if}}
+        {{/or}}
       );
       {{#isnt this.returnType "void"}}
-        return data;
+        return response.data;
       {{/isnt}}
     }
   {{/each}}

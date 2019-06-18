@@ -60,7 +60,7 @@ describe('MethodGenerator', () => {
       expect(methodDefinition.method).toBe('post');
       expect(methodDefinition.normalizedUrl).toBe('/identity-providers');
       expect(methodDefinition.parameterMethod).toBe('postAll');
-      expect(methodDefinition.parameterName).toBeUndefined();
+      expect(methodDefinition.pathParameters).toEqual([]);
       expect(methodDefinition.returnType).toBe(
         '{ extraInfo: string; id: string, metadata: { certAuthnResponse: Array<string>; issuer: string, requestURI: string } }'
       );
@@ -76,7 +76,7 @@ describe('MethodGenerator', () => {
       expect(methodDefinition.method).toBe('delete');
       expect(methodDefinition.normalizedUrl).toBe('/identity-providers');
       expect(methodDefinition.parameterMethod).toBe('deleteById');
-      expect(methodDefinition.parameterName).toBe('id');
+      expect(methodDefinition.pathParameters![0]).toEqual({name: 'id', type: 'any'});
     });
 
     it('builds body parameters', () => {
@@ -105,7 +105,7 @@ describe('MethodGenerator', () => {
       expect(methodDefinition.method).toBe('post');
       expect(methodDefinition.normalizedUrl).toBe('/identity-providers');
       expect(methodDefinition.parameterMethod).toBe('postById');
-      expect(methodDefinition.parameterName).toBe('id');
+      expect(methodDefinition.pathParameters[0]).toEqual({name: 'id', type: 'any'});
       expect(methodDefinition.bodyParameters![0]).toEqual({name: 'body', type: '{ user: string }'});
     });
   });
