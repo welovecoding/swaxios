@@ -86,7 +86,8 @@ export class MethodGenerator {
 
     this.method = method;
 
-    if (this.method === 'delete' || this.method === 'head') {
+    if (this.method === HttpMethod.DELETE || this.method === HttpMethod.HEAD) {
+      // TODO: Check if DELETE has "responses" with "schema", if yes then DON'T render 'void'
       this.returnType = 'void';
     } else {
       this.returnType = this.buildResponseSchema();
