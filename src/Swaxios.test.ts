@@ -51,7 +51,7 @@ describe('writeClient', () => {
     expect(actual).toBe(expected);
   });
 
-  it('supports responses on DELETE requests', async () => {
+  it('supports response types on DELETE requests', async () => {
     const inputFile = path.resolve(__dirname, './test/snapshots/4-delete-by-id-number-with-response.json');
     await writeClient(inputFile, tempDir, true);
     const actual = await fs.readFile(path.join(tempDir, 'rest/api/v1/ExchangeService.ts'), 'utf-8');
