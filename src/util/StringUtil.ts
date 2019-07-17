@@ -4,7 +4,7 @@ export function camelCase(words: string[], isPascalCase: boolean = false): strin
       word
         .toLowerCase()
         .charAt(0)
-        .toUpperCase() + word.slice(1)
+        .toUpperCase() + word.slice(1),
   );
   if (!isPascalCase) {
     casedWords[0] = casedWords[0].toLowerCase();

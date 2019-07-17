@@ -62,7 +62,7 @@ describe('MethodGenerator', () => {
       expect(methodDefinition.parameterMethod).toBe('postAll');
       expect(methodDefinition.pathParameters).toEqual([]);
       expect(methodDefinition.returnType).toBe(
-        '{ extraInfo: string; id: string, metadata: { certAuthnResponse: Array<string>; issuer: string, requestURI: string } }'
+        '{ extraInfo: string; id: string, metadata: { certAuthnResponse: Array<string>; issuer: string, requestURI: string } }',
       );
     });
 

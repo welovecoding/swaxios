@@ -102,7 +102,7 @@ export class MethodGenerator {
   private buildDescriptions(): Description[] | undefined {
     if (this.operation.parameters) {
       const parameters = this.operation.parameters.filter(
-        parameter => !this.parameterIsReference(parameter)
+        parameter => !this.parameterIsReference(parameter),
       ) as Parameter[];
 
       const extractDescription = (parameter: Parameter): Description | undefined => {
@@ -152,7 +152,7 @@ export class MethodGenerator {
         return;
       }
 
-      if (parameter.in === 'path') {
+      if (parameter.in === 'path' && parameter.type) {
         const type = this.buildSimpleType(parameter.type);
         this.pathParameters.push({
           name: parameter.name,
@@ -170,7 +170,7 @@ export class MethodGenerator {
         });
       }
 
-      if (parameter.in === 'query') {
+      if (parameter.in === 'query' && parameter.type) {
         const type = this.buildSimpleType(parameter.type);
         this.queryParameters.push({
           name: parameter.name,
