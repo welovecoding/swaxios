@@ -86,11 +86,10 @@ export class MethodGenerator {
 
     this.method = method;
 
-    if (this.method === HttpMethod.DELETE || this.method === HttpMethod.HEAD) {
-      // TODO: Check if DELETE has "responses" with "schema", if yes then DON'T render 'void'
-      this.returnType = 'void';
-    } else {
+    if (this.includesSuccessResponse(this.responses)) {
       this.returnType = this.buildResponseSchema();
+    } else {
+      this.returnType = 'void';
     }
 
     this.needsDataObj = !(
@@ -98,6 +97,15 @@ export class MethodGenerator {
       this.method === HttpMethod.POST ||
       this.method === HttpMethod.PUT
     );
+  }
+
+  private includesSuccessResponse(responses: Record<string, Response | Reference>): boolean {
+    for (const [successCode, response] of Object.entries(responses)) {
+      if (successCode.startsWith('2') && response.hasOwnProperty('schema')) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private buildDescriptions(): Description[] | undefined {
@@ -267,6 +275,7 @@ export class MethodGenerator {
   }
 
   private buildResponseSchema(): string {
+    // TODO: This does not cover other "success" codes such as "206", etc.
     const response200 = this.responses['200'] as Response;
     const response201 = this.responses['201'] as Response;
 
