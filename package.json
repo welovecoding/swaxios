@@ -61,7 +61,7 @@
   "name": "swaxios",
   "prettier": "@wireapp/prettier-config",
   "scripts": {
-    "changelog:commit": "git add CHANGELOG.md && git commit -m 'docs: updated CHANGELOG.md'",
+    "changelog:commit": "git add CHANGELOG.md && git commit -m \"docs: updated CHANGELOG.md\"",
     "clean": "rimraf dist",
     "copy": "cpx src/templates/**/* dist/templates/",
     "dist": "yarn clean && tsc && yarn copy",
