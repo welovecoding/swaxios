@@ -61,6 +61,7 @@
   "name": "swaxios",
   "prettier": "@wireapp/prettier-config",
   "scripts": {
+    "changelog:commit": "git add CHANGELOG.md && git commit -m 'docs: updated CHANGELOG.md'",
     "clean": "rimraf dist",
     "copy": "cpx src/templates/**/* dist/templates/",
     "dist": "yarn clean && tsc && yarn copy",
@@ -70,8 +71,10 @@
     "lint": "yarn lint:other && yarn lint:ts",
     "lint:other": "yarn prettier --list-different",
     "lint:ts": "tslint --config tslint.json --project tsconfig.json \"**/*.ts?(x)\"",
+    "postversion": "git push origin && git push origin --tags",
     "prettier": "prettier \"**/*.{json,md}\"",
-    "release:patch": "git pull && yarn && yarn dist && changelog -p && git add -p && git commit -m 'updated CHANGELOG.md' && npm version patch && git push origin && git push origin --tags",
+    "preversion": "git pull && yarn && yarn test && yarn dist",
+    "release:patch": "changelog -p && yarn changelog:commit && npm version patch",
     "start": "ts-node src/cli.ts -i ./src/test/fixtures/wire-sso.json -o ./src/temp -f",
     "test": "yarn lint && yarn test:node",
     "test:node": "nyc jasmine --config=jasmine.json"
