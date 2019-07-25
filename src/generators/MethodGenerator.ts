@@ -193,9 +193,10 @@ export class MethodGenerator {
     }
   }
 
-  private buildTypeFromSchema(schema: any, schemaName: string): string {
-    let {required: requiredProperties, properties, type: schemaType} = schema;
+  private buildTypeFromSchema(schema: OpenAPIV2.SchemaObject, schemaName: string): string {
+    let {required: requiredProperties, properties} = schema;
     const {allOf: multipleSchemas, enum: enumType} = schema;
+    let schemaType = schema.type as string;
 
     if (multipleSchemas) {
       return multipleSchemas
@@ -217,9 +218,9 @@ export class MethodGenerator {
         return TypeScriptType.EMPTY_OBJECT;
       }
       const definition = schema.$ref.replace('#/definitions', '');
-      requiredProperties = this.spec.definitions[definition].required;
       properties = this.spec.definitions[definition].properties;
-      schemaType = this.spec.definitions[definition].type;
+      requiredProperties = this.spec.definitions[definition].required;
+      schemaType = this.spec.definitions[definition].type as string;
     }
 
     schemaType = schemaType || SwaggerType.OBJECT;
