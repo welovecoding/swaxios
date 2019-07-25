@@ -33,7 +33,7 @@ export class {{{name}}} {
       {{#if this.queryParameters.length}}
         params?: {
           {{#each this.queryParameters}}
-            {{{this.name}}}{{#isnt this.required}}?{{/isnt}}: {{{this.type}}};
+            {{{this.name}}}{{#is this.required false}}?{{/is}}: {{{this.type}}};
           {{/each}}
         }
       {{/if}}

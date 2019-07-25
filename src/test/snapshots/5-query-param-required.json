@@ -1,0 +1,48 @@
+{
+  "info": {
+    "description": "User API",
+    "title": "",
+    "version": ""
+  },
+  "paths": {
+    "/api/user": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "firstname",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "lastname",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "age",
+            "required": false,
+            "type": "number"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "swagger": "2.0"
+}
