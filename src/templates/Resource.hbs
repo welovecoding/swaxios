@@ -28,12 +28,12 @@ export class {{{name}}} {
         {{{this.name}}}: {{{this.type}}},
       {{/each}}
       {{#each this.bodyParameters}}
-        {{{this.name}}}{{#isnt this.required}}?{{/isnt}}: {{{this.type}}},
+        {{{this.name}}}{{#isnt this.required true}}?{{/isnt}}: {{{this.type}}},
       {{/each}}
       {{#if this.queryParameters.length}}
         params?: {
           {{#each this.queryParameters}}
-            {{{this.name}}}{{#is this.required false}}?{{/is}}: {{{this.type}}};
+            {{{this.name}}}{{#isnt this.required true}}?{{/isnt}}: {{{this.type}}};
           {{/each}}
         }
       {{/if}}

@@ -180,6 +180,7 @@ export class MethodGenerator {
           : TypeScriptType.EMPTY_OBJECT;
         this.bodyParameters.push({
           name: parameter.name,
+          required: parameter.required,
           type,
         });
       }
