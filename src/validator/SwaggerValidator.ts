@@ -1,6 +1,6 @@
+import {OpenAPIV2} from 'openapi-types';
 import SwaggerParser from 'swagger-parser';
-import {Spec} from 'swagger-schema-official';
 
-export async function validateConfig(swaggerJson: Spec): Promise<void> {
+export async function validateConfig(swaggerJson: OpenAPIV2.Document): Promise<void> {
   await SwaggerParser.validate(swaggerJson);
 }

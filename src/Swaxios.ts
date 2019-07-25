@@ -4,9 +4,9 @@ import {getYesNo} from 'cli-interact';
 import fs from 'fs-extra';
 import initializeHelpers from 'handlebars-helpers';
 import path from 'path';
-import {Path, Spec} from 'swagger-schema-official';
 import yaml from 'yamljs';
 
+import {OpenAPIV2} from 'openapi-types';
 import {APIClientGenerator, IndexFileGenerator, ResourceGenerator} from './generators';
 import {DirEntry, generateFileIndex} from './util/FileUtil';
 import * as StringUtil from './util/StringUtil';
@@ -14,9 +14,9 @@ import {validateConfig} from './validator/SwaggerValidator';
 
 initializeHelpers(['comparison']);
 
-export async function exportServices(swaggerJson: Spec): Promise<ResourceGenerator[]> {
+export async function exportServices(swaggerJson: OpenAPIV2.Document): Promise<ResourceGenerator[]> {
   const resources: ResourceGenerator[] = [];
-  const recordedUrls: Record<string, Record<string, Path>> = {};
+  const recordedUrls: Record<string, Record<string, OpenAPIV2.PathsObject>> = {};
 
   for (const url of Object.keys(swaggerJson.paths)) {
     const normalizedUrl = StringUtil.normalizeUrl(url);
@@ -47,7 +47,7 @@ async function buildIndexFiles(fileIndex: DirEntry): Promise<void> {
   }
 }
 
-export async function generateClient(swaggerJson: Spec, outputDirectory: string): Promise<void> {
+export async function generateClient(swaggerJson: OpenAPIV2.Document, outputDirectory: string): Promise<void> {
   const resources = await exportServices(swaggerJson);
 
   for (const restResource of resources) {
@@ -68,7 +68,7 @@ export async function generateClient(swaggerJson: Spec, outputDirectory: string)
   await buildIndexFiles(fileIndex);
 }
 
-function parseInputFile(inputFile: string): Spec {
+function parseInputFile(inputFile: string): OpenAPIV2.Document {
   try {
     return JSON.parse(inputFile);
   } catch (error) {
@@ -80,7 +80,7 @@ function parseInputFile(inputFile: string): Spec {
   }
 }
 
-async function readInputFile(inputFile: string): Promise<Spec> {
+async function readInputFile(inputFile: string): Promise<OpenAPIV2.Document> {
   console.log(`Reading OpenAPI specification from file "${inputFile}" ...`);
 
   try {
@@ -94,7 +94,7 @@ async function readInputFile(inputFile: string): Promise<Spec> {
   }
 }
 
-async function readInputURL(inputUrl: string): Promise<Spec> {
+async function readInputURL(inputUrl: string): Promise<OpenAPIV2.Document> {
   console.log(`Reading OpenAPI specification from URL "${inputUrl}" ...`);
   try {
     const {data} = await axios.get<string>(inputUrl, {transformResponse: data => data});

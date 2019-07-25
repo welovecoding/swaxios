@@ -1,4 +1,4 @@
-import {Operation, Parameter, Reference, Response, Schema, Spec} from 'swagger-schema-official';
+import {OpenAPIV2} from 'openapi-types';
 import {inspect} from 'util';
 
 import * as StringUtil from '../util/StringUtil';
@@ -40,10 +40,10 @@ export enum HttpMethod {
 }
 
 export class MethodGenerator {
-  private readonly responses: Record<string, Response | Reference>;
-  private readonly spec: Spec;
+  private readonly responses: Record<string, OpenAPIV2.ResponseObject | OpenAPIV2.ReferenceObject>;
+  private readonly spec: OpenAPIV2.Document;
   private readonly url: string;
-  private readonly operation: Operation;
+  private readonly operation: OpenAPIV2.OperationObject;
   readonly bodyParameters: InternalParameter[];
   readonly descriptions?: Description[];
   readonly formattedUrl: string;
@@ -55,7 +55,7 @@ export class MethodGenerator {
   readonly queryParameters: InternalParameter[];
   readonly returnType: string;
 
-  constructor(url: string, method: HttpMethod, operation: Operation, spec: Spec) {
+  constructor(url: string, method: HttpMethod, operation: OpenAPIV2.OperationObject, spec: OpenAPIV2.Document) {
     this.url = url;
     this.operation = operation;
     this.normalizedUrl = StringUtil.normalizeUrl(url);
@@ -99,7 +99,9 @@ export class MethodGenerator {
     );
   }
 
-  private includesSuccessResponse(responses: Record<string, Response | Reference>): boolean {
+  private includesSuccessResponse(
+    responses: Record<string, OpenAPIV2.ResponseObject | OpenAPIV2.ReferenceObject>,
+  ): boolean {
     for (const [successCode, response] of Object.entries(responses)) {
       if (successCode.startsWith('2') && response.hasOwnProperty('schema')) {
         return true;
@@ -112,9 +114,9 @@ export class MethodGenerator {
     if (this.operation.parameters) {
       const parameters = this.operation.parameters.filter(
         parameter => !this.parameterIsReference(parameter),
-      ) as Parameter[];
+      ) as OpenAPIV2.ParameterObject[];
 
-      const extractDescription = (parameter: Parameter): Description | undefined => {
+      const extractDescription = (parameter: OpenAPIV2.ParameterObject): Description | undefined => {
         if (parameter.description) {
           return {
             name: parameter.name,
@@ -129,11 +131,13 @@ export class MethodGenerator {
     return undefined;
   }
 
-  private parameterIsReference(parameter: Reference | Parameter): parameter is Reference {
-    return !!(parameter as Reference).$ref;
+  private parameterIsReference(
+    parameter: OpenAPIV2.ReferenceObject | OpenAPIV2.ParameterObject,
+  ): parameter is OpenAPIV2.ReferenceObject {
+    return !!(parameter as OpenAPIV2.ReferenceObject).$ref;
   }
 
-  private getSchemaFromRef(ref: string): Schema | undefined {
+  private getSchemaFromRef(ref: string): OpenAPIV2.SchemaObject | undefined {
     if (!ref.startsWith('#/definitions')) {
       console.warn(`Invalid reference "${ref}".`);
       return;
@@ -147,7 +151,7 @@ export class MethodGenerator {
     return definition.$ref ? this.getSchemaFromRef(definition.$ref) : definition;
   }
 
-  private buildParameters(parameters?: (Parameter | Reference)[]): void {
+  private buildParameters(parameters?: (OpenAPIV2.ParameterObject | OpenAPIV2.ReferenceObject)[]): void {
     if (!parameters || !parameters.length) {
       return;
     }
@@ -156,7 +160,7 @@ export class MethodGenerator {
       if (this.parameterIsReference(parameter)) {
         const definition = this.getSchemaFromRef(parameter.$ref);
         if (definition) {
-          return this.buildParameters([definition] as Parameter[]);
+          return this.buildParameters([definition] as OpenAPIV2.ParameterObject[]);
         }
         return;
       }
@@ -189,12 +193,15 @@ export class MethodGenerator {
     }
   }
 
-  private buildTypeFromSchema(schema: Schema, schemaName: string): string {
-    let {required: requiredProperties, properties, type: schemaType} = schema;
+  private buildTypeFromSchema(schema: OpenAPIV2.SchemaObject, schemaName: string): string {
+    let {required: requiredProperties, properties} = schema;
     const {allOf: multipleSchemas, enum: enumType} = schema;
+    let schemaType = schema.type as string;
 
     if (multipleSchemas) {
-      return multipleSchemas.map(includedSchema => this.buildTypeFromSchema(includedSchema, schemaName)).join('|');
+      return multipleSchemas
+        .map(includedSchema => this.buildTypeFromSchema(<OpenAPIV2.SchemaObject>includedSchema, schemaName))
+        .join('|');
     }
 
     if (enumType) {
@@ -211,9 +218,9 @@ export class MethodGenerator {
         return TypeScriptType.EMPTY_OBJECT;
       }
       const definition = schema.$ref.replace('#/definitions', '');
-      requiredProperties = this.spec.definitions[definition].required;
       properties = this.spec.definitions[definition].properties;
-      schemaType = this.spec.definitions[definition].type;
+      requiredProperties = this.spec.definitions[definition].required;
+      schemaType = this.spec.definitions[definition].type as string;
     }
 
     schemaType = schemaType || SwaggerType.OBJECT;
@@ -276,8 +283,8 @@ export class MethodGenerator {
 
   private buildResponseSchema(): string {
     // TODO: This does not cover other "success" codes such as "206", etc.
-    const response200 = this.responses['200'] as Response;
-    const response201 = this.responses['201'] as Response;
+    const response200 = this.responses['200'] as OpenAPIV2.ResponseObject;
+    const response201 = this.responses['201'] as OpenAPIV2.ResponseObject;
 
     const response200Schema =
       response200 && response200.schema
