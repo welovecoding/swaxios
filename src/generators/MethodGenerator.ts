@@ -137,7 +137,7 @@ export class MethodGenerator {
     return !!(parameter as OpenAPIV2.ReferenceObject).$ref;
   }
 
-  private getSchemaFromRef(ref: string): any | undefined {
+  private getSchemaFromRef(ref: string): OpenAPIV2.SchemaObject | undefined {
     if (!ref.startsWith('#/definitions')) {
       console.warn(`Invalid reference "${ref}".`);
       return;
@@ -200,7 +200,7 @@ export class MethodGenerator {
 
     if (multipleSchemas) {
       return multipleSchemas
-        .map((includedSchema: any) => this.buildTypeFromSchema(includedSchema, schemaName))
+        .map(includedSchema => this.buildTypeFromSchema(<OpenAPIV2.SchemaObject>includedSchema, schemaName))
         .join('|');
     }
 
@@ -256,7 +256,7 @@ export class MethodGenerator {
         }
 
         const schemes = schema.items
-          .map((itemSchema: any, index: any) => this.buildTypeFromSchema(itemSchema, `${schemaName}[${index}]`))
+          .map((itemSchema, index) => this.buildTypeFromSchema(itemSchema, `${schemaName}[${index}]`))
           .join('|');
         return `${TypeScriptType.ARRAY}<${schemes}>`;
       }
