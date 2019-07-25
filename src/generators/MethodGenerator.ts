@@ -21,6 +21,7 @@ export enum TypeScriptType {
 
 interface InternalParameter {
   name: string;
+  required?: boolean;
   type: string;
 }
 
@@ -179,6 +180,7 @@ export class MethodGenerator {
           : TypeScriptType.EMPTY_OBJECT;
         this.bodyParameters.push({
           name: parameter.name,
+          required: parameter.required,
           type,
         });
       }
@@ -187,6 +189,7 @@ export class MethodGenerator {
         const type = this.buildSimpleType(parameter.type);
         this.queryParameters.push({
           name: parameter.name,
+          required: parameter.required,
           type,
         });
       }
