@@ -73,6 +73,8 @@
     "postversion": "git push origin && git push origin --tags && npm publish",
     "prettier": "prettier \"**/*.{json,md}\"",
     "preversion": "git pull && yarn && yarn test && yarn dist",
+    "release:major": "changelog -M -x \"chore,docs,refactor,style,test\" && yarn changelog:commit && npm version major",
+    "release:minor": "changelog -m -x \"chore,docs,refactor,style,test\" && yarn changelog:commit && npm version minor",
     "release:patch": "changelog -p -x \"chore,docs,refactor,style,test\" && yarn changelog:commit && npm version patch",
     "start": "ts-node src/cli.ts -i ./src/test/fixtures/wire-sso.json -o ./src/temp -f",
     "test": "yarn lint && yarn test:node",
