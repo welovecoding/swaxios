@@ -1,3 +1,9 @@
+#### 0.0.16 (2019-07-25)
+
+##### New Features
+
+- Parse required attributes for body and query parameters (#48) (50c68933)
+
 #### 0.0.15 (2019-07-18)
 
 ##### Chores
