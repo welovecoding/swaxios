@@ -1,8 +1,7 @@
 import fs from 'fs-extra';
+import {OpenAPIV2} from 'openapi-types';
 import os from 'os';
 import path from 'path';
-import {Spec} from 'swagger-schema-official';
-
 import {exportServices, writeClient} from './Swaxios';
 
 let tempDir: string;
@@ -65,7 +64,7 @@ describe('writeClient', () => {
 
 describe('exportServices', () => {
   it('merges resources if they belong to the same service', async () => {
-    const swaggerJson: Spec = {
+    const swaggerJson: OpenAPIV2.Document = {
       info: {
         description: '',
         title: '',

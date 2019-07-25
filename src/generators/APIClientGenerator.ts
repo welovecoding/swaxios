@@ -2,7 +2,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import {inspect} from 'util';
 
-import {Spec} from 'swagger-schema-official';
+import {OpenAPIV2} from 'openapi-types';
 import {DirEntry, FileEntry} from '../util/FileUtil';
 import * as StringUtil from '../util/StringUtil';
 import {GeneratorContext, TemplateGenerator} from './TemplateGenerator';
@@ -29,7 +29,7 @@ export class APIClientGenerator extends TemplateGenerator {
   protected readonly name: string;
   protected readonly templateFile: string;
 
-  constructor(fileIndex: DirEntry, outputDirectory: string, spec: Spec) {
+  constructor(fileIndex: DirEntry, outputDirectory: string, spec: OpenAPIV2.Document) {
     super();
     this.name = 'APIClient';
     this.outputDirectory = outputDirectory;

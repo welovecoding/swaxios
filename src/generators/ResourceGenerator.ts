@@ -1,4 +1,4 @@
-import {Path, Spec} from 'swagger-schema-official';
+import {OpenAPIV2} from 'openapi-types';
 import {camelCase} from '../util/StringUtil';
 import {HttpMethod, MethodGenerator} from './MethodGenerator';
 import {GeneratorContext, TemplateGenerator} from './TemplateGenerator';
@@ -15,7 +15,7 @@ export class ResourceGenerator extends TemplateGenerator {
   protected readonly templateFile: string;
   readonly fullyQualifiedName: string;
 
-  constructor(fullyQualifiedName: string, resources: Record<string, Path>, spec: Spec) {
+  constructor(fullyQualifiedName: string, resources: Record<string, OpenAPIV2.PathsObject>, spec: OpenAPIV2.Document) {
     super();
     const directories = fullyQualifiedName.split('/');
 

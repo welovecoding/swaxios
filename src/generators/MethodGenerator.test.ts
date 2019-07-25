@@ -1,4 +1,4 @@
-import {Operation} from 'swagger-schema-official';
+import {OpenAPIV2} from 'openapi-types';
 import {HttpMethod, MethodGenerator} from './MethodGenerator';
 
 const WireSSO = require('../test/fixtures/wire-sso.json');
@@ -8,7 +8,7 @@ describe('MethodGenerator', () => {
     it('constructs a RESTful method name', () => {
       const url = '/identity-providers';
       const method = HttpMethod.POST;
-      const operation: Operation = {
+      const operation: OpenAPIV2.OperationObject = {
         responses: {
           '201': {
             description: '',
@@ -51,6 +51,9 @@ describe('MethodGenerator', () => {
           '400': {
             description: 'Invalid `body`',
           },
+          default: {
+            $ref: '',
+          },
         },
       };
 
@@ -69,7 +72,15 @@ describe('MethodGenerator', () => {
     it('recognizes URL variables', () => {
       const url = '/identity-providers/{id}';
       const method = HttpMethod.DELETE;
-      const operation: Operation = {responses: {'204': {description: ''}, '404': {description: '`id` not found'}}};
+      const operation: OpenAPIV2.OperationObject = {
+        responses: {
+          '204': {description: ''},
+          '404': {description: '`id` not found'},
+          default: {
+            $ref: '',
+          },
+        },
+      };
 
       const methodDefinition = new MethodGenerator(url, method, operation, WireSSO);
 
@@ -82,7 +93,7 @@ describe('MethodGenerator', () => {
     it('builds body parameters', () => {
       const url = '/identity-providers/{id}';
       const method = HttpMethod.POST;
-      const operation: Operation = {
+      const operation: OpenAPIV2.OperationObject = {
         parameters: [
           {
             in: 'body',
@@ -97,7 +108,13 @@ describe('MethodGenerator', () => {
             },
           },
         ],
-        responses: {'200': {description: ''}, '404': {description: '`id` not found'}},
+        responses: {
+          '200': {description: ''},
+          '404': {description: '`id` not found'},
+          default: {
+            $ref: '',
+          },
+        },
       };
 
       const methodDefinition = new MethodGenerator(url, method, operation, WireSSO);

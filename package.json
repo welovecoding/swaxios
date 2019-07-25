@@ -11,7 +11,7 @@
     "handlebars": "4.1.2",
     "handlebars-helpers": "0.10.0",
     "prettier": "1.18.2",
-    "swagger-parser": "6.0.5",
+    "swagger-parser": "7.0.1",
     "yamljs": "0.3.0"
   },
   "description": "Generate Swagger API clients with axios",
@@ -24,7 +24,6 @@
     "@types/minimist": "1.2.0",
     "@types/node": "12.6.8",
     "@types/prettier": "1.18.0",
-    "@types/swagger-parser": "4.0.3",
     "@types/yamljs": "0.2.30",
     "@wireapp/prettier-config": "0.3.0",
     "@wireapp/tslint-config": "1.4.1",
