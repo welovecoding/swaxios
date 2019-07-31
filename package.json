@@ -59,6 +59,9 @@
   "main": "dist/index.js",
   "name": "swaxios",
   "prettier": "@wireapp/prettier-config",
+  "resolutions": {
+    "handlebars-helpers/../underscore.string": "3.3.5"
+  },
   "scripts": {
     "changelog:commit": "git add CHANGELOG.md && git commit -m \"docs: updated CHANGELOG.md\"",
     "clean": "rimraf dist",
