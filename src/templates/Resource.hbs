@@ -43,7 +43,9 @@ export class {{{name}}} {
           const config = {
             {{#if this.bodyParameters.length}}
               data: {
-                {{#each this.bodyParameters}}{{this.name}},{{/each}}
+                {{#each this.bodyParameters}}
+                  {{this.name}},
+                {{/each}}
               },
             {{/if}}
             {{#if this.queryParameters.length}}
@@ -56,7 +58,9 @@ export class {{{name}}} {
           {{/eq}}
           {{#gt this.bodyParameters.length}}
             const data = {
-              {{#each this.bodyParameters}}{{{this.name}}},{{/each}}
+              {{#each this.bodyParameters}}
+                {{{this.name}}},
+              {{/each}}
             };
           {{/gt}}
           {{#if this.queryParameters.length}}
@@ -75,7 +79,7 @@ export class {{{name}}} {
           {{#if this.needsDataObj}}
             config,
           {{else}}
-            data
+            data,
           {{/if}}
         {{/or}}
       );
