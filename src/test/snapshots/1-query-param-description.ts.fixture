@@ -17,10 +17,10 @@ export class ArchiveService {
   /**
    * @param instanceId ID of instance to return
    */
-  async postByInstanceId(
+  postByInstanceId = async (
     instanceId: string,
     body: {archive: {}; conversationId: string}
-  ): Promise<{instanceId: string; name: string}> {
+  ): Promise<{instanceId: string; name: string}> => {
     const resource = `/instance/${instanceId}/archive`;
     const data = body;
     const response = await this.apiClient.post<{
@@ -28,5 +28,5 @@ export class ArchiveService {
       name: string;
     }>(resource, data);
     return response.data;
-  }
+  };
 }

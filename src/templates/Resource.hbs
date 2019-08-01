@@ -22,8 +22,7 @@ export class {{{name}}} {
       {{/each}}
        */
     {{/if}}
-    async {{{this.parameterMethod}}}
-    (
+    {{{this.parameterMethod}}} = async (
       {{#each this.pathParameters}}
         {{{this.name}}}: {{{this.type}}},
       {{/each}}
@@ -37,7 +36,7 @@ export class {{{name}}} {
           {{/each}}
         }
       {{/if}}
-    ): Promise<{{{this.returnType}}}> {
+    ): Promise<{{{this.returnType}}}> => {
       const resource = {{{this.formattedUrl}}};
       {{#or this.queryParameters.length this.bodyParameters.length}}
         {{#if this.needsDataObj}}
