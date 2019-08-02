@@ -22,7 +22,7 @@
     "@types/handlebars-helpers": "0.5.2",
     "@types/jasmine": "3.3.16",
     "@types/minimist": "1.2.0",
-    "@types/node": "12.6.8",
+    "@types/node": "12.6.9",
     "@types/prettier": "1.18.0",
     "@types/yamljs": "0.2.30",
     "@wireapp/prettier-config": "0.3.0",
