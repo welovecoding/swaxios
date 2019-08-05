@@ -14,16 +14,16 @@ export class UserService {
     this.apiClient = apiClient;
   }
 
-  async getAll(params?: {
+  getAll = async (params?: {
     firstname: string;
     lastname: string;
     age?: number;
-  }): Promise<string> {
+  }): Promise<string> => {
     const resource = '/api/user';
     const config = {
       params,
     };
     const response = await this.apiClient.get<string>(resource, config);
     return response.data;
-  }
+  };
 }

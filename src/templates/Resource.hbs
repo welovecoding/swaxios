@@ -22,8 +22,7 @@ export class {{{name}}} {
       {{/each}}
        */
     {{/if}}
-    async {{{this.parameterMethod}}}
-    (
+    {{{this.parameterMethod}}} = async (
       {{#each this.pathParameters}}
         {{{this.name}}}: {{{this.type}}},
       {{/each}}
@@ -37,14 +36,16 @@ export class {{{name}}} {
           {{/each}}
         }
       {{/if}}
-    ): Promise<{{{this.returnType}}}> {
+    ): Promise<{{{this.returnType}}}> => {
       const resource = {{{this.formattedUrl}}};
       {{#or this.queryParameters.length this.bodyParameters.length}}
         {{#if this.needsDataObj}}
           const config = {
             {{#if this.bodyParameters.length}}
               data: {
-                {{#each this.bodyParameters}}{{this.name}},{{/each}}
+                {{#each this.bodyParameters}}
+                  {{this.name}},
+                {{/each}}
               },
             {{/if}}
             {{#if this.queryParameters.length}}
@@ -57,7 +58,9 @@ export class {{{name}}} {
           {{/eq}}
           {{#gt this.bodyParameters.length}}
             const data = {
-              {{#each this.bodyParameters}}{{{this.name}}},{{/each}}
+              {{#each this.bodyParameters}}
+                {{{this.name}}},
+              {{/each}}
             };
           {{/gt}}
           {{#if this.queryParameters.length}}
@@ -76,13 +79,13 @@ export class {{{name}}} {
           {{#if this.needsDataObj}}
             config,
           {{else}}
-            data
+            data,
           {{/if}}
         {{/or}}
       );
       {{#isnt this.returnType "void"}}
         return response.data;
       {{/isnt}}
-    }
+    };
   {{/each}}
 }
