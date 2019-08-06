@@ -33,6 +33,13 @@ With the `-f` option, you can force Swaxios to overwrite existing files in the o
 swaxios -i ./path/to/swagger.json -o ./path/to/output/directory -f
 ```
 
+Your targeted project must also have a recent version of axios and TypeScript:
+
+```
+npm i axios
+npm i --dev typescript
+```
+
 ## Examples
 
 You can find many examples of generated API client code in our [snapshots section](./src/test/snapshots).
@@ -71,13 +78,11 @@ It has been generated from the following [path](https://swagger.io/docs/specific
 
 ```jsonc
 {
-  ...,
+  // ...
   "paths": {
     "/api/v1/exchange/{id}": {
       "delete": {
-        "consumes": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
         "operationId": "deleteExchange",
         "parameters": [
           {
@@ -87,9 +92,7 @@ It has been generated from the following [path](https://swagger.io/docs/specific
             "type": "number"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": ""
@@ -97,7 +100,7 @@ It has been generated from the following [path](https://swagger.io/docs/specific
         }
       }
     }
-  },
+  }
   // ...
 }
 ```
