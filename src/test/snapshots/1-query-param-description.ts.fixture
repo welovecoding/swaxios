@@ -17,7 +17,7 @@ export class ArchiveService {
   /**
    * @param instanceId ID of instance to return
    */
-  postByInstanceId = async (
+  archiveConversation = async (
     instanceId: string,
     body: {archive: {}; conversationId: string}
   ): Promise<{instanceId: string; name: string}> => {

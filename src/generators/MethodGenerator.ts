@@ -83,7 +83,7 @@ export class MethodGenerator {
     }
 
     const postFix = parameterMatch ? `By${StringUtil.camelCase(parameterMatch.splice(1), true)}` : 'All';
-    this.parameterMethod = `${method}${postFix}`;
+    this.parameterMethod = this.operation.operationId || `${method}${postFix}`;
 
     this.method = method;
 
