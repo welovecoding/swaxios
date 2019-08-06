@@ -8,7 +8,7 @@
   "paths": {
     "/api/v1/exchange/{id}": {
       "delete": {
-        "operationId": "deleteExchangeById",
+        "operationId": "deleteExchange",
         "consumes": [
           "application/json"
         ],

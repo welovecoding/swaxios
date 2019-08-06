@@ -14,7 +14,7 @@ export class ExchangeService {
     this.apiClient = apiClient;
   }
 
-  deleteExchangeById = async (id: number): Promise<void> => {
+  deleteExchange = async (id: number): Promise<void> => {
     const resource = `/api/v1/exchange/${id}`;
     await this.apiClient.delete(resource);
   };
