@@ -1,3 +1,9 @@
+#### 0.0.19 (2019-08-06)
+
+##### New Features
+
+- Support operation ids in methods (#57) (2023a494)
+
 #### 0.0.18 (2019-08-05)
 
 ##### New Features
