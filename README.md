@@ -98,7 +98,7 @@ It has been generated from the following [path](https://swagger.io/docs/specific
       }
     }
   },
-  ...
+  // ...
 }
 ```
 
