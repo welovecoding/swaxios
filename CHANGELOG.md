@@ -1,3 +1,9 @@
+#### 0.0.21 (2019-08-07)
+
+##### New Features
+
+- Support Bearer authorization callback in operations ([#63](https://github.com/bennyn/swaxios/pull/63)) ([44a830e2](https://github.com/bennyn/swaxios/commit/44a830e27470c3b4f9350dac2b13530391e02bf9))
+
 #### 0.0.20 (2019-08-07)
 
 #### 0.0.19 (2019-08-06)
