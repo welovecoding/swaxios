@@ -29,7 +29,7 @@ export class {{{name}}} {
       {{#each this.bodyParameters}}
         {{{this.name}}}{{#isnt this.required true}}?{{/isnt}}: {{{this.type}}},
       {{/each}}
-      {{#if this.hasBearerAuthentication}}
+      {{#if this.requiresBearerAuthorization}}
         accessTokenCallback: () => Promise<string>,
       {{/if}}
       {{#if this.queryParameters.length}}
@@ -40,7 +40,7 @@ export class {{{name}}} {
         }
       {{/if}}
     ): Promise<{{{this.returnType}}}> => {
-      {{#if this.hasBearerAuthentication}}
+      {{#if this.requiresBearerAuthorization}}
         const accessToken = await accessTokenCallback();
       {{/if}}
       const config: AxiosRequestConfig = {
@@ -51,7 +51,7 @@ export class {{{name}}} {
             {{/each}}
           },
         {{/if}}
-        {{#if this.hasBearerAuthentication}}
+        {{#if this.requiresBearerAuthorization}}
           headers: {
             Authorization: `Bearer ${decodeURIComponent(accessToken)}`,
           },

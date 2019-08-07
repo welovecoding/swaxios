@@ -48,7 +48,7 @@ export class MethodGenerator {
   readonly bodyParameters: InternalParameter[];
   readonly descriptions?: Description[];
   readonly formattedUrl: string;
-  readonly hasBearerAuthentication: boolean;
+  readonly requiresBearerAuthorization: boolean;
   readonly method: HttpMethod;
   readonly needsDataObj: boolean;
   readonly normalizedUrl: string;
@@ -99,7 +99,7 @@ export class MethodGenerator {
       this.method === HttpMethod.PUT
     );
 
-    this.hasBearerAuthentication =
+    this.requiresBearerAuthorization =
       !!this.operation.security && this.operation.security.some(obj => Object.keys(obj).includes('Bearer'));
   }
 
