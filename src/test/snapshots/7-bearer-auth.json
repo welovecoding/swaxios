@@ -1,0 +1,44 @@
+{
+  "basePath": "/",
+  "info": {
+    "description": "",
+    "title": "",
+    "version": ""
+  },
+  "paths": {
+    "/api/v1/exchange/{id}": {
+      "delete": {
+        "operationId": "deleteExchange",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0",
+  "tags": []
+}

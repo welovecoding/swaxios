@@ -14,12 +14,18 @@ export class ExchangeService {
     this.apiClient = apiClient;
   }
 
-  deleteById = async (id: number): Promise<number> => {
+  deleteExchange = async (
+    id: number,
+    accessTokenCallback: () => Promise<string>
+  ): Promise<void> => {
+    const accessToken = await accessTokenCallback();
     const config: AxiosRequestConfig = {
+      headers: {
+        Authorization: `Bearer ${decodeURIComponent(accessToken)}`,
+      },
       method: 'delete',
       url: `/api/v1/exchange/${id}`,
     };
-    const response = await this.apiClient.request<number>(config);
-    return response.data;
+    await this.apiClient.request(config);
   };
 }

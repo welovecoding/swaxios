@@ -5,7 +5,7 @@
  * It should not be modified by hand.
  */
 
-import {AxiosInstance} from 'axios';
+import {AxiosInstance, AxiosRequestConfig} from 'axios';
 
 export class {{{name}}} {
   private readonly apiClient: AxiosInstance;
@@ -29,6 +29,9 @@ export class {{{name}}} {
       {{#each this.bodyParameters}}
         {{{this.name}}}{{#isnt this.required true}}?{{/isnt}}: {{{this.type}}},
       {{/each}}
+      {{#if this.hasBearerAuthentication}}
+        accessTokenCallback: () => Promise<string>,
+      {{/if}}
       {{#if this.queryParameters.length}}
         params?: {
           {{#each this.queryParameters}}
@@ -37,52 +40,34 @@ export class {{{name}}} {
         }
       {{/if}}
     ): Promise<{{{this.returnType}}}> => {
-      const resource = {{{this.formattedUrl}}};
-      {{#or this.queryParameters.length this.bodyParameters.length}}
-        {{#if this.needsDataObj}}
-          const config = {
-            {{#if this.bodyParameters.length}}
-              data: {
-                {{#each this.bodyParameters}}
-                  {{this.name}},
-                {{/each}}
-              },
-            {{/if}}
-            {{#if this.queryParameters.length}}
-              params,
-            {{/if}}
-          }
-        {{else}}
-          {{#eq this.bodyParameters.length 1}}
-            const data = {{{this.bodyParameters.[0].name}}};
-          {{/eq}}
-          {{#gt this.bodyParameters.length}}
-            const data = {
-              {{#each this.bodyParameters}}
-                {{{this.name}}},
-              {{/each}}
-            };
-          {{/gt}}
-          {{#if this.queryParameters.length}}
-            const config = {params};
-          {{/if}}
+      {{#if this.hasBearerAuthentication}}
+        const accessToken = await accessTokenCallback();
+      {{/if}}
+      const config: AxiosRequestConfig = {
+        {{#if this.bodyParameters.length}}
+          data: {
+            {{#each this.bodyParameters}}
+              ...{{this.name}},
+            {{/each}}
+          },
         {{/if}}
-      {{/or}}
+        {{#if this.hasBearerAuthentication}}
+          headers: {
+            Authorization: `Bearer ${decodeURIComponent(accessToken)}`,
+          },
+        {{/if}}
+        method: '{{{this.method}}}',
+        {{#if this.queryParameters.length}}
+          params,
+        {{/if}}
+        url: {{{this.formattedUrl}}},
+      }
       {{#eq this.returnType "void"}}
-        await this.apiClient.{{{this.method}}}
+        await this.apiClient.request
       {{else}}
-        const response = await this.apiClient.{{{this.method}}}<{{{this.returnType}}}>
+        const response = await this.apiClient.request<{{{this.returnType}}}>
       {{/eq}}
-      (
-        resource,
-        {{#or this.queryParameters.length this.bodyParameters.length}}
-          {{#if this.needsDataObj}}
-            config,
-          {{else}}
-            data,
-          {{/if}}
-        {{/or}}
-      );
+      (config);
       {{#isnt this.returnType "void"}}
         return response.data;
       {{/isnt}}
