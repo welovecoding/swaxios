@@ -50,14 +50,17 @@
   ],
   "homepage": "https://github.com/bennyn/swaxios#readme",
   "keywords": [
+    "api",
     "api-client",
     "api-generator",
     "axios",
     "browser",
     "cli",
+    "codegen",
     "generator",
     "javascript",
     "nodejs",
+    "openapi",
     "rest",
     "swagger",
     "typescript"
