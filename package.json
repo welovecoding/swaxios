@@ -2,6 +2,9 @@
   "bin": {
     "swaxios": "dist/cli.js"
   },
+  "bugs": {
+    "url": "https://github.com/bennyn/swaxios/issues"
+  },
   "dependencies": {
     "axios": "0.19.0",
     "ci-info": "2.0.0",
@@ -14,7 +17,7 @@
     "swagger-parser": "8.0.0",
     "yamljs": "0.3.0"
   },
-  "description": "Generate Swagger API clients with axios",
+  "description": "Swagger API client generator based on axios and TypeScript.",
   "devDependencies": {
     "@types/ci-info": "2.0.0",
     "@types/cli-interact": "0.1.0",
@@ -45,20 +48,38 @@
   "files": [
     "dist"
   ],
+  "homepage": "https://github.com/bennyn/swaxios#readme",
+  "keywords": [
+    "api-client",
+    "api-generator",
+    "axios",
+    "browser",
+    "cli",
+    "generator",
+    "javascript",
+    "nodejs",
+    "rest",
+    "swagger",
+    "typescript"
+  ],
   "license": "MIT",
   "lint-staged": {
-    "*.{ts,tsx}": [
-      "tslint --config tslint.json --project tsconfig.json --fix",
-      "git add"
-    ],
     "*.{json,md,scss,yml}": [
       "prettier --write",
+      "git add"
+    ],
+    "*.{ts,tsx}": [
+      "tslint --config tslint.json --project tsconfig.json --fix",
       "git add"
     ]
   },
   "main": "dist/index.js",
   "name": "swaxios",
   "prettier": "@wireapp/prettier-config",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bennyn/swaxios.git"
+  },
   "resolutions": {
     "handlebars-helpers/../underscore.string": "3.3.5"
   },
