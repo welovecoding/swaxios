@@ -56,7 +56,7 @@ Here is a basic example:
  * It should not be modified by hand.
  */
 
-import {AxiosInstance} from 'axios';
+import {AxiosInstance, AxiosRequestConfig} from 'axios';
 
 export class ExchangeService {
   private readonly apiClient: AxiosInstance;
@@ -66,8 +66,11 @@ export class ExchangeService {
   }
 
   deleteExchange = async (id: number): Promise<void> => {
-    const resource = `/api/v1/exchange/${id}`;
-    await this.apiClient.delete(resource);
+    const config: AxiosRequestConfig = {
+      method: 'delete',
+      url: `/api/v1/exchange/${id}`,
+    };
+    await this.apiClient.request(config);
   };
 }
 ```
