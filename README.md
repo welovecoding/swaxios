@@ -6,7 +6,14 @@ A [Swagger](https://swagger.io/) API client generator based on [axios](https://g
 
 ## Installation
 
-You can install Swaxios globally (`npm i -g swaxios`) or name it in your [devDependencies](https://docs.npmjs.com/files/package.json#devdependencies).
+You can install Swaxios globally (`npm i -g swaxios`) or add it to your [devDependencies](https://docs.npmjs.com/files/package.json#devdependencies).
+
+Your targeted project must also have a recent version of axios and TypeScript:
+
+```
+npm i axios
+npm i -D typescript
+```
 
 ## Usage
 
@@ -33,18 +40,11 @@ With the `-f` option, you can force Swaxios to overwrite existing files in the o
 swaxios -i ./path/to/swagger.json -o ./path/to/output/directory -f
 ```
 
-Your targeted project must also have a recent version of axios and TypeScript:
-
-```
-npm i axios
-npm i -D typescript
-```
-
 ## Examples
 
 You can find many examples of generated API client code in our [snapshots section](./src/test/snapshots).
 
-Here is a simple example:
+Here is a basic example:
 
 **`ExchangeService.ts`**
 
