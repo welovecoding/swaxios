@@ -5,7 +5,7 @@
  * It should not be modified by hand.
  */
 
-import {AxiosInstance} from 'axios';
+import {AxiosInstance, AxiosRequestConfig} from 'axios';
 
 export class UserService {
   private readonly apiClient: AxiosInstance;
@@ -19,11 +19,12 @@ export class UserService {
     lastname: string;
     age?: number;
   }): Promise<string> => {
-    const resource = '/api/user';
-    const config = {
+    const config: AxiosRequestConfig = {
+      method: 'get',
       params,
+      url: '/api/user',
     };
-    const response = await this.apiClient.get<string>(resource, config);
+    const response = await this.apiClient.request<string>(config);
     return response.data;
   };
 }

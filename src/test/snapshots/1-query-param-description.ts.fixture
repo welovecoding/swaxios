@@ -5,7 +5,7 @@
  * It should not be modified by hand.
  */
 
-import {AxiosInstance} from 'axios';
+import {AxiosInstance, AxiosRequestConfig} from 'axios';
 
 export class ArchiveService {
   private readonly apiClient: AxiosInstance;
@@ -21,12 +21,17 @@ export class ArchiveService {
     instanceId: string,
     body: {archive: {}; conversationId: string}
   ): Promise<{instanceId: string; name: string}> => {
-    const resource = `/instance/${instanceId}/archive`;
-    const data = body;
-    const response = await this.apiClient.post<{
+    const config: AxiosRequestConfig = {
+      data: {
+        ...body,
+      },
+      method: 'post',
+      url: `/instance/${instanceId}/archive`,
+    };
+    const response = await this.apiClient.request<{
       instanceId: string;
       name: string;
-    }>(resource, data);
+    }>(config);
     return response.data;
   };
 }

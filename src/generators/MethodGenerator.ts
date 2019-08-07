@@ -48,6 +48,7 @@ export class MethodGenerator {
   readonly bodyParameters: InternalParameter[];
   readonly descriptions?: Description[];
   readonly formattedUrl: string;
+  readonly requiresBearerAuthorization: boolean;
   readonly method: HttpMethod;
   readonly needsDataObj: boolean;
   readonly normalizedUrl: string;
@@ -59,6 +60,7 @@ export class MethodGenerator {
   constructor(url: string, method: HttpMethod, operation: OpenAPIV2.OperationObject, spec: OpenAPIV2.Document) {
     this.url = url;
     this.operation = operation;
+    this.method = method;
     this.normalizedUrl = StringUtil.normalizeUrl(url);
     this.formattedUrl = `'${url}'`;
     this.spec = spec;
@@ -83,9 +85,7 @@ export class MethodGenerator {
     }
 
     const postFix = parameterMatch ? `By${StringUtil.camelCase(parameterMatch.splice(1), true)}` : 'All';
-    this.parameterMethod = this.operation.operationId || `${method}${postFix}`;
-
-    this.method = method;
+    this.parameterMethod = this.operation.operationId || `${this.method}${postFix}`;
 
     if (this.includesSuccessResponse(this.responses)) {
       this.returnType = this.buildResponseSchema();
@@ -98,6 +98,9 @@ export class MethodGenerator {
       this.method === HttpMethod.POST ||
       this.method === HttpMethod.PUT
     );
+
+    this.requiresBearerAuthorization =
+      !!this.operation.security && this.operation.security.some(obj => Object.keys(obj).includes('Bearer'));
   }
 
   private includesSuccessResponse(
