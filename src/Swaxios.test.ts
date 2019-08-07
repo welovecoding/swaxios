@@ -84,7 +84,7 @@ describe('writeClient', () => {
     expect(actual).toBe(expected);
   });
 
-  it('supports Bearer authentication', async () => {
+  it('supports Bearer authorization', async () => {
     const inputFile = path.resolve(__dirname, './test/snapshots/7-bearer-auth.json');
     await writeClient(inputFile, tempDir, true);
 
