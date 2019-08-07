@@ -37,7 +37,7 @@ Your targeted project must also have a recent version of axios and TypeScript:
 
 ```
 npm i axios
-npm i --dev typescript
+npm i -D typescript
 ```
 
 ## Examples
