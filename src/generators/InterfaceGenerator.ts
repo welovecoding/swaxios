@@ -69,7 +69,7 @@ export class InterfaceGenerator extends TemplateGenerator {
     const schemaObject = schema as OpenAPIV2.SchemaObject;
     const {required: requiredProperties, properties} = schemaObject;
 
-    let schemaType = schemaObject.schemaType || SwaggerType.OBJECT;
+    let schemaType = schemaObject.type || SwaggerType.OBJECT;
 
     if (Array.isArray(schemaType)) {
       schemaType = schemaType[0];

@@ -208,7 +208,7 @@ export class MethodGenerator {
     const {required: requiredProperties, properties} = schemaObject;
     const {allOf: multipleSchemas, enum: enumType} = schemaObject;
 
-    let schemaType = schemaObject.schemaType || SwaggerType.OBJECT;
+    let schemaType = schemaObject.type || SwaggerType.OBJECT;
 
     if (Array.isArray(schemaType)) {
       schemaType = schemaType[0];
