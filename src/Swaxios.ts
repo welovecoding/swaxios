@@ -40,9 +40,7 @@ export async function exportServices(swaggerJson: OpenAPIV2.Document): Promise<R
 }
 
 async function buildIndexFiles(fileIndex: DirEntry): Promise<void> {
-  const filesAndDirs = Object.keys(fileIndex.files)
-    .concat(Object.keys(fileIndex.directories).map(dir => `${dir}/`))
-    .concat('interfaces/');
+  const filesAndDirs = Object.keys(fileIndex.files).concat(Object.keys(fileIndex.directories).map(dir => `${dir}/`));
   await new IndexFileGenerator(filesAndDirs, fileIndex.fullPath).write();
 
   for (const dir of Object.values(fileIndex.directories)) {
@@ -66,6 +64,13 @@ export async function generateClient(swaggerJson: OpenAPIV2.Document, outputDire
     alternativeName: null,
     fullPath: path.resolve(outputDirectory, 'APIClient'),
     name: 'APIClient',
+  };
+
+  fileIndex.directories.interfaces = {
+    directories: {},
+    files: {},
+    fullPath: path.resolve(outputDirectory, 'interfaces'),
+    name: 'interfaces',
   };
 
   await buildIndexFiles(fileIndex);
