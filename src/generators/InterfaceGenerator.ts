@@ -7,6 +7,7 @@ import {GeneratorContext, TemplateGenerator} from './TemplateGenerator';
 
 export enum SwaggerType {
   ARRAY = 'array',
+  BOOLEAN = 'boolean',
   INTEGER = 'integer',
   NUMBER = 'number',
   OBJECT = 'object',
@@ -16,6 +17,7 @@ export enum SwaggerType {
 export enum TypeScriptType {
   ANY = 'any',
   ARRAY = 'Array',
+  BOOLEAN = 'boolean',
   EMPTY_OBJECT = '{}',
   NUMBER = 'number',
   STRING = 'string',
@@ -85,6 +87,9 @@ export class InterfaceGenerator extends TemplateGenerator {
     }
 
     switch (schemaType.toLowerCase()) {
+      case SwaggerType.BOOLEAN: {
+        return {basicType, type: TypeScriptType.BOOLEAN, imports};
+      }
       case SwaggerType.STRING: {
         return {basicType, type: TypeScriptType.STRING, imports};
       }
