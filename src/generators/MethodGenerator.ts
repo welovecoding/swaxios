@@ -223,7 +223,7 @@ export class MethodGenerator {
         console.warn(`No reference found for "${schema.$ref}".`);
         return TypeScriptType.EMPTY_OBJECT;
       }
-      const definition = schema.$ref.replace('#/definitions', '');
+      const definition = schema.$ref.replace('#/definitions/', '');
       properties = this.spec.definitions[definition].properties;
       requiredProperties = this.spec.definitions[definition].required;
       schemaType = this.spec.definitions[definition].type as string;
