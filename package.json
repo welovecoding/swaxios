@@ -107,5 +107,5 @@
     "test": "yarn lint && yarn test:node",
     "test:node": "nyc jasmine --config=jasmine.json"
   },
-  "version": "0.0.21"
+  "version": "0.0.22"
 }
