@@ -1,3 +1,11 @@
+#### 0.0.22 (2019-08-08)
+
+##### Bug Fixes
+
+- Add missing attributes and "boolean" type ([#72](https://github.com/bennyn/swaxios/pull/72)) ([4c782608](https://github.com/bennyn/swaxios/commit/4c78260822f25e28d5b4a92b9c85364892cc6251))
+- Use original Swagger object and fix references ([#70](https://github.com/bennyn/swaxios/pull/70)) ([68675443](https://github.com/bennyn/swaxios/commit/68675443a724bfae842b8fdce9d3082bfe2912ff))
+- Codeowners syntax ([#73](https://github.com/bennyn/swaxios/pull/73)) ([41292d57](https://github.com/bennyn/swaxios/commit/41292d57380c86936dd78ad39b7d20fd53bae7ab))
+
 #### 0.0.21 (2019-08-07)
 
 ##### New Features
