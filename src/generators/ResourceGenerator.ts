@@ -33,10 +33,7 @@ export class ResourceGenerator extends TemplateGenerator {
       this.name = fullyQualifiedName;
     }
 
-    const interfacesDir = this.directory
-      .split('/')
-      .map(() => '..')
-      .join('/');
+    const interfacesDir = this.directory.replace(/[^\/]+/g, '..');
 
     this.imports = {
       list: [],

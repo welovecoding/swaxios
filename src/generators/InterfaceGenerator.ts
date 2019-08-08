@@ -23,11 +23,17 @@ export enum TypeScriptType {
   TYPE = 'type',
 }
 
+interface SwaxiosInterface {
+  basicType?: TypeScriptType;
+  type: string;
+  imports: string[];
+}
+
 interface Context extends GeneratorContext {
-  data: string;
+  basicType?: string;
   imports: string[];
   name: string;
-  type?: TypeScriptType;
+  typeData: string;
 }
 
 export class InterfaceGenerator extends TemplateGenerator {
@@ -36,8 +42,6 @@ export class InterfaceGenerator extends TemplateGenerator {
   private readonly spec: OpenAPIV2.Document;
   private readonly definition: OpenAPIV2.Schema;
   private readonly outputDirectory: string;
-  private type?: TypeScriptType;
-  public imports: string[];
 
   constructor(definitionName: string, definition: OpenAPIV2.Schema, spec: OpenAPIV2.Document, outputDirectory: string) {
     super();
@@ -46,24 +50,29 @@ export class InterfaceGenerator extends TemplateGenerator {
     this.spec = spec;
     this.definition = definition;
     this.outputDirectory = outputDirectory;
-    this.imports = [];
 
     fs.ensureDirSync(this.outputDirectory);
   }
 
-  private buildType(schema: OpenAPIV2.SchemaObject | OpenAPIV2.ReferenceObject, schemaName: string): string {
+  public static buildInterface(
+    spec: OpenAPIV2.Document,
+    schema: OpenAPIV2.SchemaObject | OpenAPIV2.ReferenceObject,
+    schemaName: string,
+    imports: string[] = [],
+    basicType: TypeScriptType = TypeScriptType.TYPE,
+  ): SwaxiosInterface {
     const reference = (schema as OpenAPIV2.ReferenceObject).$ref;
 
     if (reference && reference.startsWith('#/definitions')) {
-      if (!this.spec.definitions) {
+      if (!spec.definitions) {
         console.info('Spec has no definitions.');
-        return TypeScriptType.EMPTY_OBJECT;
+        return {type: TypeScriptType.EMPTY_OBJECT, imports};
       }
       const definition = reference.replace('#/definitions/', '');
-      if (!this.imports.includes(definition)) {
-        this.imports.push(definition);
+      if (!imports.includes(definition)) {
+        imports.push(definition);
       }
-      return definition;
+      return {type: definition, imports};
     }
 
     const schemaObject = schema as OpenAPIV2.SchemaObject;
@@ -77,63 +86,85 @@ export class InterfaceGenerator extends TemplateGenerator {
 
     switch (schemaType.toLowerCase()) {
       case SwaggerType.STRING: {
-        this.setBasicType(TypeScriptType.TYPE);
-        return TypeScriptType.STRING;
+        return {basicType, type: TypeScriptType.STRING, imports};
       }
       case SwaggerType.NUMBER:
       case SwaggerType.INTEGER: {
-        this.setBasicType(TypeScriptType.TYPE);
-        return TypeScriptType.NUMBER;
+        return {basicType, type: TypeScriptType.NUMBER, imports};
       }
       case SwaggerType.OBJECT: {
-        this.setBasicType(TypeScriptType.INTERFACE);
         if (!properties) {
           console.info(`Schema type for "${schemaName}" is "object" but has no properties.`);
-          return TypeScriptType.EMPTY_OBJECT;
+          return {basicType: TypeScriptType.INTERFACE, type: TypeScriptType.EMPTY_OBJECT, imports};
         }
 
         const schema: Record<string, string> = {};
 
-        for (const property of Object.keys(properties)) {
+        for (const property in properties) {
           const propertyName = requiredProperties && !requiredProperties.includes(property) ? `${property}?` : property;
-          schema[propertyName] = this.buildType(properties[property], property);
+          const {type: propertyType, imports: propertyImports} = InterfaceGenerator.buildInterface(
+            spec,
+            properties[property],
+            property,
+            imports,
+          );
+          schema[propertyName] = propertyType;
+          for (const propertyImport of propertyImports) {
+            if (!imports.includes(propertyImport)) {
+              imports.push(propertyImport);
+            }
+          }
         }
 
-        return inspect(schema, {breakLength: Infinity})
+        const type = inspect(schema, {breakLength: Infinity})
           .replace(/'/gm, '')
           .replace(',', ';')
           .replace(new RegExp('\\n', 'g'), '');
+        return {basicType: TypeScriptType.INTERFACE, type, imports};
       }
       case SwaggerType.ARRAY: {
-        this.setBasicType(TypeScriptType.TYPE);
         if (!schemaObject.items) {
           console.info(`Schema type for "${schemaName}" is "array" but has no items.`);
-          return `${TypeScriptType.ARRAY}<${TypeScriptType.ANY}>`;
+          return {basicType, type: `${TypeScriptType.ARRAY}<${TypeScriptType.ANY}>`, imports};
         }
 
         if (!(schemaObject.items instanceof Array)) {
-          const itemType = this.buildType(schemaObject.items, schemaName);
-          return `${TypeScriptType.ARRAY}<${itemType}>`;
+          const {imports: itemImports, type: itemType} = InterfaceGenerator.buildInterface(
+            spec,
+            schemaObject.items,
+            schemaName,
+            imports,
+          );
+          for (const itemImport of itemImports) {
+            if (!imports.includes(itemImport)) {
+              imports.push(itemImport);
+            }
+          }
+          return {basicType, type: `${TypeScriptType.ARRAY}<${itemType}>`, imports};
         }
 
-        const schemes = schemaObject.items.map(itemSchema => this.buildType(itemSchema, schemaName)).join('|');
-        return `${TypeScriptType.ARRAY}<${schemes}>`;
+        const itemTypes = schemaObject.items.map(itemSchema =>
+          InterfaceGenerator.buildInterface(spec, itemSchema, schemaName, imports, basicType),
+        );
+
+        const schemes = itemTypes.map(item => item.type).join('|');
+        for (const itemType of itemTypes) {
+          for (const itemImport of itemType.imports) {
+            if (!imports.includes(itemImport)) {
+              imports.push(itemImport);
+            }
+          }
+        }
+        return {basicType, type: `${TypeScriptType.ARRAY}<${schemes}>`, imports};
       }
       default: {
-        this.setBasicType(TypeScriptType.TYPE);
-        return TypeScriptType.EMPTY_OBJECT;
+        return {basicType, type: TypeScriptType.EMPTY_OBJECT, imports};
       }
     }
   }
 
-  generateInterface(): string {
-    return this.buildType(this.definition, this.name);
-  }
-
-  private setBasicType(type: TypeScriptType): void {
-    if (!this.type) {
-      this.type = type;
-    }
+  generateInterface(): SwaxiosInterface {
+    return InterfaceGenerator.buildInterface(this.spec, this.definition, this.name);
   }
 
   async write(): Promise<void> {
@@ -143,13 +174,13 @@ export class InterfaceGenerator extends TemplateGenerator {
   }
 
   protected async getContext(): Promise<Context> {
-    const data = this.generateInterface();
+    const {basicType, imports, type: typeData} = this.generateInterface();
 
     return {
-      data,
-      imports: this.imports,
+      basicType: basicType || '',
+      imports,
       name: this.name,
-      type: this.type,
+      typeData,
     };
   }
 }
