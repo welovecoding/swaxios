@@ -88,6 +88,7 @@
   },
   "scripts": {
     "changelog:commit": "git add CHANGELOG.md && git commit -m \"docs: updated CHANGELOG.md\"",
+    "changelog:create": "changelog -x \"chore,docs,refactor,style,test\"",
     "clean": "rimraf dist",
     "copy": "cpx src/templates/**/* dist/templates/",
     "dist": "yarn clean && tsc && yarn copy",
@@ -99,10 +100,10 @@
     "lint:ts": "tslint --config tslint.json --project tsconfig.json \"**/*.ts?(x)\"",
     "postversion": "git push origin && git push origin --tags && npm publish",
     "prettier": "prettier \"**/*.{json,md}\"",
-    "preversion": "git pull && yarn && yarn test && yarn dist",
-    "release:major": "changelog -M -x \"chore,docs,refactor,style,test\" && yarn changelog:commit && npm version major",
-    "release:minor": "changelog -m -x \"chore,docs,refactor,style,test\" && yarn changelog:commit && npm version minor",
-    "release:patch": "changelog -p -x \"chore,docs,refactor,style,test\" && yarn changelog:commit && npm version patch",
+    "prerelease": "git pull && yarn && yarn test && yarn dist",
+    "release:major": "yarn prerelease && yarn changelog:create -M && yarn changelog:commit && npm version major",
+    "release:minor": "yarn prerelease && yarn changelog:create -m && yarn changelog:commit && npm version minor",
+    "release:patch": "yarn prerelease && yarn changelog:create -p && yarn changelog:commit && npm version patch",
     "start": "ts-node src/cli.ts -i ./src/test/fixtures/wire-sso.json -o ./src/temp -f",
     "test": "yarn lint && yarn test:node",
     "test:node": "nyc jasmine --config=jasmine.json"
