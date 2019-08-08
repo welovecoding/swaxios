@@ -5,6 +5,7 @@ import * as StringUtil from '../util/StringUtil';
 
 export enum SwaggerType {
   ARRAY = 'array',
+  BOOLEAN = 'boolean',
   INTEGER = 'integer',
   NUMBER = 'number',
   OBJECT = 'object',
@@ -14,6 +15,7 @@ export enum SwaggerType {
 export enum TypeScriptType {
   ANY = 'any',
   ARRAY = 'Array',
+  BOOLEAN = 'boolean',
   EMPTY_OBJECT = '{}',
   NUMBER = 'number',
   STRING = 'string',
@@ -241,7 +243,8 @@ export class MethodGenerator {
         const schema: Record<string, string> = {};
 
         for (const property of Object.keys(properties)) {
-          const propertyName = requiredProperties && !requiredProperties.includes(property) ? `${property}?` : property;
+          const isRequired = requiredProperties && requiredProperties.includes(property);
+          const propertyName = `${property}${isRequired ? '' : '?'}`;
           schema[propertyName] = this.buildTypeFromSchema(properties[property], `${schemaName}/${property}`);
         }
 
@@ -276,6 +279,9 @@ export class MethodGenerator {
     switch (schemaType.toLowerCase()) {
       case SwaggerType.STRING: {
         return TypeScriptType.STRING;
+      }
+      case SwaggerType.BOOLEAN: {
+        return TypeScriptType.BOOLEAN;
       }
       case SwaggerType.NUMBER:
       case SwaggerType.INTEGER: {

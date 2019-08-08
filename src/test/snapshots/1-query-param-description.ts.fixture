@@ -19,8 +19,8 @@ export class ArchiveService {
    */
   archiveConversation = async (
     instanceId: string,
-    body: {archive: {}; conversationId: string}
-  ): Promise<{instanceId: string; name: string}> => {
+    body: {archive?: boolean; conversationId?: string}
+  ): Promise<{instanceId?: string; name?: string}> => {
     const config: AxiosRequestConfig = {
       data: {
         ...body,
@@ -29,8 +29,8 @@ export class ArchiveService {
       url: `/instance/${instanceId}/archive`,
     };
     const response = await this.apiClient.request<{
-      instanceId: string;
-      name: string;
+      instanceId?: string;
+      name?: string;
     }>(config);
     return response.data;
   };

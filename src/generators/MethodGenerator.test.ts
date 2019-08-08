@@ -123,7 +123,7 @@ describe('MethodGenerator', () => {
       expect(methodDefinition.normalizedUrl).toBe('/identity-providers');
       expect(methodDefinition.parameterMethod).toBe('postById');
       expect(methodDefinition.pathParameters[0]).toEqual({name: 'id', type: 'any'});
-      expect(methodDefinition.bodyParameters[0]).toEqual({name: 'body', required: false, type: '{ user: string }'});
+      expect(methodDefinition.bodyParameters[0]).toEqual({name: 'body', required: false, type: '{ user?: string }'});
     });
   });
 });
