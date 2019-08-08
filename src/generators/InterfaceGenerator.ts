@@ -3,7 +3,7 @@ import {OpenAPIV2} from 'openapi-types';
 import path from 'path';
 import {inspect} from 'util';
 
-import {TemplateGenerator} from './TemplateGenerator';
+import {GeneratorContext, TemplateGenerator} from './TemplateGenerator';
 
 export enum SwaggerType {
   ARRAY = 'array',
@@ -23,6 +23,13 @@ export enum TypeScriptType {
   TYPE = 'type',
 }
 
+interface Context extends GeneratorContext {
+  data: string;
+  imports: string[];
+  name: string;
+  type?: TypeScriptType;
+}
+
 export class InterfaceGenerator extends TemplateGenerator {
   protected readonly name: string;
   protected readonly templateFile: string;
@@ -30,6 +37,7 @@ export class InterfaceGenerator extends TemplateGenerator {
   private readonly definition: OpenAPIV2.Schema;
   private readonly outputDirectory: string;
   private type?: TypeScriptType;
+  public imports: string[];
 
   constructor(definitionName: string, definition: OpenAPIV2.Schema, spec: OpenAPIV2.Document, outputDirectory: string) {
     super();
@@ -38,25 +46,30 @@ export class InterfaceGenerator extends TemplateGenerator {
     this.spec = spec;
     this.definition = definition;
     this.outputDirectory = outputDirectory;
+    this.imports = [];
 
     fs.ensureDirSync(this.outputDirectory);
   }
 
-  private buildType(schema: OpenAPIV2.SchemaObject, schemaName: string): string {
-    let {required: requiredProperties, properties, type: schemaType} = schema;
+  private buildType(schema: OpenAPIV2.SchemaObject | OpenAPIV2.ReferenceObject, schemaName: string): string {
+    const reference = (schema as OpenAPIV2.ReferenceObject).$ref;
 
-    if (schema.$ref && schema.$ref.startsWith('#/definitions')) {
+    if (reference && reference.startsWith('#/definitions')) {
       if (!this.spec.definitions) {
         console.info('Spec has no definitions.');
         return TypeScriptType.EMPTY_OBJECT;
       }
-      const definition = schema.$ref.replace('#/definitions/', '');
-      requiredProperties = this.spec.definitions[definition].required;
-      properties = this.spec.definitions[definition].properties;
-      schemaType = this.spec.definitions[definition].type;
+      const definition = reference.replace('#/definitions/', '');
+      if (!this.imports.includes(definition)) {
+        this.imports.push(definition);
+      }
+      return definition;
     }
 
-    schemaType = schemaType || SwaggerType.OBJECT;
+    const schemaObject = schema as OpenAPIV2.SchemaObject;
+    const {required: requiredProperties, properties} = schemaObject;
+
+    let schemaType = schemaObject.schemaType || SwaggerType.OBJECT;
 
     if (Array.isArray(schemaType)) {
       schemaType = schemaType[0];
@@ -93,17 +106,17 @@ export class InterfaceGenerator extends TemplateGenerator {
       }
       case SwaggerType.ARRAY: {
         this.setBasicType(TypeScriptType.TYPE);
-        if (!schema.items) {
+        if (!schemaObject.items) {
           console.info(`Schema type for "${schemaName}" is "array" but has no items.`);
           return `${TypeScriptType.ARRAY}<${TypeScriptType.ANY}>`;
         }
 
-        if (!(schema.items instanceof Array)) {
-          const itemType = this.buildType(schema.items, schemaName);
+        if (!(schemaObject.items instanceof Array)) {
+          const itemType = this.buildType(schemaObject.items, schemaName);
           return `${TypeScriptType.ARRAY}<${itemType}>`;
         }
 
-        const schemes = schema.items.map(itemSchema => this.buildType(itemSchema, schemaName)).join('|');
+        const schemes = schemaObject.items.map(itemSchema => this.buildType(itemSchema, schemaName)).join('|');
         return `${TypeScriptType.ARRAY}<${schemes}>`;
       }
       default: {
@@ -129,11 +142,12 @@ export class InterfaceGenerator extends TemplateGenerator {
     return fs.outputFile(outputFile, renderedIndex, 'utf-8');
   }
 
-  protected async getContext(): Promise<{data: string; name: string; type?: TypeScriptType}> {
+  protected async getContext(): Promise<Context> {
     const data = this.generateInterface();
 
     return {
       data,
+      imports: this.imports,
       name: this.name,
       type: this.type,
     };
