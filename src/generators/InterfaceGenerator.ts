@@ -58,7 +58,7 @@ export class InterfaceGenerator extends TemplateGenerator {
 
   public static buildInterface(
     spec: OpenAPIV2.Document,
-    schema: OpenAPIV2.SchemaObject | OpenAPIV2.ReferenceObject,
+    schema: OpenAPIV2.Schema,
     schemaName: string,
     imports: string[] = [],
     basicType: TypeScriptType = TypeScriptType.TYPE,
@@ -78,7 +78,25 @@ export class InterfaceGenerator extends TemplateGenerator {
     }
 
     const schemaObject = schema as OpenAPIV2.SchemaObject;
-    const {required: requiredProperties, properties} = schemaObject;
+    const {allOf: multipleSchemas, required: requiredProperties, properties} = schemaObject;
+
+    if (multipleSchemas) {
+      const multipleTypes = multipleSchemas.map(itemSchema =>
+        InterfaceGenerator.buildInterface(spec, itemSchema as OpenAPIV2.Schema, schemaName, imports, basicType),
+      );
+
+      const schemas = multipleTypes.map(item => item.type).join('&');
+
+      for (const itemType of multipleTypes) {
+        for (const itemImport of itemType.imports) {
+          if (!imports.includes(itemImport)) {
+            imports.push(itemImport);
+          }
+        }
+      }
+
+      return {basicType, type: schemas, imports};
+    }
 
     let schemaType = schemaObject.type || SwaggerType.OBJECT;
 
@@ -154,7 +172,8 @@ export class InterfaceGenerator extends TemplateGenerator {
           InterfaceGenerator.buildInterface(spec, itemSchema, schemaName, imports, basicType),
         );
 
-        const schemes = itemTypes.map(item => item.type).join('|');
+        const schemas = itemTypes.map(item => item.type).join('|');
+
         for (const itemType of itemTypes) {
           for (const itemImport of itemType.imports) {
             if (!imports.includes(itemImport)) {
@@ -162,7 +181,8 @@ export class InterfaceGenerator extends TemplateGenerator {
             }
           }
         }
-        return {basicType, type: `${TypeScriptType.ARRAY}<${schemes}>`, imports};
+
+        return {basicType, type: `${TypeScriptType.ARRAY}<${schemas}>`, imports};
       }
       default: {
         return {basicType, type: TypeScriptType.EMPTY_OBJECT, imports};
