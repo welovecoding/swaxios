@@ -8,6 +8,7 @@ import yaml from 'yamljs';
 
 import {OpenAPIV2} from 'openapi-types';
 import {APIClientGenerator, IndexFileGenerator, ResourceGenerator} from './generators';
+import {InterfaceGenerator} from './generators/InterfaceGenerator';
 import {DirEntry, generateFileIndex} from './util/FileUtil';
 import * as StringUtil from './util/StringUtil';
 import {validateConfig} from './validator/SwaggerValidator';
@@ -39,7 +40,9 @@ export async function exportServices(swaggerJson: OpenAPIV2.Document): Promise<R
 }
 
 async function buildIndexFiles(fileIndex: DirEntry): Promise<void> {
-  const filesAndDirs = Object.keys(fileIndex.files).concat(Object.keys(fileIndex.directories).map(dir => `${dir}/`));
+  const filesAndDirs = Object.keys(fileIndex.files)
+    .concat(Object.keys(fileIndex.directories).map(dir => `${dir}/`))
+    .concat('interfaces/');
   await new IndexFileGenerator(filesAndDirs, fileIndex.fullPath).write();
 
   for (const dir of Object.values(fileIndex.directories)) {
@@ -66,6 +69,22 @@ export async function generateClient(swaggerJson: OpenAPIV2.Document, outputDire
   };
 
   await buildIndexFiles(fileIndex);
+  await generateInterfaces(swaggerJson, outputDirectory);
+}
+
+async function generateInterfaces(spec: OpenAPIV2.Document, outputDirectory: string): Promise<void> {
+  if (!spec.definitions) {
+    console.info('Spec has no definitions.');
+    return;
+  }
+
+  const interfaceDirectory = path.join(outputDirectory, 'interfaces');
+
+  for (const [definitionName, definition] of Object.entries(spec.definitions)) {
+    await new InterfaceGenerator(definitionName, definition, spec, interfaceDirectory).write();
+  }
+
+  await new IndexFileGenerator(Object.keys(spec.definitions), interfaceDirectory).write();
 }
 
 function parseInputFile(inputFile: string): OpenAPIV2.Document {

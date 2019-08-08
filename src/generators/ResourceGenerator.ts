@@ -4,6 +4,7 @@ import {HttpMethod, MethodGenerator} from './MethodGenerator';
 import {GeneratorContext, TemplateGenerator} from './TemplateGenerator';
 
 interface Context extends GeneratorContext {
+  imports: {path: string; list: string[]};
   methods: MethodGenerator[];
   name: string;
 }
@@ -14,6 +15,7 @@ export class ResourceGenerator extends TemplateGenerator {
   protected readonly name: string;
   protected readonly templateFile: string;
   readonly fullyQualifiedName: string;
+  readonly imports: {path: string; list: string[]};
 
   constructor(fullyQualifiedName: string, resources: Record<string, OpenAPIV2.PathsObject>, spec: OpenAPIV2.Document) {
     super();
@@ -31,12 +33,27 @@ export class ResourceGenerator extends TemplateGenerator {
       this.name = fullyQualifiedName;
     }
 
-    Object.entries(resources).forEach(([url, definition]) => {
+    const interfacesDir = this.directory
+      .split('/')
+      .map(() => '..')
+      .join('/');
+
+    this.imports = {
+      list: [],
+      path: `${interfacesDir}/interfaces/`,
+    };
+
+    for (const [url, definition] of Object.entries(resources)) {
       for (const [method, data] of Object.entries(definition)) {
         const methodDefinition = new MethodGenerator(url, method as HttpMethod, data, spec);
         this.methods.push(methodDefinition);
+        for (const importValue of methodDefinition.imports) {
+          if (!this.imports.list.includes(importValue)) {
+            this.imports.list.push(importValue);
+          }
+        }
       }
-    });
+    }
 
     this.fullyQualifiedName = `${this.directory}/${this.name}`;
     this.templateFile = 'Resource.hbs';
@@ -44,6 +61,7 @@ export class ResourceGenerator extends TemplateGenerator {
 
   protected async getContext(): Promise<Context> {
     return {
+      imports: this.imports,
       methods: this.methods,
       name: this.name,
     };

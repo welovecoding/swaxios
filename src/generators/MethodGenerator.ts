@@ -2,22 +2,7 @@ import {OpenAPIV2} from 'openapi-types';
 import {inspect} from 'util';
 
 import * as StringUtil from '../util/StringUtil';
-
-export enum SwaggerType {
-  ARRAY = 'array',
-  INTEGER = 'integer',
-  NUMBER = 'number',
-  OBJECT = 'object',
-  STRING = 'string',
-}
-
-export enum TypeScriptType {
-  ANY = 'any',
-  ARRAY = 'Array',
-  EMPTY_OBJECT = '{}',
-  NUMBER = 'number',
-  STRING = 'string',
-}
+import {SwaggerType, TypeScriptType} from './InterfaceGenerator';
 
 interface InternalParameter {
   name: string;
@@ -48,6 +33,7 @@ export class MethodGenerator {
   readonly bodyParameters: InternalParameter[];
   readonly descriptions?: Description[];
   readonly formattedUrl: string;
+  readonly imports: string[];
   readonly requiresBearerAuthorization: boolean;
   readonly method: HttpMethod;
   readonly needsDataObj: boolean;
@@ -67,6 +53,7 @@ export class MethodGenerator {
     this.responses = operation.responses;
 
     this.bodyParameters = [];
+    this.imports = [];
     this.pathParameters = [];
     this.queryParameters = [];
     this.buildParameters(this.operation.parameters);
@@ -150,7 +137,7 @@ export class MethodGenerator {
       console.warn(`No reference found for "${ref}".`);
       return;
     }
-    const definitionString = ref.replace('#/definitions', '');
+    const definitionString = ref.replace('#/definitions/', '');
     const definition = this.spec.definitions[definitionString];
     return definition.$ref ? this.getSchemaFromRef(definition.$ref) : definition;
   }
@@ -199,10 +186,28 @@ export class MethodGenerator {
     }
   }
 
-  private buildTypeFromSchema(schema: OpenAPIV2.SchemaObject, schemaName: string): string {
-    let {required: requiredProperties, properties} = schema;
-    const {allOf: multipleSchemas, enum: enumType} = schema;
-    let schemaType = schema.type as string;
+  private buildTypeFromSchema(schema: OpenAPIV2.SchemaObject | OpenAPIV2.ReferenceObject, schemaName: string): string {
+    const reference = (schema as OpenAPIV2.ReferenceObject).$ref;
+
+    if (reference) {
+      if (!reference.startsWith('#/definitions')) {
+        console.warn(`Invalid reference "${reference}".`);
+        return TypeScriptType.EMPTY_OBJECT;
+      }
+      if (!this.spec.definitions) {
+        console.warn(`No reference found for "${reference}".`);
+        return TypeScriptType.EMPTY_OBJECT;
+      }
+      const definition = reference.replace('#/definitions/', '');
+      this.imports.push(definition);
+      return definition;
+    }
+
+    const schemaObject = schema as OpenAPIV2.SchemaObject;
+
+    const {required: requiredProperties, properties} = schemaObject;
+    const {allOf: multipleSchemas, enum: enumType} = schemaObject;
+    let schemaType = schemaObject.type as string;
 
     if (multipleSchemas) {
       return multipleSchemas
@@ -212,21 +217,6 @@ export class MethodGenerator {
 
     if (enumType) {
       return `"${enumType.join('" | "')}"`;
-    }
-
-    if (schema.$ref) {
-      if (!schema.$ref.startsWith('#/definitions')) {
-        console.warn(`Invalid reference "${schema.$ref}".`);
-        return TypeScriptType.EMPTY_OBJECT;
-      }
-      if (!this.spec.definitions) {
-        console.warn(`No reference found for "${schema.$ref}".`);
-        return TypeScriptType.EMPTY_OBJECT;
-      }
-      const definition = schema.$ref.replace('#/definitions', '');
-      properties = this.spec.definitions[definition].properties;
-      requiredProperties = this.spec.definitions[definition].required;
-      schemaType = this.spec.definitions[definition].type as string;
     }
 
     schemaType = schemaType || SwaggerType.OBJECT;
@@ -251,17 +241,17 @@ export class MethodGenerator {
           .replace(new RegExp('\\n', 'g'), '');
       }
       case SwaggerType.ARRAY: {
-        if (!schema.items) {
+        if (!schemaObject.items) {
           console.warn(`Schema type for "${schemaName}" is "array" but has no items.`);
           return `${TypeScriptType.ARRAY}<${TypeScriptType.ANY}>`;
         }
 
-        if (!(schema.items instanceof Array)) {
-          const itemType = this.buildTypeFromSchema(schema.items, schemaName);
+        if (!(schemaObject.items instanceof Array)) {
+          const itemType = this.buildTypeFromSchema(schemaObject.items, schemaName);
           return `${TypeScriptType.ARRAY}<${itemType}>`;
         }
 
-        const schemes = schema.items
+        const schemes = schemaObject.items
           .map((itemSchema, index) => this.buildTypeFromSchema(itemSchema, `${schemaName}[${index}]`))
           .join('|');
         return `${TypeScriptType.ARRAY}<${schemes}>`;
