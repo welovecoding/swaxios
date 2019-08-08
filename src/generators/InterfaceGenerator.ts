@@ -124,12 +124,12 @@ export class InterfaceGenerator extends TemplateGenerator {
         const schema: Record<string, string> = {};
 
         for (const [property, propertyOptions] of Object.entries(properties)) {
-          const isRequired = (requiredProperties && requiredProperties.includes(property)) || propertyOptions.required;
+          const isRequired = requiredProperties && requiredProperties.includes(property);
           const isReadOnly = propertyOptions.readOnly;
           const propertyName = `${isReadOnly ? 'readonly ' : ''}${property}${isRequired ? '' : '?'}`;
           const {type: propertyType, imports: propertyImports} = InterfaceGenerator.buildInterface(
             spec,
-            properties[property],
+            propertyOptions,
             property,
             imports,
           );

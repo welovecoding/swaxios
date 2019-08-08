@@ -20,7 +20,7 @@ export class ArchiveService {
    */
   archiveConversation = async (
     instanceId: string,
-    body: {archive: {}; conversationId: string}
+    body: {archive?: boolean; conversationId?: string}
   ): Promise<InstanceAndName> => {
     const config: AxiosRequestConfig = {
       data: {
