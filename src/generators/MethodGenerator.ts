@@ -242,10 +242,11 @@ export class MethodGenerator {
 
         const schema: Record<string, string> = {};
 
-        for (const property of Object.keys(properties)) {
+        for (const [property, propertyOptons] of Object.entries(properties)) {
           const isRequired = requiredProperties && requiredProperties.includes(property);
-          const propertyName = `${property}${isRequired ? '' : '?'}`;
-          schema[propertyName] = this.buildTypeFromSchema(properties[property], `${schemaName}/${property}`);
+          const isReadOnly = propertyOptons.readOnly;
+          const propertyName = `${isReadOnly ? 'readonly ' : ''}${property}${isRequired ? '' : '?'}`;
+          schema[propertyName] = this.buildTypeFromSchema(propertyOptons, `${schemaName}/${property}`);
         }
 
         return inspect(schema, {breakLength: Infinity, depth: Infinity})
