@@ -199,6 +199,9 @@ export class MethodGenerator {
       case SwaggerType.STRING: {
         return TypeScriptType.STRING;
       }
+      case SwaggerType.BOOLEAN: {
+        return TypeScriptType.BOOLEAN;
+      }
       case SwaggerType.NUMBER:
       case SwaggerType.INTEGER: {
         return TypeScriptType.NUMBER;
