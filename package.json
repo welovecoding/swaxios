@@ -66,16 +66,6 @@
     "typescript"
   ],
   "license": "MIT",
-  "lint-staged": {
-    "*.{json,md,scss,yml}": [
-      "prettier --write",
-      "git add"
-    ],
-    "*.{ts,tsx}": [
-      "tslint --config tslint.json --project tsconfig.json --fix",
-      "git add"
-    ]
-  },
   "main": "dist/index.js",
   "name": "swaxios",
   "prettier": "@wireapp/prettier-config",
