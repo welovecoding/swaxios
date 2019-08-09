@@ -17,12 +17,15 @@
     "BackendData": {
       "properties": {
         "name": {
+          "example": "my custom backend",
           "type": "string"
         },
         "rest": {
+          "example": "https://...",
           "type": "string"
         },
         "ws": {
+          "example": "wss://...",
           "type": "string"
         }
       },
@@ -39,10 +42,12 @@
           "$ref": "#/definitions/BackendData"
         },
         "email": {
+          "example": "email@example.com",
           "format": "email",
           "type": "string"
         },
         "password": {
+          "example": "",
           "format": "password",
           "type": "string"
         }
@@ -103,13 +108,30 @@
           "type": "array"
         },
         "type": {
-          "description": "Type can be `0` (Delivered) or `1` (Read).",
+          "description": "Type can be `0` (delivered) or `1` (read).",
           "enum": [0, 1],
           "type": "integer"
         }
       },
       "required": ["firstMessageId", "type"],
       "type": "object"
+    },
+    "ConfirmationWithSender": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Confirmation"
+        },
+        {
+          "properties": {
+            "from": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          "required": ["from"],
+          "type": "object"
+        }
+      ]
     },
     "Instance": {
       "allOf": [
@@ -142,8 +164,8 @@
       "type": "object"
     },
     "LegalHoldStatus": {
-      "description": "Type can be `0` (Disabled) or `1` (Enabled).",
-      "enum": [0, 1],
+      "description": "Type can be `0` (unknown), `1` (disabled) or `2` (enabled).",
+      "enum": [0, 1, 2],
       "type": "integer"
     },
     "LinkPreview": {
@@ -235,9 +257,11 @@
               "type": "string"
             },
             "deviceLabel": {
+              "example": "",
               "type": "string"
             },
             "deviceName": {
+              "example": "",
               "type": "string"
             },
             "name": {
@@ -247,7 +271,7 @@
           "type": "object"
         }
       ],
-      "description": "**Notes**:\n\nYou can either set `backend` or `customBackend`. If you set neither, the \"staging\" backend will be used. If you set both, `backend` takes the precedence.\n`deviceClass` can be set to any string if `backend` is unset and `customBackend` is set.",
+      "description": "**Note**: You can either set `backend` or `customBackend`. If you set neither, the \"staging\" backend will be used. If you set both, `backend` takes the precedence.",
       "required": ["email", "password"]
     },
     "Mention": {
@@ -269,20 +293,7 @@
       "properties": {
         "confirmations": {
           "items": {
-            "allOf": [
-              {
-                "$ref": "#/definitions/Confirmation"
-              },
-              {
-                "properties": {
-                  "from": {
-                    "format": "uuid",
-                    "type": "string"
-                  }
-                },
-                "required": ["from"]
-              }
-            ]
+            "$ref": "#/definitions/ConfirmationWithSender"
           },
           "type": "array"
         },
@@ -303,6 +314,12 @@
         },
         "messageTimer": {
           "type": "integer"
+        },
+        "reactions": {
+          "items": {
+            "$ref": "#/definitions/ReactionWithSender"
+          },
+          "type": "array"
         },
         "state": {
           "enum": ["PayloadBundleState.INCOMING", "PayloadBundleState.OUTGOING_SENT"],
@@ -361,6 +378,23 @@
       "required": ["originalMessageId", "type"],
       "type": "object"
     },
+    "ReactionWithSender": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/Reaction"
+        },
+        {
+          "properties": {
+            "from": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          "required": ["from"],
+          "type": "object"
+        }
+      ]
+    },
     "ServerError": {
       "properties": {
         "error": {
@@ -381,30 +415,36 @@
           "type": "string"
         },
         "instance": {
-          "properties": {
-            "env": {
-              "properties": {
-                "LOG_ERROR": {
-                  "type": "string"
-                },
-                "LOG_OUTPUT": {
-                  "type": "string"
-                },
-                "NODE_DEBUG": {
-                  "type": "string"
-                }
-              },
-              "type": "object"
-            }
-          },
-          "required": ["env", "uptime"],
-          "type": "object"
+          "$ref": "#/definitions/ServerInfoInstance"
         },
         "message": {
           "type": "string"
         }
       },
       "required": ["code", "instance", "message"],
+      "type": "object"
+    },
+    "ServerInfoInstance": {
+      "properties": {
+        "env": {
+          "properties": {
+            "LOG_ERROR": {
+              "type": "string"
+            },
+            "LOG_OUTPUT": {
+              "type": "string"
+            },
+            "NODE_DEBUG": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "uptime": {
+          "type": "string"
+        }
+      },
+      "required": ["env", "uptime"],
       "type": "object"
     },
     "TextMessage": {
@@ -501,7 +541,7 @@
     "/clients": {
       "delete": {
         "consumes": ["application/json"],
-        "description": "**Notes**:\n\nYou can either set `backend` or `customBackend`. If you set neither, the \"staging\" backend will be used. If you set both, `backend` takes the precedence.",
+        "description": "**Note**: You can either set `backend` or `customBackend`. If you set neither, the \"staging\" backend will be used. If you set both, `backend` takes the precedence.",
         "operationId": "deleteAllClients",
         "parameters": [
           {
@@ -599,7 +639,7 @@
         "operationId": "deleteInstance",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -635,7 +675,7 @@
         "operationId": "getInstance",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -667,7 +707,7 @@
         "operationId": "archiveConversation",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -723,7 +763,7 @@
         "operationId": "setAvailability",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -731,7 +771,7 @@
             "type": "string"
           },
           {
-            "description": "Type can be 0 (`NONE`), 1 (`AVAILABLE`), 2 (`AWAY`), 3 (`BUSY`).",
+            "description": "Type can be `0` (none), `1` (available), `2` (away), `3` (busy).",
             "in": "body",
             "name": "body",
             "required": true,
@@ -770,7 +810,7 @@
         "operationId": "clearConversation",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -823,7 +863,7 @@
         "operationId": "getClients",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -858,7 +898,7 @@
         "operationId": "deleteMessage",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -915,7 +955,7 @@
         "operationId": "deleteMessageEverywhere",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -972,7 +1012,7 @@
         "operationId": "getFingerprint",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1013,7 +1053,7 @@
         "operationId": "getMessages",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1069,7 +1109,7 @@
         "operationId": "muteConversation",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1125,7 +1165,7 @@
         "operationId": "sendConfirmationDelivered",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1186,7 +1226,7 @@
         "operationId": "sendConfirmationRead",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1251,7 +1291,7 @@
         "operationId": "sendEphemeralConfirmationDelivered",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1308,7 +1348,7 @@
         "operationId": "sendEphemeralConfirmationRead",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1365,7 +1405,7 @@
         "operationId": "sendFile",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1449,7 +1489,7 @@
         "operationId": "sendImage",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1536,7 +1576,7 @@
         "operationId": "sendLocation",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1609,7 +1649,7 @@
         "operationId": "sendPing",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1683,7 +1723,7 @@
         "operationId": "sendReaction",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1756,7 +1796,7 @@
         "operationId": "sendSessionReset",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1821,7 +1861,7 @@
         "operationId": "sendText",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1836,6 +1876,9 @@
             "schema": {
               "allOf": [
                 {
+                  "$ref": "#/definitions/TextMessage"
+                },
+                {
                   "properties": {
                     "conversationId": {
                       "format": "uuid",
@@ -1844,9 +1887,6 @@
                   },
                   "required": ["conversationId"],
                   "type": "object"
-                },
-                {
-                  "$ref": "#/definitions/TextMessage"
                 }
               ]
             }
@@ -1896,7 +1936,7 @@
         "operationId": "sendTyping",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
@@ -1943,7 +1983,7 @@
         "operationId": "updateText",
         "parameters": [
           {
-            "description": "ID of instance to return",
+            "description": "ID of instance to use",
             "format": "uuid",
             "in": "path",
             "name": "instanceId",
