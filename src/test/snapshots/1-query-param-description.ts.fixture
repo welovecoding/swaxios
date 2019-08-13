@@ -6,6 +6,7 @@
  */
 
 import {AxiosInstance, AxiosRequestConfig} from 'axios';
+import {InstanceAndName} from '../../interfaces/';
 
 export class ArchiveService {
   private readonly apiClient: AxiosInstance;
@@ -20,7 +21,7 @@ export class ArchiveService {
   archiveConversation = async (
     instanceId: string,
     body: {archive?: boolean; conversationId?: string}
-  ): Promise<{instanceId?: string; name?: string}> => {
+  ): Promise<InstanceAndName> => {
     const config: AxiosRequestConfig = {
       data: {
         ...body,
@@ -28,10 +29,7 @@ export class ArchiveService {
       method: 'post',
       url: `/instance/${instanceId}/archive`,
     };
-    const response = await this.apiClient.request<{
-      instanceId?: string;
-      name?: string;
-    }>(config);
+    const response = await this.apiClient.request<InstanceAndName>(config);
     return response.data;
   };
 }

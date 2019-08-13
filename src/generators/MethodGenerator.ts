@@ -1,25 +1,7 @@
 import {OpenAPIV2} from 'openapi-types';
-import {inspect} from 'util';
 
 import * as StringUtil from '../util/StringUtil';
-
-export enum SwaggerType {
-  ARRAY = 'array',
-  BOOLEAN = 'boolean',
-  INTEGER = 'integer',
-  NUMBER = 'number',
-  OBJECT = 'object',
-  STRING = 'string',
-}
-
-export enum TypeScriptType {
-  ANY = 'any',
-  ARRAY = 'Array',
-  BOOLEAN = 'boolean',
-  EMPTY_OBJECT = '{}',
-  NUMBER = 'number',
-  STRING = 'string',
-}
+import {InterfaceGenerator, SwaggerType, TypeScriptType} from './InterfaceGenerator';
 
 interface InternalParameter {
   name: string;
@@ -50,6 +32,7 @@ export class MethodGenerator {
   readonly bodyParameters: InternalParameter[];
   readonly descriptions?: Description[];
   readonly formattedUrl: string;
+  readonly imports: string[];
   readonly requiresBearerAuthorization: boolean;
   readonly method: HttpMethod;
   readonly needsDataObj: boolean;
@@ -69,6 +52,7 @@ export class MethodGenerator {
     this.responses = operation.responses;
 
     this.bodyParameters = [];
+    this.imports = [];
     this.pathParameters = [];
     this.queryParameters = [];
     this.buildParameters(this.operation.parameters);
@@ -143,7 +127,7 @@ export class MethodGenerator {
     return !!(parameter as OpenAPIV2.ReferenceObject).$ref;
   }
 
-  private getSchemaFromRef(ref: string): OpenAPIV2.SchemaObject | undefined {
+  private getSchemaFromRef(ref: string): OpenAPIV2.SchemaObject | OpenAPIV2.ParameterObject | undefined {
     if (!ref.startsWith('#/definitions')) {
       console.warn(`Invalid reference "${ref}".`);
       return;
@@ -152,7 +136,7 @@ export class MethodGenerator {
       console.warn(`No reference found for "${ref}".`);
       return;
     }
-    const definitionString = ref.replace('#/definitions', '');
+    const definitionString = ref.replace('#/definitions/', '');
     const definition = this.spec.definitions[definitionString];
     return definition.$ref ? this.getSchemaFromRef(definition.$ref) : definition;
   }
@@ -166,7 +150,7 @@ export class MethodGenerator {
       if (this.parameterIsReference(parameter)) {
         const definition = this.getSchemaFromRef(parameter.$ref);
         if (definition) {
-          return this.buildParameters([definition] as OpenAPIV2.ParameterObject[]);
+          return this.buildParameters([definition as OpenAPIV2.ParameterObject]);
         }
         return;
       }
@@ -180,9 +164,18 @@ export class MethodGenerator {
       }
 
       if (parameter.in === 'body') {
-        const type = parameter.schema
-          ? this.buildTypeFromSchema(parameter.schema, parameter.name)
-          : TypeScriptType.EMPTY_OBJECT;
+        let type: string = TypeScriptType.EMPTY_OBJECT;
+
+        if (parameter.schema) {
+          const builtInterface = InterfaceGenerator.buildInterface(this.spec, parameter.schema, parameter.name);
+          type = builtInterface.type;
+          for (const interfaceImport of builtInterface.imports) {
+            if (!this.imports.includes(interfaceImport)) {
+              this.imports.push(interfaceImport);
+            }
+          }
+        }
+
         this.bodyParameters.push({
           name: parameter.name,
           required: parameter.required,
@@ -197,81 +190,6 @@ export class MethodGenerator {
           required: parameter.required,
           type,
         });
-      }
-    }
-  }
-
-  private buildTypeFromSchema(schema: OpenAPIV2.SchemaObject, schemaName: string): string {
-    let {required: requiredProperties, properties} = schema;
-    const {allOf: multipleSchemas, enum: enumType} = schema;
-    let schemaType = schema.type as string;
-
-    if (multipleSchemas) {
-      return multipleSchemas
-        .map(includedSchema => this.buildTypeFromSchema(<OpenAPIV2.SchemaObject>includedSchema, schemaName))
-        .join('|');
-    }
-
-    if (enumType) {
-      return `"${enumType.join('" | "')}"`;
-    }
-
-    if (schema.$ref) {
-      if (!schema.$ref.startsWith('#/definitions')) {
-        console.warn(`Invalid reference "${schema.$ref}".`);
-        return TypeScriptType.EMPTY_OBJECT;
-      }
-      if (!this.spec.definitions) {
-        console.warn(`No reference found for "${schema.$ref}".`);
-        return TypeScriptType.EMPTY_OBJECT;
-      }
-      const definition = schema.$ref.replace('#/definitions/', '');
-      properties = this.spec.definitions[definition].properties;
-      requiredProperties = this.spec.definitions[definition].required;
-      schemaType = this.spec.definitions[definition].type as string;
-    }
-
-    schemaType = schemaType || SwaggerType.OBJECT;
-
-    switch (schemaType.toLowerCase()) {
-      case SwaggerType.OBJECT: {
-        if (!properties) {
-          console.warn(`Schema type for "${schemaName}" is "object" but has no properties.`);
-          return TypeScriptType.EMPTY_OBJECT;
-        }
-
-        const schema: Record<string, string> = {};
-
-        for (const [property, propertyOptons] of Object.entries(properties)) {
-          const isRequired = requiredProperties && requiredProperties.includes(property);
-          const isReadOnly = propertyOptons.readOnly;
-          const propertyName = `${isReadOnly ? 'readonly ' : ''}${property}${isRequired ? '' : '?'}`;
-          schema[propertyName] = this.buildTypeFromSchema(propertyOptons, `${schemaName}/${property}`);
-        }
-
-        return inspect(schema, {breakLength: Infinity, depth: Infinity})
-          .replace(/'/gm, '')
-          .replace(',', ';')
-          .replace(new RegExp('\\n', 'g'), '');
-      }
-      case SwaggerType.ARRAY: {
-        if (!schema.items) {
-          console.warn(`Schema type for "${schemaName}" is "array" but has no items.`);
-          return `${TypeScriptType.ARRAY}<${TypeScriptType.ANY}>`;
-        }
-
-        if (!(schema.items instanceof Array)) {
-          const itemType = this.buildTypeFromSchema(schema.items, schemaName);
-          return `${TypeScriptType.ARRAY}<${itemType}>`;
-        }
-
-        const schemes = schema.items
-          .map((itemSchema, index) => this.buildTypeFromSchema(itemSchema, `${schemaName}[${index}]`))
-          .join('|');
-        return `${TypeScriptType.ARRAY}<${schemes}>`;
-      }
-      default: {
-        return this.buildSimpleType(schemaType);
       }
     }
   }
@@ -299,14 +217,29 @@ export class MethodGenerator {
     const response200 = this.responses['200'] as OpenAPIV2.ResponseObject;
     const response201 = this.responses['201'] as OpenAPIV2.ResponseObject;
 
-    const response200Schema =
-      response200 && response200.schema
-        ? this.buildTypeFromSchema(response200.schema, `${this.url}/${this.method}/200`)
-        : '';
-    const response201Schema =
-      response201 && response201.schema
-        ? this.buildTypeFromSchema(response201.schema, `${this.url}/${this.method}/201`)
-        : '';
+    let response200Schema = '';
+
+    if (response200 && response200.schema) {
+      const response200Interface = InterfaceGenerator.buildInterface(
+        this.spec,
+        response200.schema,
+        `${this.url}/${this.method}/200`,
+      );
+      response200Schema = response200Interface.type;
+      this.imports.push(...response200Interface.imports);
+    }
+
+    let response201Schema = '';
+
+    if (response201 && response201.schema) {
+      const response201Interface = InterfaceGenerator.buildInterface(
+        this.spec,
+        response201.schema,
+        `${this.url}/${this.method}/201`,
+      );
+      response201Schema = response201Interface.type;
+      this.imports.push(...response201Interface.imports);
+    }
 
     const responseSchema =
       response200Schema && response201Schema

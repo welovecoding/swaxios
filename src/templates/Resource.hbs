@@ -6,6 +6,13 @@
  */
 
 import {AxiosInstance, AxiosRequestConfig} from 'axios';
+{{#if imports.list.length}}
+import {
+  {{#each imports.list}}
+    {{{this}}},
+  {{/each}}
+} from '{{{imports.path}}}'
+{{/if}}
 
 export class {{{name}}} {
   private readonly apiClient: AxiosInstance;
