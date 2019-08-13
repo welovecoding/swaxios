@@ -1,0 +1,141 @@
+{
+  "basePath": "/",
+  "definitions": {
+    "CreateAccountRequest": {
+      "properties": {
+        "apiKey": {
+          "type": "string"
+        },
+        "apiSecret": {
+          "type": "string"
+        },
+        "exchange": {
+          "enum": [
+            "BINANCE",
+            "COINBASE"
+          ],
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "passphrase": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "apiKey",
+        "apiSecret",
+        "exchange",
+        "label"
+      ],
+      "type": "object"
+    },
+    "CreateAccountResponse": {
+      "properties": {
+        "exchange": {
+          "enum": [
+            "BINANCE",
+            "COINBASE"
+          ],
+          "type": "string"
+        },
+        "id": {
+          "type": "number"
+        },
+        "label": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "exchange",
+        "id",
+        "label"
+      ],
+      "type": "object"
+    }
+  },
+  "info": {
+    "description": "",
+    "title": "@lambot/server",
+    "version": "0.9.0"
+  },
+  "paths": {
+    "/api/v1/account": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "enum": [
+              "BINANCE",
+              "COINBASE"
+            ],
+            "in": "query",
+            "name": "exchange",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "label",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/CreateAccountResponse"
+              },
+              "type": "array"
+            }
+          }
+        },
+        "tags": [
+          "account"
+        ]
+      },
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "CreateAccountRequest",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateAccountRequest"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/CreateAccountResponse"
+            }
+          }
+        },
+        "tags": [
+          "account"
+        ]
+      }
+    }
+  },
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0",
+  "tags": []
+}

@@ -93,6 +93,25 @@ describe('writeClient', () => {
 
     expect(actual).toBe(expected);
   });
+
+  it('supports definitions', async () => {
+    const inputFile = path.resolve(__dirname, './test/snapshots/8-definitions.json');
+    await writeClient(inputFile, tempDir, true);
+
+    let actual = await fs.readFile(path.join(tempDir, 'interfaces/CreateAccountRequest.ts'), 'utf-8');
+    let expected = await fs.readFile(
+      path.resolve(__dirname, './test/snapshots/8-definitions-CreateAccountRequest.ts.fixture'),
+      'utf-8',
+    );
+    expect(actual).toBe(expected);
+
+    actual = await fs.readFile(path.join(tempDir, 'interfaces/CreateAccountResponse.ts'), 'utf-8');
+    expected = await fs.readFile(
+      path.resolve(__dirname, './test/snapshots/8-definitions-CreateAccountResponse.ts.fixture'),
+      'utf-8',
+    );
+    expect(actual).toBe(expected);
+  });
 });
 
 describe('exportServices', () => {
