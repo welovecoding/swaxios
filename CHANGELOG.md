@@ -1,3 +1,9 @@
+### 0.1.0 (2019-08-14)
+
+##### New Features
+
+- Interfaces generation ([#71](https://github.com/bennyn/swaxios/pull/71)) ([59e56495](https://github.com/bennyn/swaxios/commit/59e56495eaf4841ebd0f241543171d8dd041dac9))
+
 #### 0.0.22 (2019-08-08)
 
 ##### Bug Fixes
