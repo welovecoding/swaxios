@@ -1,13 +1,21 @@
 {
   "compilerOptions": {
+    "alwaysStrict": true,
+    "declaration": true,
     "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["esnext"],
     "module": "commonjs",
     "moduleResolution": "node",
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "outDir": "dist",
     "resolveJsonModule": true,
     "rootDir": "src",
     "strict": true,
     "target": "es6"
   },
-  "exclude": ["src/temp"]
+  "exclude": ["dist", "src/temp"]
 }
