@@ -46,7 +46,8 @@
     "typescript": "3.5.3"
   },
   "files": [
-    "dist"
+    "dist",
+    "!dist/**/*.test.js"
   ],
   "homepage": "https://github.com/bennyn/swaxios#readme",
   "keywords": [
