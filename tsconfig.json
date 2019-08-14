@@ -17,5 +17,5 @@
     "strict": true,
     "target": "es6"
   },
-  "exclude": ["src/temp"]
+  "exclude": ["dist", "src/temp"]
 }

@@ -113,6 +113,7 @@ export class MethodGenerator {
             text: StringUtil.addStarsToNewline(parameter.description),
           };
         }
+        return;
       };
 
       return parameters.map(extractDescription).filter(Boolean) as Description[];
