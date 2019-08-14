@@ -10,7 +10,7 @@
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": false,
+    "noUnusedParameters": true,
     "outDir": "dist",
     "resolveJsonModule": true,
     "rootDir": "src",
