@@ -1,9 +1,14 @@
 {
   "compilerOptions": {
+    "alwaysStrict": true,
     "declaration": true,
     "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "module": "commonjs",
     "moduleResolution": "node",
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
     "outDir": "dist",
     "resolveJsonModule": true,
     "rootDir": "src",
