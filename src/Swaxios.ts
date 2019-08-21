@@ -3,6 +3,7 @@ import {isCI} from 'ci-info';
 import {getYesNo} from 'cli-interact';
 import fs from 'fs-extra';
 import initializeHelpers from 'handlebars-helpers';
+import parsePath from 'parse-path';
 import path from 'path';
 import yaml from 'yamljs';
 
@@ -150,8 +151,9 @@ async function checkOutputDirectory(outputDirectory: string, forceDeletion?: boo
 
 export async function writeClient(inputFile: string, outputDirectory: string, forceDeletion?: boolean): Promise<void> {
   await checkOutputDirectory(outputDirectory, forceDeletion);
-  const isUrl = /^(https?|ftps?):\/\//.test(inputFile);
-  const swaggerJson = isUrl ? await readInputURL(inputFile) : await readInputFile(inputFile);
+  const parsedPath = parsePath(inputFile);
+  const isFile = parsedPath.protocol === 'file';
+  const swaggerJson = isFile ? await readInputFile(parsedPath.href) : await readInputURL(parsedPath.href);
   await validateConfig(swaggerJson);
   return generateClient(swaggerJson, outputDirectory);
 }

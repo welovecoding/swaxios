@@ -13,6 +13,7 @@
     "fs-extra": "8.1.0",
     "handlebars": "4.1.2",
     "handlebars-helpers": "0.10.0",
+    "parse-path": "4.0.1",
     "prettier": "1.18.2",
     "swagger-parser": "8.0.0",
     "yamljs": "0.3.0"
@@ -26,6 +27,7 @@
     "@types/jasmine": "3.4.0",
     "@types/minimist": "1.2.0",
     "@types/node": "12.7.2",
+    "@types/parse-path": "4.0.0",
     "@types/prettier": "1.18.2",
     "@types/yamljs": "0.2.30",
     "@wireapp/prettier-config": "0.3.0",
