@@ -1,3 +1,9 @@
+#### 0.1.2 (2019-09-04)
+
+##### Bug Fixes
+
+- Ignore TS test files ([#97](https://github.com/bennyn/swaxios/pull/97)) ([d904ad50](https://github.com/bennyn/swaxios/commit/d904ad50270da291e34fe7220ea2e930cc6e8346))
+
 #### 0.1.1 (2019-08-14)
 
 ### 0.1.0 (2019-08-14)
