@@ -9,7 +9,7 @@
     "axios": "0.19.0",
     "ci-info": "2.0.0",
     "cli-interact": "0.1.9",
-    "commander": "3.0.2",
+    "commander": "4.0.0",
     "fs-extra": "8.1.0",
     "handlebars": "4.5.1",
     "handlebars-helpers": "0.10.0",
