@@ -70,7 +70,7 @@ export class InterfaceGenerator extends TemplateGenerator {
         console.info('Spec has no definitions.');
         return {type: TypeScriptType.EMPTY_OBJECT, imports};
       }
-      const definition = reference.replace('#/definitions/', '');
+      const definition = reference.replace('#/definitions/', '').replace(/[^\w\/-]/gm, '_');
       if (!imports.includes(definition)) {
         imports.push(definition);
       }
@@ -125,15 +125,18 @@ export class InterfaceGenerator extends TemplateGenerator {
 
         for (const [property, propertyOptions] of Object.entries(properties)) {
           const isRequired = requiredProperties && requiredProperties.includes(property);
-          const isReadOnly = propertyOptions.readOnly;
-          const propertyName = `${isReadOnly ? 'readonly ' : ''}${property}${isRequired ? '' : '?'}`;
+          const safeProperty = property.replace(/\W/gm, '_');
+          const isReadOnly = !!propertyOptions.readOnly;
+          const propertyName = `${isReadOnly ? 'readonly ' : ''}${safeProperty}${isRequired ? '' : '?'}`;
           const {type: propertyType, imports: propertyImports} = InterfaceGenerator.buildInterface(
             spec,
             propertyOptions,
-            property,
+            safeProperty,
             imports,
           );
+
           schema[propertyName] = propertyType;
+
           for (const propertyImport of propertyImports) {
             if (!imports.includes(propertyImport)) {
               imports.push(propertyImport);
@@ -141,7 +144,7 @@ export class InterfaceGenerator extends TemplateGenerator {
           }
         }
 
-        const type = inspect(schema, {breakLength: Infinity})
+        const type = inspect(schema, {breakLength: Infinity, depth: Infinity})
           .replace(/'/gm, '')
           .replace(',', ';')
           .replace(new RegExp('\\n', 'g'), '');

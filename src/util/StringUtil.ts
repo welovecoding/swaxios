@@ -29,7 +29,7 @@ export function generateServiceName(url: string): string {
 }
 
 export function normalizeUrl(url: string): string {
-  return url.replace(/\/\{.*\}/g, '');
+  return url.replace(/\/\{.*\}/g, '').replace(/[^\w\/-]/gm, '_');
 }
 
 export function addStarsToNewline(text?: string): string {

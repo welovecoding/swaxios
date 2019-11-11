@@ -112,6 +112,17 @@ describe('writeClient', () => {
     );
     expect(actual).toBe(expected);
   });
+
+  it('resolves endpoints with special characters', async () => {
+    const inputFile = path.resolve(__dirname, './test/snapshots/9-special-characters.json');
+    await writeClient(inputFile, tempDir, true);
+    const actual = await fs.readFile(path.join(tempDir, 'APIClient.ts'), 'utf-8');
+    const expected = await fs.readFile(
+      path.resolve(__dirname, './test/snapshots/9-special-characters.ts.fixture'),
+      'utf-8',
+    );
+    expect(actual).toBe(expected);
+  });
 });
 
 describe('exportServices', () => {
