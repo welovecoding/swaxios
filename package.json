@@ -13,7 +13,7 @@
     "fs-extra": "8.1.0",
     "handlebars": "4.5.1",
     "handlebars-helpers": "0.10.0",
-    "prettier": "1.18.2",
+    "prettier": "1.19.1",
     "swagger-parser": "8.0.3",
     "yamljs": "0.3.0"
   },
