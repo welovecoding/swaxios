@@ -1,0 +1,46 @@
+{
+  "basePath": "/",
+  "info": {
+    "contact": {
+      "email": "opensource@wire.com"
+    },
+    "description": "End-to-end Test Service (ETS) for Wire's test automation suite.",
+    "license": {
+      "name": "GPL-3.0",
+      "url": "https://github.com/wireapp/wire-web-ets/blob/master/LICENSE"
+    },
+    "termsOfService": "https://wire.com/legal/",
+    "title": "E2E Test Service",
+    "version": "1.16.1"
+  },
+  "paths": {
+    "/api/v1.0/client/": {
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "properties": {
+                "x.x": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0",
+  "tags": []
+}
