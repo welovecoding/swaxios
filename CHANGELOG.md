@@ -1,3 +1,9 @@
+#### 0.1.3 (2019-11-12)
+
+##### Bug Fixes
+
+- Normalize special characters in URL or keys ([#155](https://github.com/welovecoding/swaxios/pull/155)) ([16ec4ced](https://github.com/welovecoding/swaxios/commit/16ec4ced4af92ddacd3d9eabb55c88bfb6857733))
+
 #### 0.1.2 (2019-09-04)
 
 ##### Bug Fixes
