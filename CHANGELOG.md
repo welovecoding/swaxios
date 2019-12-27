@@ -1,3 +1,9 @@
+#### 0.1.4 (2019-12-27)
+
+##### Bug Fixes
+
+- Register Handlebars comparison helpers ([#164](https://github.com/welovecoding/swaxios/pull/164)) ([a0ccb858](https://github.com/welovecoding/swaxios/commit/a0ccb858f5b5ec5ec4e7b4605c27abff410c0b97))
+
 #### 0.1.3 (2019-11-12)
 
 ##### Bug Fixes
