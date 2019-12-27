@@ -1,5 +1,6 @@
 import fs from 'fs-extra';
 import Handlebars from 'handlebars';
+import helpers from 'handlebars-helpers';
 import path from 'path';
 import prettier from 'prettier';
 
@@ -9,6 +10,12 @@ export abstract class TemplateGenerator {
   protected abstract name: string;
   protected abstract templateFile: string;
   protected abstract async getContext(): Promise<GeneratorContext>;
+  private readonly handlebars: typeof Handlebars;
+
+  constructor() {
+    this.handlebars = Handlebars.create();
+    helpers(['comparison'], {handlebars: this.handlebars});
+  }
 
   protected getTemplateFile(): string {
     return path.resolve(__dirname, '../templates', this.templateFile);
@@ -19,7 +26,7 @@ export abstract class TemplateGenerator {
     const context = await this.getContext();
     if (templateFile && context) {
       const templateSource = await fs.readFile(templateFile, 'utf8');
-      const template = Handlebars.compile(templateSource);
+      const template = this.handlebars.compile(templateSource);
       return template(context);
     }
     return '';
