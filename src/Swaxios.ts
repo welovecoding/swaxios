@@ -2,7 +2,6 @@ import axios from 'axios';
 import {isCI} from 'ci-info';
 import {getYesNo} from 'cli-interact';
 import fs from 'fs-extra';
-import initializeHelpers from 'handlebars-helpers';
 import path from 'path';
 import yaml from 'yamljs';
 
@@ -12,8 +11,6 @@ import {InterfaceGenerator} from './generators/InterfaceGenerator';
 import {DirEntry, generateFileIndex} from './util/FileUtil';
 import * as StringUtil from './util/StringUtil';
 import {validateConfig} from './validator/SwaggerValidator';
-
-initializeHelpers(['comparison']);
 
 export async function exportServices(swaggerJson: OpenAPIV2.Document): Promise<ResourceGenerator[]> {
   const resources: ResourceGenerator[] = [];
