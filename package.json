@@ -6,7 +6,7 @@
     "url": "https://github.com/welovecoding/swaxios/issues"
   },
   "dependencies": {
-    "axios": "0.19.0",
+    "axios": "0.19.2",
     "ci-info": "2.0.0",
     "cli-interact": "0.1.9",
     "commander": "4.0.1",

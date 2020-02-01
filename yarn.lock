@@ -629,13 +629,12 @@ autolinker@~0.28.0:
   dependencies:
     gulp-header "^1.7.1"
 
-axios@0.19.0:
-  version "0.19.0"
-  resolved "https://registry.npmjs.org/axios/-/axios-0.19.0.tgz#8e09bff3d9122e133f7b8101c8fbdd00ed3d2ab8"
-  integrity sha512-1uvKqKQta3KBxIz14F2v06AEHZ/dIoeKfbTRkK1E5oqjDnuEerLmYTgJB5AiQZHJcljpg1TuRzdjDR06qNk0DQ==
+axios@0.19.2:
+  version "0.19.2"
+  resolved "https://registry.npmjs.org/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
+  integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
   dependencies:
     follow-redirects "1.5.10"
-    is-buffer "^2.0.2"
 
 babel-runtime@^6.9.2:
   version "6.26.0"
@@ -1858,11 +1857,6 @@ is-buffer@^1.1.5:
   version "1.1.6"
   resolved "https://registry.npmjs.org/is-buffer/-/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
   integrity sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==
-
-is-buffer@^2.0.2:
-  version "2.0.4"
-  resolved "https://registry.npmjs.org/is-buffer/-/is-buffer-2.0.4.tgz#3e572f23c8411a5cfd9557c849e3665e0b290623"
-  integrity sha512-Kq1rokWXOPXWuaMAqZiJW4XxsmD9zGx9q4aePabbn3qCRGedtH7Cm+zV8WETitMfu1wdh+Rvd6w5egwSngUX2A==
 
 is-data-descriptor@^0.1.4:
   version "0.1.4"
