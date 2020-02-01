@@ -34,7 +34,7 @@
     "generate-changelog": "1.8.0",
     "husky": "3.1.0",
     "jasmine": "3.5.0",
-    "lint-staged": "9.5.0",
+    "lint-staged": "10.0.7",
     "nyc": "15.0.0",
     "rimraf": "3.0.0",
     "ts-node": "8.5.4",
