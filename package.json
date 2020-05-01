@@ -10,7 +10,7 @@
     "ci-info": "2.0.0",
     "cli-interact": "0.1.9",
     "commander": "5.1.0",
-    "fs-extra": "8.1.0",
+    "fs-extra": "9.0.0",
     "handlebars": "4.7.3",
     "handlebars-helpers": "0.10.0",
     "prettier": "1.19.1",
