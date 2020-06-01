@@ -27,7 +27,7 @@
     "@types/minimist": "1.2.0",
     "@types/node": "~13",
     "@types/prettier": "2.0.1",
-    "@types/yamljs": "0.2.30",
+    "@types/yamljs": "0.2.31",
     "@wireapp/prettier-config": "0.3.0",
     "@wireapp/tslint-config": "1.4.1",
     "cpx": "1.5.0",
