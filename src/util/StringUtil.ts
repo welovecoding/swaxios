@@ -1,11 +1,5 @@
 export function camelCase(words: string[], isPascalCase: boolean = false): string {
-  const casedWords = words.map(
-    word =>
-      word
-        .toLowerCase()
-        .charAt(0)
-        .toUpperCase() + word.slice(1),
-  );
+  const casedWords = words.map(word => word.toLowerCase().charAt(0).toUpperCase() + word.slice(1));
   if (!isPascalCase) {
     casedWords[0] = casedWords[0].toLowerCase();
   }
