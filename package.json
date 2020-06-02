@@ -6,6 +6,7 @@
     "url": "https://github.com/welovecoding/swaxios/issues"
   },
   "dependencies": {
+    "@apidevtools/swagger-parser": "9.0.1",
     "axios": "0.19.2",
     "ci-info": "2.0.0",
     "cli-interact": "0.1.9",
@@ -14,7 +15,6 @@
     "handlebars": "4.7.6",
     "handlebars-helpers": "0.10.0",
     "prettier": "1.19.1",
-    "swagger-parser": "8.0.4",
     "yamljs": "0.3.0"
   },
   "description": "Swagger API client generator based on axios and TypeScript.",

@@ -1,5 +1,5 @@
+import SwaggerParser from '@apidevtools/swagger-parser';
 import {OpenAPIV2} from 'openapi-types';
-import SwaggerParser from 'swagger-parser';
 
 export async function validateConfig(swaggerJson: OpenAPIV2.Document): Promise<void> {
   // let's create a copy because swagger-parser modifies the object,
