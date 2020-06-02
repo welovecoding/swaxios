@@ -1,4 +1,4 @@
 {
-  "*.{json,md,scss,yml}": ["prettier --write", "git add"],
-  "src/!(test)*/*.{ts,tsx}": ["tslint --config tslint.json --project tsconfig.json --fix", "git add"]
+  "*.{json,md,scss,yml}": ["prettier --write"],
+  "src/!(test)*/*.{ts,tsx}": ["tslint --config tslint.json --project tsconfig.json --fix"]
 }
