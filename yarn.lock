@@ -2,6 +2,38 @@
 # yarn lockfile v1
 
 
+"@apidevtools/json-schema-ref-parser@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.npmjs.org/@apidevtools/json-schema-ref-parser/-/json-schema-ref-parser-8.0.0.tgz#9eb749499b3f8d919e90bb141e4b6f67aee4692d"
+  integrity sha512-n4YBtwQhdpLto1BaUCyAeflizmIbaloGShsPyRtFf5qdFJxfssj+GgLavczgKJFa3Bq+3St2CKcpRJdjtB4EBw==
+  dependencies:
+    "@jsdevtools/ono" "^7.1.0"
+    call-me-maybe "^1.0.1"
+    js-yaml "^3.13.1"
+
+"@apidevtools/openapi-schemas@^2.0.2":
+  version "2.0.3"
+  resolved "https://registry.npmjs.org/@apidevtools/openapi-schemas/-/openapi-schemas-2.0.3.tgz#c21f198b445bc8b8a90cd4f97534b96deefdfcb4"
+  integrity sha512-QoPaxGXfgqgGpK1p21FJ400z56hV681a8DOcZt3J5z0WIHgFeaIZ4+6bX5ATqmOoCpRCsH4ITEwKaOyFMz7wOA==
+
+"@apidevtools/swagger-methods@^3.0.0":
+  version "3.0.1"
+  resolved "https://registry.npmjs.org/@apidevtools/swagger-methods/-/swagger-methods-3.0.1.tgz#cf3b1c6b92f811d3f14d51645d277fb54ddd5211"
+  integrity sha512-1Vlm18XYW6Yg7uHunroXeunWz5FShPFAdxBbPy8H6niB2Elz9QQsCoYHMbcc11EL1pTxaIr9HXz2An/mHXlX1Q==
+
+"@apidevtools/swagger-parser@9.0.1":
+  version "9.0.1"
+  resolved "https://registry.npmjs.org/@apidevtools/swagger-parser/-/swagger-parser-9.0.1.tgz#592e39dc412452ac4b34507a765e4d74ff6eda14"
+  integrity sha512-Irqybg4dQrcHhZcxJc/UM4vO7Ksoj1Id5e+K94XUOzllqX1n47HEA50EKiXTCQbykxuJ4cYGIivjx/MRSTC5OA==
+  dependencies:
+    "@apidevtools/json-schema-ref-parser" "^8.0.0"
+    "@apidevtools/openapi-schemas" "^2.0.2"
+    "@apidevtools/swagger-methods" "^3.0.0"
+    "@jsdevtools/ono" "^7.1.0"
+    call-me-maybe "^1.0.1"
+    openapi-types "^1.3.5"
+    z-schema "^4.2.2"
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.5.5":
   version "7.5.5"
   resolved "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.5.5.tgz#bc0782f6d69f7b7d49531219699b988f669a8f9d"
@@ -139,6 +171,11 @@
   version "0.1.2"
   resolved "https://registry.npmjs.org/@istanbuljs/schema/-/schema-0.1.2.tgz#26520bf09abe4a5644cd5414e37125a8954241dd"
   integrity sha512-tsAQNx32a8CoFhjhijUIhI4kccIAgmGhy8LZMZgGfmXcpMbPRUqn5LWmgRttILi6yeGmBJd2xsPkFMs0PzgPCw==
+
+"@jsdevtools/ono@^7.1.0":
+  version "7.1.2"
+  resolved "https://registry.npmjs.org/@jsdevtools/ono/-/ono-7.1.2.tgz#373995bb40a6686589a7fcfec06b0e6e304ef6c6"
+  integrity sha512-qS/a24RA5FEoiJS9wiv6Pwg2c/kiUo3IVUQcfeM9JvsR6pM8Yx+yl/6xWYLckZCT5jpLNhslgjiA8p/XcGyMRQ==
 
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
@@ -2024,15 +2061,6 @@ json-parse-better-errors@^1.0.1:
   resolved "https://registry.npmjs.org/json-parse-better-errors/-/json-parse-better-errors-1.0.2.tgz#bb867cfb3450e69107c131d1c514bab3dc8bcaa9"
   integrity sha512-mrqyZKfX5EhL7hvqcV6WG1yYjnjeuYDzDhhcAAUrq8Po85NBQBJP+ZDUT75qZQ98IkUoBqdkExkukOU7Ts2wrw==
 
-json-schema-ref-parser@^7.1.3:
-  version "7.1.3"
-  resolved "https://registry.npmjs.org/json-schema-ref-parser/-/json-schema-ref-parser-7.1.3.tgz#21468cd180b2f1939ce93fe291f743b441e97d49"
-  integrity sha512-/Lmyl0PW27dOmCO03PI339+1gs4Z2PlqIyUgzIOtoRp08zkkMCB30TRbdppbPO7WWzZX0uT98HqkDiZSujkmbA==
-  dependencies:
-    call-me-maybe "^1.0.1"
-    js-yaml "^3.13.1"
-    ono "^6.0.0"
-
 json5@^2.1.0:
   version "2.1.1"
   resolved "https://registry.npmjs.org/json5/-/json5-2.1.1.tgz#81b6cb04e9ba496f1c7005d07b4368a2638f90b6"
@@ -2480,16 +2508,6 @@ onetime@^5.1.0:
   integrity sha512-5NcSkPHhwTVFIQN+TUqXoS5+dlElHXdpAWu9I0HP20YOtIi+aZ0Ct82jdlILDxjLEAWwvm+qj1m6aEtsDVmm6Q==
   dependencies:
     mimic-fn "^2.1.0"
-
-ono@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.npmjs.org/ono/-/ono-6.0.0.tgz#c0c51b61f6ee56fccd56421620f351de7e8e3200"
-  integrity sha512-vhx50giT0dDBLYYXwKU/tuNsT6CwPzGZmd6yypPsXrkq+ujT0lX0q4tvMQ/5jxM6HKntk7p3N51Ts0fD8qL5dA==
-
-openapi-schemas@^1.0.2:
-  version "1.0.3"
-  resolved "https://registry.npmjs.org/openapi-schemas/-/openapi-schemas-1.0.3.tgz#0fa2f19e44ce8a1cdab9c9f616df4babe1aa026b"
-  integrity sha512-KtMWcK2VtOS+nD8RKSIyScJsj8JrmVWcIX7Kjx4xEHijFYuvMTDON8WfeKOgeSb4uNG6UsqLj5Na7nKbSav9RQ==
 
 openapi-types@^1.3.5:
   version "1.3.5"
@@ -3106,24 +3124,6 @@ supports-color@^7.1.0:
   integrity sha512-oRSIpR8pxT1Wr2FquTNnGet79b3BWljqOuoW/h4oBhxJ/HUbX5nX6JSruTkvXDCFMwDPvsaTTbvMLKZWSy0R5g==
   dependencies:
     has-flag "^4.0.0"
-
-swagger-methods@^2.0.1:
-  version "2.0.2"
-  resolved "https://registry.npmjs.org/swagger-methods/-/swagger-methods-2.0.2.tgz#5891d5536e54d5ba8e7ae1007acc9170f41c9590"
-  integrity sha512-/RNqvBZkH8+3S/FqBPejHxJxZenaYq3MrpeXnzi06aDIS39Mqf5YCUNb/ZBjsvFFt8h9FxfKs8EXPtcYdfLiRg==
-
-swagger-parser@8.0.4:
-  version "8.0.4"
-  resolved "https://registry.npmjs.org/swagger-parser/-/swagger-parser-8.0.4.tgz#ddec68723d13ee3748dd08fd5b7ba579327595da"
-  integrity sha512-KGRdAaMJogSEB7sPKI31ptKIWX8lydEDAwWgB4pBMU7zys5cd54XNhoPSVlTxG/A3LphjX47EBn9j0dOGyzWbA==
-  dependencies:
-    call-me-maybe "^1.0.1"
-    json-schema-ref-parser "^7.1.3"
-    ono "^6.0.0"
-    openapi-schemas "^1.0.2"
-    openapi-types "^1.3.5"
-    swagger-methods "^2.0.1"
-    z-schema "^4.2.2"
 
 test-exclude@^6.0.0:
   version "6.0.0"
