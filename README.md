@@ -110,4 +110,10 @@ It has been generated from the following [path](https://swagger.io/docs/specific
 
 ## Credits
 
-This project is inspired by [swagger-codegen](https://github.com/swagger-api/swagger-codegen).
+This project is inspired by [swagger-codegen](https://github.com/swagger-api/swagger-codegen). 
+
+You can try if `swagger-codegen` works for your project:
+
+> java -jar swagger-codegen-cli-3.0.24.jar generate -l typescript-axios -i swagger.json -o /api-client
+
+- [Download Swagger Codegen 3.0.24](https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/3.0.24/swagger-codegen-cli-3.0.24.jar) ([Source Code](https://github.com/swagger-api/swagger-codegen/releases/tag/v3.0.24))
