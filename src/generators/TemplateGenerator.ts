@@ -9,7 +9,7 @@ export interface GeneratorContext {}
 export abstract class TemplateGenerator {
   protected abstract name: string;
   protected abstract templateFile: string;
-  protected abstract async getContext(): Promise<GeneratorContext>;
+  protected abstract getContext(): Promise<GeneratorContext>;
   private readonly handlebars: typeof Handlebars;
 
   constructor() {
