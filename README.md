@@ -110,7 +110,7 @@ It has been generated from the following [path](https://swagger.io/docs/specific
 
 ## Credits
 
-This project is inspired by [swagger-codegen](https://github.com/swagger-api/swagger-codegen). 
+This project is inspired by [swagger-codegen](https://github.com/swagger-api/swagger-codegen).
 
 You can try if `swagger-codegen` works for your project:
 
