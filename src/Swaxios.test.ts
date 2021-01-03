@@ -17,6 +17,12 @@ beforeEach(async () => (tempDir = await createTempDir()));
 afterEach(() => fs.remove(tempDir));
 
 describe('writeClient', () => {
+  it('rejects OpenAPI 3.0 documents', async () => {
+    const inputFile = path.resolve(__dirname, './test/snapshots/10-openapi-3-header.json');
+    const onWriteClient = writeClient(inputFile, tempDir, true);
+    await expectAsync(onWriteClient).toBeRejected();
+  });
+
   it('generates descriptions', async () => {
     const inputFile = path.resolve(__dirname, './test/snapshots/1-query-param-description.json');
     await writeClient(inputFile, tempDir, true);
