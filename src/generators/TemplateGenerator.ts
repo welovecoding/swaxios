@@ -1,6 +1,5 @@
 import fs from 'fs-extra';
-import Handlebars from 'handlebars';
-import helpers from 'handlebars-helpers';
+import Handlebars, {HelperOptions, TemplateDelegate} from 'handlebars';
 import path from 'path';
 import prettier from 'prettier';
 
@@ -9,12 +8,33 @@ export interface GeneratorContext {}
 export abstract class TemplateGenerator {
   protected abstract name: string;
   protected abstract templateFile: string;
+
   protected abstract getContext(): Promise<GeneratorContext>;
+
   private readonly handlebars: typeof Handlebars;
 
   constructor() {
     this.handlebars = Handlebars.create();
-    helpers(['comparison'], {handlebars: this.handlebars});
+
+    this.handlebars.registerHelper(
+      'eq',
+      function (this: TemplateDelegate, a: string | boolean, b: string | boolean, options: HelperOptions): string {
+        if (a == b) {
+          return options.fn(this);
+        }
+        return options.inverse(this);
+      },
+    );
+
+    this.handlebars.registerHelper(
+      'isnt',
+      function (this: TemplateDelegate, a: string | boolean, b: string | boolean, options: HelperOptions): string {
+        if (a != b) {
+          return options.fn(this);
+        }
+        return options.inverse(this);
+      },
+    );
   }
 
   protected getTemplateFile(): string {
