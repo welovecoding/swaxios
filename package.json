@@ -88,7 +88,7 @@
     "lint:ts": "tslint --config tslint.json --project tsconfig.json \"**/*.ts?(x)\"",
     "postversion": "git push origin && git push origin --tags && npm publish",
     "prettier": "prettier \"**/*.{json,md}\"",
-    "prerelease": "git pull && yarn && yarn test && yarn dist",
+    "prerelease": "git checkout main && git pull && yarn install && yarn test && yarn dist",
     "release:major": "yarn prerelease && yarn changelog:create -M && yarn changelog:commit && npm version major",
     "release:minor": "yarn prerelease && yarn changelog:create -m && yarn changelog:commit && npm version minor",
     "release:patch": "yarn prerelease && yarn changelog:create -p && yarn changelog:commit && npm version patch",
