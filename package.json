@@ -76,7 +76,7 @@
   },
   "scripts": {
     "changelog:commit": "git add CHANGELOG.md && git commit -m \"docs: updated CHANGELOG.md\"",
-    "changelog:create": "changelog -x \"chore,docs,refactor,style,test\"",
+    "changelog:create": "changelog -x \"chore,docs\"",
     "clean": "rimraf dist",
     "copy": "cpx src/templates/**/* dist/templates/",
     "dist": "yarn clean && tsc && yarn copy",
