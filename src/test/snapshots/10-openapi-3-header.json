@@ -1,0 +1,13 @@
+{
+  "components": {},
+  "info": {
+    "contact": {},
+    "description": "",
+    "title": "OpenAPI 3.0 Meta Test",
+    "version": "0.7.4"
+  },
+  "openapi": "3.0.0",
+  "paths": {},
+  "servers": [],
+  "tags": []
+}
