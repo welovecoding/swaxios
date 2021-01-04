@@ -1,3 +1,13 @@
+#### 0.2.1 (2021-01-04)
+
+##### New Features
+
+- Reject OpenAPI 3 documents ([#273](https://github.com/welovecoding/swaxios/pull/273)) ([72ed2a4e](https://github.com/welovecoding/swaxios/commit/72ed2a4eb63e933f0ba5f4b68b9c835363480ae4))
+
+##### Refactors
+
+- Rename CI job ([3de0c692](https://github.com/welovecoding/swaxios/commit/3de0c6927895035795f5bf27aec3d8c33d819182))
+
 ### 0.2.0 (2021-01-03)
 
 #### 0.1.4 (2019-12-27)
