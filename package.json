@@ -13,7 +13,7 @@
     "commander": "6.2.1",
     "fs-extra": "9.0.1",
     "handlebars": "4.7.7",
-    "openapi-types": "7.0.1",
+    "openapi-types": "9.0.3",
     "prettier": "2.2.1",
     "yamljs": "0.3.0"
   },

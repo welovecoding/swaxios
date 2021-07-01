@@ -2009,10 +2009,10 @@ onetime@^5.1.0:
   dependencies:
     mimic-fn "^2.1.0"
 
-openapi-types@7.0.1:
-  version "7.0.1"
-  resolved "https://registry.npmjs.org/openapi-types/-/openapi-types-7.0.1.tgz#966bcacfd14119fa12000dbc9d588bfd8df2e4d1"
-  integrity sha512-6pi4/Fw+JIW1HHda2Ij7LRJ5QJ8f6YzaXnsRA6m44BJz8nLq/j5gVFzPBKJo+uOFhAeHqZC/3uzhTpYPga3Q/A==
+openapi-types@9.0.3:
+  version "9.0.3"
+  resolved "https://registry.npmjs.org/openapi-types/-/openapi-types-9.0.3.tgz#4f1fcf956165692f710ac7823b89a6b7d36b0fbb"
+  integrity sha512-c4C1xAKZOvOxeSWvRY0d2XsoaZoF8M7rifxfZZCIH2mqPEQxOz8qfFx4oEpLFaE+DfDGe08HcIA/p1Bu93keLQ==
 
 opencollective-postinstall@^2.0.2:
   version "2.0.3"
