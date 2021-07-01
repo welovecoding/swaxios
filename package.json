@@ -10,7 +10,7 @@
     "axios": "0.21.1",
     "ci-info": "2.0.0",
     "cli-interact": "0.1.9",
-    "commander": "6.2.1",
+    "commander": "8.0.0",
     "fs-extra": "9.0.1",
     "handlebars": "4.7.7",
     "openapi-types": "7.0.1",
