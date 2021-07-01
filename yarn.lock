@@ -254,10 +254,10 @@
   dependencies:
     handlebars ">=4.1.0"
 
-"@types/jasmine@3.6.2":
-  version "3.6.2"
-  resolved "https://registry.npmjs.org/@types/jasmine/-/jasmine-3.6.2.tgz#02f64450016f7de70f145d698be311136d7c6374"
-  integrity sha512-AzfesNFLvOs6Q1mHzIsVJXSeUnqVh4ZHG8ngygKJfbkcSLwzrBVm/LKa+mR8KrOfnWtUL47112gde1MC0IXqpQ==
+"@types/jasmine@3.7.7":
+  version "3.7.7"
+  resolved "https://registry.npmjs.org/@types/jasmine/-/jasmine-3.7.7.tgz#56718af036be3c9f86eca560a22e39440b2b0784"
+  integrity sha512-yZzGe1d1T0y+imXDZ79F030nn8qbmiwpWKCZKvKN0KbTzwXAVYShUxkIxu1ba+vhIdabTGVGCfbtZC0oOam8TQ==
 
 "@types/minimist@1.2.1":
   version "1.2.1"
