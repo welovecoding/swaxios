@@ -247,10 +247,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/handlebars-helpers@0.5.2":
-  version "0.5.2"
-  resolved "https://registry.npmjs.org/@types/handlebars-helpers/-/handlebars-helpers-0.5.2.tgz#3d75237da2eef5ba00fac771e4fb50ef3e001620"
-  integrity sha512-3FF6MQ/Lp32FHvYByqox4PN4ci9gDhekyFKU9LcHAFea9H4uCblJcSQsl3XD5U0LhqdszMejXa4O0NL+mpYvtw==
+"@types/handlebars-helpers@0.5.3":
+  version "0.5.3"
+  resolved "https://registry.npmjs.org/@types/handlebars-helpers/-/handlebars-helpers-0.5.3.tgz#5ff8da505867e1962c964cb50b15f83f948bde4f"
+  integrity sha512-h+a3eIWts6BgqzlmlmCH6K7yvCfbcEm5Gs+6CMYwbAi8SgC3I/+HEPEciDVT7qav+6BPE0M0nB2UhnwRYkO68w==
   dependencies:
     handlebars ">=4.1.0"
 
