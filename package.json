@@ -26,7 +26,7 @@
     "@types/jasmine": "3.9.1",
     "@types/minimist": "1.2.1",
     "@types/node": "16.10.2",
-    "@types/prettier": "2.1.6",
+    "@types/prettier": "2.4.1",
     "@types/yamljs": "0.2.31",
     "@wireapp/prettier-config": "0.3.0",
     "@wireapp/tslint-config": "1.4.1",
