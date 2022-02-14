@@ -23,7 +23,7 @@ export abstract class TemplateGenerator {
           return options.fn(this);
         }
         return options.inverse(this);
-      },
+      }
     );
 
     this.handlebars.registerHelper(
@@ -33,7 +33,7 @@ export abstract class TemplateGenerator {
           return options.fn(this);
         }
         return options.inverse(this);
-      },
+      }
     );
   }
 

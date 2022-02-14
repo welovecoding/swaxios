@@ -112,7 +112,16 @@
       "type": "object"
     },
     "NameIDFormat": {
-      "enum": ["NameIDFUnspecified", "NameIDFEmail", "NameIDFX509", "NameIDFWindows", "NameIDFKerberos", "NameIDFEntity", "NameIDFPersistent", "NameIDFTransient"],
+      "enum": [
+        "NameIDFUnspecified",
+        "NameIDFEmail",
+        "NameIDFX509",
+        "NameIDFWindows",
+        "NameIDFKerberos",
+        "NameIDFEntity",
+        "NameIDFPersistent",
+        "NameIDFTransient"
+      ],
       "type": "string"
     },
     "NameIdPolicy": {

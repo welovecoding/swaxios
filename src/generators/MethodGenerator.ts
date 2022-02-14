@@ -90,7 +90,7 @@ export class MethodGenerator {
   }
 
   private includesSuccessResponse(
-    responses: Record<string, OpenAPIV2.ResponseObject | OpenAPIV2.ReferenceObject>,
+    responses: Record<string, OpenAPIV2.ResponseObject | OpenAPIV2.ReferenceObject>
   ): boolean {
     for (const [successCode, response] of Object.entries(responses)) {
       if (successCode.startsWith('2') && response.hasOwnProperty('schema')) {
@@ -103,7 +103,7 @@ export class MethodGenerator {
   private buildDescriptions(): Description[] | undefined {
     if (this.operation.parameters) {
       const parameters = this.operation.parameters.filter(
-        parameter => !this.parameterIsReference(parameter),
+        parameter => !this.parameterIsReference(parameter)
       ) as OpenAPIV2.ParameterObject[];
 
       const extractDescription = (parameter: OpenAPIV2.ParameterObject): Description | undefined => {
@@ -123,7 +123,7 @@ export class MethodGenerator {
   }
 
   private parameterIsReference(
-    parameter: OpenAPIV2.ReferenceObject | OpenAPIV2.ParameterObject,
+    parameter: OpenAPIV2.ReferenceObject | OpenAPIV2.ParameterObject
   ): parameter is OpenAPIV2.ReferenceObject {
     return !!(parameter as OpenAPIV2.ReferenceObject).$ref;
   }
@@ -224,7 +224,7 @@ export class MethodGenerator {
       const response200Interface = InterfaceGenerator.buildInterface(
         this.spec,
         response200.schema,
-        `${this.url}/${this.method}/200`,
+        `${this.url}/${this.method}/200`
       );
       response200Schema = response200Interface.type;
       this.imports.push(...response200Interface.imports);
@@ -236,7 +236,7 @@ export class MethodGenerator {
       const response201Interface = InterfaceGenerator.buildInterface(
         this.spec,
         response201.schema,
-        `${this.url}/${this.method}/201`,
+        `${this.url}/${this.method}/201`
       );
       response201Schema = response201Interface.type;
       this.imports.push(...response201Interface.imports);

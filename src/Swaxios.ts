@@ -101,6 +101,10 @@ function parseInputFile(inputFile: string): OpenAPIV2.Document {
   }
 }
 
+function hasErrorCode(error: any): error is {code: string} {
+  return typeof (error && error.code) === 'string';
+}
+
 async function readInputFile(inputFile: string): Promise<OpenAPIV2.Document> {
   console.log(`Reading OpenAPI specification from file "${inputFile}" ...`);
 
@@ -108,9 +112,10 @@ async function readInputFile(inputFile: string): Promise<OpenAPIV2.Document> {
     const data = await fs.readFile(inputFile, 'utf-8');
     return parseInputFile(data);
   } catch (error) {
-    if (error.code === 'ENOENT') {
+    if (hasErrorCode(error) && error.code === 'ENOENT') {
       throw new Error(`Input file "${inputFile}" could not be found or is not readable`);
     }
+
     throw error;
   }
 }
@@ -121,7 +126,7 @@ async function readInputURL(inputUrl: string): Promise<OpenAPIV2.Document> {
     const {data} = await axios.get<string>(inputUrl, {transformResponse: data => data});
     return parseInputFile(data);
   } catch (error) {
-    throw new Error(error.message);
+    throw error;
   }
 }
 

@@ -61,7 +61,7 @@ export class InterfaceGenerator extends TemplateGenerator {
     schema: OpenAPIV2.Schema,
     schemaName: string,
     imports: string[] = [],
-    basicType: TypeScriptType = TypeScriptType.TYPE,
+    basicType: TypeScriptType = TypeScriptType.TYPE
   ): SwaxiosInterface {
     const reference = (schema as OpenAPIV2.ReferenceObject).$ref;
 
@@ -82,7 +82,7 @@ export class InterfaceGenerator extends TemplateGenerator {
 
     if (multipleSchemas) {
       const multipleTypes = multipleSchemas.map(itemSchema =>
-        InterfaceGenerator.buildInterface(spec, itemSchema as OpenAPIV2.Schema, schemaName, imports, basicType),
+        InterfaceGenerator.buildInterface(spec, itemSchema as OpenAPIV2.Schema, schemaName, imports, basicType)
       );
 
       const schemas = multipleTypes.map(item => item.type).join('&');
@@ -132,7 +132,7 @@ export class InterfaceGenerator extends TemplateGenerator {
             spec,
             propertyOptions,
             safeProperty,
-            imports,
+            imports
           );
 
           schema[propertyName] = propertyType;
@@ -161,7 +161,7 @@ export class InterfaceGenerator extends TemplateGenerator {
             spec,
             schemaObject.items,
             schemaName,
-            imports,
+            imports
           );
           for (const itemImport of itemImports) {
             if (!imports.includes(itemImport)) {
@@ -172,7 +172,7 @@ export class InterfaceGenerator extends TemplateGenerator {
         }
 
         const itemTypes = schemaObject.items.map(itemSchema =>
-          InterfaceGenerator.buildInterface(spec, itemSchema, schemaName, imports, basicType),
+          InterfaceGenerator.buildInterface(spec, itemSchema, schemaName, imports, basicType)
         );
 
         const schemas = itemTypes.map(item => item.type).join('|');
