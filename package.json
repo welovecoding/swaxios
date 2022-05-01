@@ -23,7 +23,7 @@
     "@types/cli-interact": "0.1.1",
     "@types/fs-extra": "9.0.13",
     "@types/handlebars-helpers": "0.5.3",
-    "@types/jasmine": "3.10.3",
+    "@types/jasmine": "4.0.3",
     "@types/minimist": "1.2.2",
     "@types/node": "16.11.24",
     "@types/prettier": "2.4.4",
