@@ -14,7 +14,7 @@
     "fs-extra": "10.0.0",
     "handlebars": "4.7.7",
     "openapi-types": "8.0.0",
-    "prettier": "2.5.1",
+    "prettier": "2.6.2",
     "yamljs": "0.3.0"
   },
   "description": "Swagger API client generator based on axios and TypeScript.",
