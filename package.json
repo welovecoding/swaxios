@@ -25,7 +25,7 @@
     "@types/handlebars-helpers": "0.5.3",
     "@types/jasmine": "4.3.1",
     "@types/minimist": "1.2.2",
-    "@types/node": "16.11.24",
+    "@types/node": "16.18.11",
     "@types/prettier": "2.7.2",
     "@types/yamljs": "0.2.31",
     "@wireapp/tslint-config": "1.4.1",
