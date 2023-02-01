@@ -4,6 +4,10 @@
 
 A [Swagger](https://swagger.io/) API client generator based on [axios](https://github.com/axios/axios) and written in [TypeScript](https://www.typescriptlang.org/).
 
+## Motivation
+
+Swaxios automates the generation of an API client for TypeScript applications, which can be used in browser and Node.js environments. At the time of writing this code, the [Swagger Codegen project](https://github.com/swagger-api/swagger-codegen) only provided separate SDK generators (`typescript-fetch` for browsers and `typescript-node` for Node.js). Unfortunately, the `typescript-fetch` generator cannot be used with all Node.js applications as the `fetch` API only became globally available as an [experimental fetch API](https://nodejs.org/de/blog/announcements/v18-release-announce/#fetch-experimental) in Node.js 18.
+
 ## Installation
 
 You can install Swaxios globally (`npm i -g swaxios`) or add it to your [devDependencies](https://docs.npmjs.com/files/package.json#devdependencies).
