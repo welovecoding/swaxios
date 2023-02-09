@@ -2,22 +2,31 @@
 
 # Swaxios
 
-A [Swagger](https://swagger.io/) API client generator based on [axios](https://github.com/axios/axios) and written in [TypeScript](https://www.typescriptlang.org/).
+A [Swagger (OpenAPI v2)][oas2] API client generator based on [axios][axios] and written in [TypeScript][ts].
 
 ## Motivation
 
-Swaxios automates the generation of an API client for TypeScript applications, which can be used in browser and Node.js environments. At the time of writing this code, the [Swagger Codegen project](https://github.com/swagger-api/swagger-codegen) only provided separate SDK generators (`typescript-fetch` for browsers and `typescript-node` for Node.js). Unfortunately, the `typescript-fetch` generator cannot be used with all Node.js applications as the `fetch` API only became globally available as an [experimental fetch API](https://nodejs.org/de/blog/announcements/v18-release-announce/#fetch-experimental) in Node.js 18.
+The Swaxios project automates the creation of an API client for TypeScript applications, which can be used in web browsers and Node.js environments.
+
+At the time of writing this tool (2019-04-26), the [Swagger Codegen project][codegen] only provided separate SDK generators (`typescript-fetch` for browsers and `typescript-node` for Node.js). Unfortunately, the `typescript-fetch` generator for browsers is not compatible with all Node.js applications since the fetch API became globally available only as an [experimental feature in Node.js 18](https://nodejs.org/de/blog/announcements/v18-release-announce/#fetch-experimental) (2022-04-19).
+
+Swaxios offers an API generator that works in both environments by utilizing the flexible [axios request library][axios]. API calls are routed through axios and can be easily customized using request interceptors.
+
+## Limitations
+
+This library can only work with a valid [OpenAPI Version 2 specification][oas2], which must be in the form of a file or URL. It does not support [OpenAPI Version 3][oas3] specifications.
+
+If you need a generator for Open API v3 specs, you can test `typescript-axios` from [Swagger Codegen][codegen] ([added on 2020-09-21](https://github.com/swagger-api/swagger-codegen-generators/commits/master/src/main/java/io/swagger/codegen/v3/generators/typescript/TypeScriptAxiosClientCodegen.java)).
+
+```bash
+java -jar swagger-codegen-cli-3.0.24.jar generate -l typescript-axios -i swagger.json -o /api-client
+```
+
+- [Download Swagger Codegen 3.0.24](https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/3.0.24/swagger-codegen-cli-3.0.24.jar) ([Release Notes](https://github.com/swagger-api/swagger-codegen/releases/tag/v3.0.24))
 
 ## Installation
 
 You can install Swaxios globally (`npm i -g swaxios`) or add it to your [devDependencies](https://docs.npmjs.com/files/package.json#devdependencies).
-
-Your targeted project must also have a recent version of axios and TypeScript:
-
-```
-npm i axios
-npm i -D typescript
-```
 
 ## Usage
 
@@ -27,9 +36,9 @@ Display all CLI options:
 swaxios --help
 ```
 
-If you pass an [OpenAPI Specification (OAS)](https://swagger.io/docs/specification/2-0/basic-structure/) (v2.0; JSON or YAML) to Swaxios, then it generates an API client that uses axios under the hood and is written in TypeScript:
+If you pass an [OpenAPI v2 specification][oas2] (JSON or YAML) to Swaxios, then it generates a fully typed API client for you which uses axios under the hood:
 
-```
+```bash
 # Provide a Swagger input file (JSON or YAML)
 swaxios -i ./path/to/swagger.json -o ./path/to/output/directory
 swaxios -i ./path/to/swagger.yml -o ./path/to/output/directory
@@ -40,7 +49,7 @@ swaxios -i http://127.0.0.1:3000/documentation-json -o ./path/to/output/director
 
 With the `-f` option, you can force Swaxios to overwrite existing files in the output path:
 
-```
+```bash
 swaxios -i ./path/to/swagger.json -o ./path/to/output/directory -f
 ```
 
@@ -112,12 +121,8 @@ It has been generated from the following [path](https://swagger.io/docs/specific
 }
 ```
 
-## Credits
-
-This project is inspired by [swagger-codegen](https://github.com/swagger-api/swagger-codegen).
-
-You can try if `swagger-codegen` works for your project:
-
-> java -jar swagger-codegen-cli-3.0.24.jar generate -l typescript-axios -i swagger.json -o /api-client
-
-- [Download Swagger Codegen 3.0.24](https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/3.0.24/swagger-codegen-cli-3.0.24.jar) ([Source Code](https://github.com/swagger-api/swagger-codegen/releases/tag/v3.0.24))
+[axios]: https://github.com/axios/axios
+[codegen]: https://github.com/swagger-api/swagger-codegen
+[oas2]: https://swagger.io/specification/v2/
+[oas3]: https://swagger.io/specification/v3/
+[ts]: https://www.typescriptlang.org/
