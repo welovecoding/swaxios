@@ -98,5 +98,5 @@
     "test:node": "nyc jasmine --config=jasmine.json",
     "test:types": "yarn lint:types"
   },
-  "version": "0.2.2"
+  "version": "0.2.3"
 }
