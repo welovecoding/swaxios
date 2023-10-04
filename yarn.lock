@@ -291,10 +291,10 @@
   resolved "https://registry.npmjs.org/@tsconfig/node16/-/node16-1.0.2.tgz#423c77877d0569db20e1fc80885ac4118314010e"
   integrity sha512-eZxlbI8GZscaGS7kkc/trHTT5xgrjH3/1n2JDwusC9iahPKWMRvRjJSAN5mCXviuTGQ/lHnhvv8Q1YTpnfz9gA==
 
-"@tstv/tsconfig-common@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/@tstv/tsconfig-common/-/tsconfig-common-2.0.0.tgz#8be79ca4e2dfd8bed90790ec3a31ef9b5ad45ec4"
-  integrity sha512-WSCxPGHR1H5ZiOdBkA1ukQAPlnNT1wVXvhBgVxVyMfZ6lgMXhz/1OJn2xY21RkG+HLQwG1iIY7LwEFc5iz3xZQ==
+"@tstv/tsconfig-common@3.3.1":
+  version "3.3.1"
+  resolved "https://registry.npmjs.org/@tstv/tsconfig-common/-/tsconfig-common-3.3.1.tgz#ab73b11a141d1ad289ff9f876969ea74ce147c09"
+  integrity sha512-OTf+DY0qd7AEBnm2Es1ytMxlIFzZejYJCsDk14JV1uEb2uCowaO1rZjOMaN/ak1RZY3bMz+9zmskPSDoUlL6yw==
 
 "@types/ci-info@3.1.0":
   version "3.1.0"

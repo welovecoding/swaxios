@@ -63,7 +63,7 @@ export class MethodGenerator {
     if (parameterMatch) {
       if (!this.pathParameters.length) {
         this.pathParameters.push({
-          name: parameterMatch[1],
+          name: parameterMatch[1]!,
           type: TypeScriptType.ANY,
         });
       }
@@ -139,7 +139,7 @@ export class MethodGenerator {
     }
     const definitionString = ref.replace('#/definitions/', '');
     const definition = this.spec.definitions[definitionString];
-    return definition.$ref ? this.getSchemaFromRef(definition.$ref) : definition;
+    return definition?.$ref ? this.getSchemaFromRef(definition?.$ref) : definition;
   }
 
   private buildParameters(parameters?: (OpenAPIV2.ParameterObject | OpenAPIV2.ReferenceObject)[]): void {

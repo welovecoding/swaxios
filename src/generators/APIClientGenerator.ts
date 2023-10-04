@@ -67,7 +67,7 @@ export class APIClientGenerator extends TemplateGenerator {
       const relativePath = path.dirname(path.relative(this.outputDirectory, file.fullPath)).replace(/\\/g, '/');
 
       bundledImports[relativePath] = bundledImports[relativePath] || [];
-      bundledImports[relativePath].push(file);
+      bundledImports[relativePath]?.push(file);
     }
 
     for (const directory of Object.values(fileIndex.directories)) {
@@ -86,7 +86,7 @@ export class APIClientGenerator extends TemplateGenerator {
   }
 
   protected async getContext(): Promise<Context> {
-    const API = await this.generateAPI(this.fileIndex.directories.rest);
+    const API = await this.generateAPI(this.fileIndex.directories.rest!);
     const apiString = inspect(API, {breakLength: Infinity, depth: Infinity}).replace(/'/gm, '');
     const imports = this.generateImports(this.fileIndex);
 

@@ -4,6 +4,6 @@
     "outDir": "dist",
     "rootDir": "src"
   },
-  "exclude": ["coverage", "dist", "src/temp", "src/**/*.test.ts"],
+  "exclude": ["coverage", "dist", "src/temp"],
   "extends": "@tstv/tsconfig-common/tsconfig.json"
 }
