@@ -29,7 +29,7 @@ describe('writeClient', () => {
     const actual = await fs.readFile(path.join(tempDir, 'rest/instance/ArchiveService.ts'), 'utf-8');
     const expected = await fs.readFile(
       path.resolve(__dirname, './test/snapshots/1-query-param-description.ts.fixture'),
-      'utf-8',
+      'utf-8'
     );
     expect(actual).toBe(expected);
   });
@@ -40,7 +40,7 @@ describe('writeClient', () => {
     const actual = await fs.readFile(path.join(tempDir, 'APIClient.ts'), 'utf-8');
     const expected = await fs.readFile(
       path.resolve(__dirname, './test/snapshots/2-deep-nested-endpoints.ts.fixture'),
-      'utf-8',
+      'utf-8'
     );
     expect(actual).toBe(expected);
   });
@@ -51,7 +51,7 @@ describe('writeClient', () => {
     const actual = await fs.readFile(path.join(tempDir, 'rest/api/v1/ExchangeService.ts'), 'utf-8');
     const expected = await fs.readFile(
       path.resolve(__dirname, './test/snapshots/3-delete-by-id-number.ts.fixture'),
-      'utf-8',
+      'utf-8'
     );
     expect(actual).toBe(expected);
   });
@@ -62,7 +62,7 @@ describe('writeClient', () => {
     const actual = await fs.readFile(path.join(tempDir, 'rest/api/v1/ExchangeService.ts'), 'utf-8');
     const expected = await fs.readFile(
       path.resolve(__dirname, './test/snapshots/4-delete-by-id-number-with-response.ts.fixture'),
-      'utf-8',
+      'utf-8'
     );
     expect(actual).toBe(expected);
   });
@@ -74,7 +74,7 @@ describe('writeClient', () => {
     const actual = await fs.readFile(path.join(tempDir, 'rest/api/UserService.ts'), 'utf-8');
     const expected = await fs.readFile(
       path.resolve(__dirname, './test/snapshots/5-query-param-required.ts.fixture'),
-      'utf-8',
+      'utf-8'
     );
 
     expect(actual).toBe(expected);
@@ -107,14 +107,14 @@ describe('writeClient', () => {
     let actual = await fs.readFile(path.join(tempDir, 'interfaces/CreateAccountRequest.ts'), 'utf-8');
     let expected = await fs.readFile(
       path.resolve(__dirname, './test/snapshots/8-definitions-CreateAccountRequest.ts.fixture'),
-      'utf-8',
+      'utf-8'
     );
     expect(actual).toBe(expected);
 
     actual = await fs.readFile(path.join(tempDir, 'interfaces/CreateAccountResponse.ts'), 'utf-8');
     expected = await fs.readFile(
       path.resolve(__dirname, './test/snapshots/8-definitions-CreateAccountResponse.ts.fixture'),
-      'utf-8',
+      'utf-8'
     );
     expect(actual).toBe(expected);
   });
@@ -125,7 +125,7 @@ describe('writeClient', () => {
     const actual = await fs.readFile(path.join(tempDir, 'APIClient.ts'), 'utf-8');
     const expected = await fs.readFile(
       path.resolve(__dirname, './test/snapshots/9-special-characters.ts.fixture'),
-      'utf-8',
+      'utf-8'
     );
     expect(actual).toBe(expected);
   });
