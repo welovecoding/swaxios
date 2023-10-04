@@ -28,7 +28,7 @@
     "@types/minimist": "1.2.3",
     "@types/node": "16.11.24",
     "@types/prettier": "2.7.3",
-    "@types/yamljs": "0.2.31",
+    "@types/yamljs": "0.2.32",
     "@wireapp/tslint-config": "1.4.1",
     "generate-changelog": "1.8.0",
     "husky": "4.3.8",
