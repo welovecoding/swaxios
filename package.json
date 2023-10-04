@@ -21,7 +21,7 @@
   "devDependencies": {
     "@tstv/tsconfig-common": "2.0.0",
     "@types/ci-info": "3.1.0",
-    "@types/cli-interact": "0.1.1",
+    "@types/cli-interact": "0.1.2",
     "@types/fs-extra": "11.0.1",
     "@types/handlebars-helpers": "0.5.3",
     "@types/jasmine": "4.3.5",
