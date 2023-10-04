@@ -100,11 +100,12 @@ export class InterfaceGenerator extends TemplateGenerator {
 
     let schemaType = schemaObject.type || SwaggerType.OBJECT;
 
-    if (Array.isArray(schemaType)) {
+    if (Array.isArray(schemaType) && schemaType[0]) {
       schemaType = schemaType[0];
     }
 
-    switch (schemaType.toLowerCase()) {
+    // TODO: Use proper assertion functions to identify "schemaType"
+    switch ((schemaType as string).toLowerCase()) {
       case SwaggerType.BOOLEAN: {
         return {basicType, type: TypeScriptType.BOOLEAN, imports};
       }

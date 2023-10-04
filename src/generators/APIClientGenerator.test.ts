@@ -40,7 +40,7 @@ describe('ResourceGenerator', () => {
 
       const generator = new APIClientGenerator(fileIndex, '.', WireSSO);
       const services = (await generator.generateAPI(fileIndex)) as Record<string, API>;
-      expect(services.login.authService).not.toBe(services.post.authService);
+      expect(services.login!.authService).not.toBe(services.post!.authService);
     });
   });
 });
