@@ -22,7 +22,7 @@
     "@tstv/tsconfig-common": "2.0.0",
     "@types/ci-info": "3.1.0",
     "@types/cli-interact": "0.1.2",
-    "@types/fs-extra": "11.0.1",
+    "@types/fs-extra": "11.0.2",
     "@types/handlebars-helpers": "0.5.4",
     "@types/jasmine": "4.3.5",
     "@types/minimist": "1.2.3",
