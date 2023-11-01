@@ -441,10 +441,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/minimist@1.2.3":
-  version "1.2.3"
-  resolved "https://registry.npmjs.org/@types/minimist/-/minimist-1.2.3.tgz#dd249cef80c6fff2ba6a0d4e5beca913e04e25f8"
-  integrity sha512-ZYFzrvyWUNhaPomn80dsMNgMeXxNWZBdkuG/hWlUvXvbdUH8ZERNBGXnU87McuGcWDsyzX2aChCv/SVN348k3A==
+"@types/minimist@1.2.4":
+  version "1.2.4"
+  resolved "https://registry.npmjs.org/@types/minimist/-/minimist-1.2.4.tgz#81f886786411c45bba3f33e781ab48bd56bfca2e"
+  integrity sha512-Kfe/D3hxHTusnPNRbycJE1N77WHDsdS4AjUYIzlDzhDrS47NrwuL3YW4VITxwR7KCVpzwgy4Rbj829KSSQmwXQ==
 
 "@types/node@*", "@types/node@16.18.57":
   version "16.18.57"
