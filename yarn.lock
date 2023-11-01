@@ -422,10 +422,10 @@
     "@types/jsonfile" "*"
     "@types/node" "*"
 
-"@types/handlebars-helpers@0.5.4":
-  version "0.5.4"
-  resolved "https://registry.npmjs.org/@types/handlebars-helpers/-/handlebars-helpers-0.5.4.tgz#add9b9751b455c0159a7ecfe4efebd3fbeb5b2ba"
-  integrity sha512-68vtLpmhED70wfm61liscWkI4EuMVusUha4D85m3Wrk0D0AMrouqK28GhC+0L5HMaahCt233RCeALGEWxuXFhw==
+"@types/handlebars-helpers@0.5.5":
+  version "0.5.5"
+  resolved "https://registry.npmjs.org/@types/handlebars-helpers/-/handlebars-helpers-0.5.5.tgz#2a45ea55da07579984c0df969d36a5805c60b520"
+  integrity sha512-ygngc0XrpbquRJXS9ha4Uhc1jjlimz7PIBdB5f5N1ZoLf+Qjvj8tkiBm4AyoAaKQAjF4P/0+eS3JmY85ru+E5Q==
   dependencies:
     handlebars ">=4.1.0"
 
