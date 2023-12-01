@@ -466,10 +466,10 @@
   resolved "https://registry.npmjs.org/@types/readline-sync/-/readline-sync-1.4.3.tgz#eac55a39d5a349912062c9e5216cd550c07fd9c8"
   integrity sha512-YP9NVli96E+qQLAF2db+VjnAUEeZcFVg4YnMgr8kpDUFwQBnj31rPLOVHmazbKQhaIkJ9cMHsZhpKdzUeL0KTg==
 
-"@types/yamljs@0.2.33":
-  version "0.2.33"
-  resolved "https://registry.npmjs.org/@types/yamljs/-/yamljs-0.2.33.tgz#8f3ed0106e93f90d9d6d1484234cf7d6061b4161"
-  integrity sha512-IuphSS8fXN/oQnSUr6+YyC/VolXmasZaRldPIyFv1HoX0M6m10pcZqd1pKYi1y8VoM9Go1VzEb0rzP08f74tow==
+"@types/yamljs@0.2.34":
+  version "0.2.34"
+  resolved "https://registry.npmjs.org/@types/yamljs/-/yamljs-0.2.34.tgz#c10b1f31b173f2cc93342f27b0796c2eb5b3ae84"
+  integrity sha512-gJvfRlv9ErxdOv7ux7UsJVePtX54NAvQyd8ncoiFqK8G5aeHIfQfGH2fbruvjAQ9657HwAaO54waS+Dsk2QTUQ==
 
 "@wireapp/tslint-config@1.4.1":
   version "1.4.1"
