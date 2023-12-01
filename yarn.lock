@@ -407,10 +407,10 @@
   dependencies:
     ci-info "*"
 
-"@types/cli-interact@0.1.3":
-  version "0.1.3"
-  resolved "https://registry.npmjs.org/@types/cli-interact/-/cli-interact-0.1.3.tgz#0318f269ea57a3209459f3c3f04c513417631163"
-  integrity sha512-rfv7c5sG6KjTWBM/7EMIK3077F8DNIYky9dapOJLh71Qzao+7wbHJawaoqx/sANZILnxtAl5TMJMVgFMZgi/YA==
+"@types/cli-interact@0.1.4":
+  version "0.1.4"
+  resolved "https://registry.npmjs.org/@types/cli-interact/-/cli-interact-0.1.4.tgz#475e4afe52748adaa5aa5935adce51d06b5dc20b"
+  integrity sha512-ApnXGFz+j6Yb6v6UvD3c9eEMQG+4YARy/+ZkwQIMBW+HTuwtAw6QknlE2rdkVHuPdt+dn4WsArQjS1K/LT6L/w==
   dependencies:
     "@types/readline-sync" "*"
 
