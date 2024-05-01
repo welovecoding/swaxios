@@ -42,7 +42,7 @@
     "tslint-plugin-prettier": "2.3.0",
     "tslint-react": "5.0.0",
     "tslint-react-hooks": "2.2.2",
-    "typescript": "5.4.3"
+    "typescript": "5.4.5"
   },
   "files": [
     "dist",
