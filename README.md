@@ -19,10 +19,20 @@ This library can only work with a valid [OpenAPI Version 2 specification][oas2],
 If you need a generator for Open API v3 specs, you can test `typescript-axios` from [Swagger Codegen][codegen] ([added on 2020-09-21](https://github.com/swagger-api/swagger-codegen-generators/commits/master/src/main/java/io/swagger/codegen/v3/generators/typescript/TypeScriptAxiosClientCodegen.java)).
 
 ```bash
-java -jar swagger-codegen-cli-3.0.24.jar generate -l typescript-axios -i swagger.json -o /api-client
+java -jar swagger-codegen-cli-3.0.24.jar generate -l typescript-axios -i ./swagger.json -o ./api-client
 ```
 
 - [Download Swagger Codegen 3.0.24](https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/3.0.24/swagger-codegen-cli-3.0.24.jar) ([Release Notes](https://github.com/swagger-api/swagger-codegen/releases/tag/v3.0.24))
+
+There is also an npm package ([@openapitools/openapi-generator-cli](https://www.npmjs.com/package/@openapitools/openapi-generator-cli)) which exposes this generator. You can use it the following way in your [scripts](https://docs.npmjs.com/cli/using-npm/scripts):
+
+```json
+{
+  "scripts": {
+    "generate": "openapi-generator-cli generate -i ./swagger.json -g typescript-axios -p \"withoutRuntimeChecks=true,withInterfaces=true\" -o ./api-client"
+  }
+}
+```
 
 ## Installation
 
