@@ -1,3 +1,11 @@
+#### 0.2.5 (2024-05-11)
+
+##### New Features
+
+- Upgrade Commander ([#536](https://github.com/welovecoding/swaxios/pull/536)) ([578c26a0](https://github.com/welovecoding/swaxios/commit/578c26a0faa01868293618e4ae8cb460971bfcb6))
+- Upgrade to Node v20 ([#535](https://github.com/welovecoding/swaxios/pull/535)) ([69a6b3e5](https://github.com/welovecoding/swaxios/commit/69a6b3e588c6922ba99121b7c4718d01d17ed8ae))
+- Automatically merge dependency updates ([6896208a](https://github.com/welovecoding/swaxios/commit/6896208af721b9c106699561bf6a4f03b3f979dd))
+
 #### 0.2.4 (2023-02-09)
 
 #### 0.2.3 (2023-02-09)
