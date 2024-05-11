@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
-import program from 'commander';
+import {Command} from 'commander';
 import path from 'path';
-
 import {writeClient} from './Swaxios';
 
 const {bin, description, name, version} = require('../package.json');
 const binName = Object.keys(bin)[0] || name;
+const program = new Command();
 
 program
   .name(binName)
@@ -17,14 +17,18 @@ program
   .option('-f, --force', 'Force deleting the output directory before generating')
   .parse(process.argv);
 
-if (!program.input || !program.output) {
+const input = program.getOptionValue('input');
+const output = program.getOptionValue('output');
+const force = program.getOptionValue('force');
+
+if (!input || !output) {
   program.outputHelp();
   process.exit(1);
 }
 
-const outputDirectory = path.resolve(program.output || '.');
+const outputDirectory = path.resolve(output || '.');
 
-writeClient(program.input, outputDirectory, program.force)
+writeClient(input, outputDirectory, force)
   .then(() => console.log(`Created API client in "${outputDirectory}".`))
   .catch(error => {
     console.error(error);
