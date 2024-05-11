@@ -20,6 +20,3 @@ updates:
       - dependency-name: 'husky'
         versions:
           - '>= 5'
-      - dependency-name: '@types/node'
-        versions:
-          - '>= 17'
