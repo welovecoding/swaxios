@@ -32,7 +32,7 @@
     "@wireapp/tslint-config": "1.4.1",
     "generate-changelog": "1.8.0",
     "husky": "4.3.8",
-    "jasmine": "5.2.0",
+    "jasmine": "5.3.0",
     "lint-staged": "15.2.9",
     "nyc": "17.0.0",
     "shx": "0.3.4",
