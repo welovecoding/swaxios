@@ -131,6 +131,10 @@ It has been generated from the following [path](https://swagger.io/docs/specific
 }
 ```
 
+## Alternatives
+
+- [OpenAPI TypeScript](https://www.npmjs.com/package/openapi-typescript)
+
 [axios]: https://github.com/axios/axios
 [codegen]: https://github.com/swagger-api/swagger-codegen
 [oas2]: https://swagger.io/specification/v2/
