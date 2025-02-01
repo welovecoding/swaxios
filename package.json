@@ -6,7 +6,7 @@
     "url": "https://github.com/welovecoding/swaxios/issues"
   },
   "dependencies": {
-    "@apidevtools/swagger-parser": "10.1.0",
+    "@apidevtools/swagger-parser": "10.1.1",
     "axios": "1.7.9",
     "ci-info": "4.1.0",
     "cli-interact": "0.1.9",
