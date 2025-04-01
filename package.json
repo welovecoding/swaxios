@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@apidevtools/swagger-parser": "10.1.1",
-    "axios": "1.8.1",
+    "axios": "1.8.2",
     "ci-info": "4.2.0",
     "cli-interact": "0.1.9",
     "commander": "13.1.0",
