@@ -416,10 +416,10 @@
   dependencies:
     handlebars ">=4.1.0"
 
-"@types/jasmine@5.1.7":
-  version "5.1.7"
-  resolved "https://registry.npmjs.org/@types/jasmine/-/jasmine-5.1.7.tgz#b9f68cf05463717bbe36d53221839e7630a24d22"
-  integrity sha512-DVOfk9FaClQfNFpSfaML15jjB5cjffDMvjtph525sroR5BEAW2uKnTOYUTqTFuZFjNvH0T5XMIydvIctnUKufw==
+"@types/jasmine@5.1.8":
+  version "5.1.8"
+  resolved "https://registry.npmjs.org/@types/jasmine/-/jasmine-5.1.8.tgz#b20f78ca416d7a2a8e726f8321e0b2827a78ceaa"
+  integrity sha512-u7/CnvRdh6AaaIzYjCgUuVbREFgulhX05Qtf6ZtW+aOcjCKKVvKgpkPYJBFTZSHtFBYimzU4zP0V2vrEsq9Wcg==
 
 "@types/json-schema@^7.0.15":
   version "7.0.15"
@@ -1420,10 +1420,10 @@ jasmine-core@~5.7.0:
   resolved "https://registry.npmjs.org/jasmine-core/-/jasmine-core-5.7.0.tgz#23476f408056a33674469005d87d57d873b4c525"
   integrity sha512-EnUzZBHxS1Ofq+FPWs16rs2YC9o6Hb3buKJQDlkhJBDx+Bm5wNF+J1gUS06dWuW2ozaQ3oNIA1SESX9M5LopOQ==
 
-jasmine@5.7.0:
-  version "5.7.0"
-  resolved "https://registry.npmjs.org/jasmine/-/jasmine-5.7.0.tgz#94b947cdf6bda6da549846ab672aea3c601857d1"
-  integrity sha512-pifsdoSBgOlAbw1Tg1Vm4LxXEzDv6a+dTzHUaI9aYYqdP+PiMFgz2Mce/7TBfvuP9kshl0yZn7+G0/G1n+yExw==
+jasmine@5.7.1:
+  version "5.7.1"
+  resolved "https://registry.npmjs.org/jasmine/-/jasmine-5.7.1.tgz#56c27d7dab7663802426a2d84eeabe3768491cac"
+  integrity sha512-E/4fkRNy/9ALz6z3Z3/tYXFAohoznVy7In9FWutG2fqBSkILJHFzbgZtHJUw5UrL3jgUQ4sdGYOVZ5KpSXYjGw==
   dependencies:
     glob "^10.2.2"
     jasmine-core "~5.7.0"
