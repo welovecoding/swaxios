@@ -1410,18 +1410,18 @@ jackspeak@^2.0.3:
   optionalDependencies:
     "@pkgjs/parseargs" "^0.11.0"
 
-jasmine-core@~5.7.0:
-  version "5.7.0"
-  resolved "https://registry.npmjs.org/jasmine-core/-/jasmine-core-5.7.0.tgz#23476f408056a33674469005d87d57d873b4c525"
-  integrity sha512-EnUzZBHxS1Ofq+FPWs16rs2YC9o6Hb3buKJQDlkhJBDx+Bm5wNF+J1gUS06dWuW2ozaQ3oNIA1SESX9M5LopOQ==
+jasmine-core@~5.8.0:
+  version "5.8.0"
+  resolved "https://registry.npmjs.org/jasmine-core/-/jasmine-core-5.8.0.tgz#8a68b7b209b06c2247d67490bca8604c2fa498cd"
+  integrity sha512-Q9dqmpUAfptwyueW3+HqBOkSuYd9I/clZSSfN97wXE/Nr2ROFNCwIBEC1F6kb3QXS9Fcz0LjFYSDQT+BiwjuhA==
 
-jasmine@5.7.1:
-  version "5.7.1"
-  resolved "https://registry.npmjs.org/jasmine/-/jasmine-5.7.1.tgz#56c27d7dab7663802426a2d84eeabe3768491cac"
-  integrity sha512-E/4fkRNy/9ALz6z3Z3/tYXFAohoznVy7In9FWutG2fqBSkILJHFzbgZtHJUw5UrL3jgUQ4sdGYOVZ5KpSXYjGw==
+jasmine@5.8.0:
+  version "5.8.0"
+  resolved "https://registry.npmjs.org/jasmine/-/jasmine-5.8.0.tgz#63a7ebe6687bc0ec80d2264a375ed82144a305c6"
+  integrity sha512-1V6HGa0+TMoMY20+/vp++RqLlL1noupV8awzV6CiPuICC0g7iKZ9z87zV2KyelRyoig0G1lHn7ueElXVMGVagg==
   dependencies:
     glob "^10.2.2"
-    jasmine-core "~5.7.0"
+    jasmine-core "~5.8.0"
 
 jest-docblock@^21.0.0:
   version "21.2.0"
