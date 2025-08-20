@@ -133,7 +133,8 @@ It has been generated from the following [path](https://swagger.io/docs/specific
 
 ## Alternatives
 
-- [OpenAPI TypeScript](https://www.npmjs.com/package/openapi-typescript)
+- [openapi-typescript (OpenAPI 3.0 & 3.1)](https://www.npmjs.com/package/openapi-typescript)
+- [@hey-api/openapi-ts (OpenAPI 2.0, 3.0, and 3.1)](https://github.com/hey-api/openapi-ts)
 
 [axios]: https://github.com/axios/axios
 [codegen]: https://github.com/swagger-api/swagger-codegen
