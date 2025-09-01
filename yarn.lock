@@ -409,10 +409,10 @@
   dependencies:
     handlebars ">=4.1.0"
 
-"@types/jasmine@5.1.8":
-  version "5.1.8"
-  resolved "https://registry.npmjs.org/@types/jasmine/-/jasmine-5.1.8.tgz#b20f78ca416d7a2a8e726f8321e0b2827a78ceaa"
-  integrity sha512-u7/CnvRdh6AaaIzYjCgUuVbREFgulhX05Qtf6ZtW+aOcjCKKVvKgpkPYJBFTZSHtFBYimzU4zP0V2vrEsq9Wcg==
+"@types/jasmine@5.1.9":
+  version "5.1.9"
+  resolved "https://registry.npmjs.org/@types/jasmine/-/jasmine-5.1.9.tgz#9f00abff2a17687e675ce6669e7b53c9e7d145f0"
+  integrity sha512-8t4HtkW4wxiPVedMpeZ63n3vlWxEIquo/zc1Tm8ElU+SqVV7+D3Na2PWaJUp179AzTragMWVwkMv7mvty0NfyQ==
 
 "@types/json-schema@^7.0.15":
   version "7.0.15"
@@ -1502,18 +1502,18 @@ jackspeak@^2.0.3:
   optionalDependencies:
     "@pkgjs/parseargs" "^0.11.0"
 
-jasmine-core@~5.9.0:
-  version "5.9.0"
-  resolved "https://registry.npmjs.org/jasmine-core/-/jasmine-core-5.9.0.tgz#140199862ee83f906bf0ff88287e7c440a1776e7"
-  integrity sha512-OMUvF1iI6+gSRYOhMrH4QYothVLN9C3EJ6wm4g7zLJlnaTl8zbaPOr0bTw70l7QxkoM7sVFOWo83u9B2Fe2Zng==
+jasmine-core@~5.10.0:
+  version "5.10.0"
+  resolved "https://registry.npmjs.org/jasmine-core/-/jasmine-core-5.10.0.tgz#7e6c3efde6eb1ec9afc58d4373f6ace1e91c459e"
+  integrity sha512-MrChbWV5LBo+EaeKwTM1eZ6oYSz1brvFExnRafraEkJkbJ9evbUxABhnIgGQimhpMxhg+BD6QmOvb/e3NXsNdg==
 
-jasmine@5.9.0:
-  version "5.9.0"
-  resolved "https://registry.npmjs.org/jasmine/-/jasmine-5.9.0.tgz#aff3c5d3b79fea0e4ce0678ae02bbcfe47b55d3a"
-  integrity sha512-SspK51QMnuC92z5zpF4kOkWN+MyZZDOBv8zgzlMAYvMD0UoGwcq5yYaDe1mrpN7wXZ2CFXh5y8Ua2ugwE4OmXQ==
+jasmine@5.10.0:
+  version "5.10.0"
+  resolved "https://registry.npmjs.org/jasmine/-/jasmine-5.10.0.tgz#312c987b6ddabfa30f66efb0c59f70313351ac00"
+  integrity sha512-v4FojO8cXQdx15mJXovGhjJOvyIcVf7AC+H0ZahnfLk52vUbwuLxjVgbikc95yLmgwKQsFT47/FGQ3dOrWVxtQ==
   dependencies:
     glob "^10.2.2"
-    jasmine-core "~5.9.0"
+    jasmine-core "~5.10.0"
 
 jest-docblock@^21.0.0:
   version "21.2.0"
